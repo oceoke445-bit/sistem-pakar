@@ -77,8 +77,8 @@
         </div>
     @endif
 
-    <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-        <table class="w-full text-sm">
+    <div class="overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <table class="w-full min-w-[560px] text-sm">
             <thead class="border-b border-slate-100 bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
                 <tr><th class="px-4 py-3">No</th><th class="px-4 py-3">Kode</th><th class="px-4 py-3">Nama kerusakan</th><th class="px-4 py-3 text-right">Aksi</th></tr>
             </thead>

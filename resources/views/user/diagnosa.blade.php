@@ -10,8 +10,8 @@
 <div class="mx-auto max-w-6xl space-y-8">
     <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-            <h1 class="text-2xl font-bold text-slate-900">Diagnosa Kerusakan</h1>
-            <p class="mt-1 text-sm text-slate-500">Centang gejala yang Anda alami, lalu proses diagnosa.</p>
+            <h1 class="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">Diagnosa Kerusakan</h1>
+            <p class="mt-1.5 text-[15px] leading-relaxed text-slate-500">Centang gejala pada printer Anda, lalu jalankan diagnosa.</p>
         </div>
     </div>
 
@@ -56,13 +56,13 @@
         <aside class="h-fit rounded-2xl border border-blue-100 bg-gradient-to-b from-blue-50 to-white p-6 shadow-sm">
             <div class="flex items-center gap-2 text-blue-800">
                 <i class="bi bi-lightbulb text-xl"></i>
-                <h3 class="font-semibold">Tips</h3>
+                <h3 class="font-bold tracking-tight">Tips</h3>
             </div>
-            <p class="mt-3 text-sm leading-relaxed text-slate-600">
-                Pilih gejala yang paling relevan. Semakin lengkap gejala yang dicentang, semakin baik sistem mempersempit kemungkinan kerusakan.
+            <p class="mt-3 text-[14px] leading-relaxed text-slate-600">
+                Pilih gejala yang paling relevan pada printer Anda. Semakin lengkap gejala yang dicentang, semakin baik sistem mempersempit kemungkinan kerusakan.
             </p>
             <div class="mt-6 flex justify-center">
-                <i class="bi bi-clipboard2-pulse text-7xl text-blue-200/90"></i>
+                <img src="{{ asset('images/printer.jpg') }}" alt="" class="h-28 w-auto max-w-[200px] object-contain opacity-90" width="200" height="200" decoding="async">
             </div>
         </aside>
     </form>

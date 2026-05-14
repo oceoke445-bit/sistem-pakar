@@ -36,7 +36,7 @@
         </form>
     </div>
 
-    <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+    <div class="overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
         <table class="w-full min-w-[720px] text-sm">
             <thead class="border-b border-slate-100 bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
                 <tr><th class="px-4 py-3">No</th><th class="px-4 py-3">IF (Gejala)</th><th class="px-4 py-3">THEN (Kerusakan)</th><th class="px-4 py-3 text-right">Aksi</th></tr>

@@ -7,14 +7,14 @@
     <title>@yield('title', config('app.name', 'Sistem Pakar'))</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: { sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'] },
-                    colors: { sidebar: '#1e293b', brand: { 600: '#2563eb', 700: '#1d4ed8' } },
+                    fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+                    colors: { navy: { DEFAULT: '#1a2b4b', 950: '#0f172a' }, sidebar: '#1a2b4b', brand: { 600: '#2563eb', 700: '#1d4ed8' } },
                 },
             },
         };

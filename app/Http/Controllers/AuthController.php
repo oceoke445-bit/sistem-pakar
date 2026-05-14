@@ -32,7 +32,22 @@ class AuthController extends Controller
             return redirect('/login')->with('error', 'Server/database bermasalah, coba lagi');
         }
 
-        if (! $user || ! Hash::check($request->input('password'), $user->password_hash)) {
+        if (! $user) {
+            return redirect('/login')->with('error', 'Email atau password salah');
+        }
+
+        // Support both Laravel Bcrypt and Next.js bcryptjs hashes
+        $passwordValid = false;
+        try {
+            // Try Laravel's Hash::check first (for new users registered via Laravel)
+            $passwordValid = Hash::check($request->input('password'), $user->password_hash);
+        } catch (\RuntimeException $e) {
+            // If it fails with "This password does not use the Bcrypt algorithm"
+            // Try password_verify which supports bcryptjs from Next.js
+            $passwordValid = password_verify($request->input('password'), $user->password_hash);
+        }
+
+        if (! $passwordValid) {
             return redirect('/login')->with('error', 'Email atau password salah');
         }
 
