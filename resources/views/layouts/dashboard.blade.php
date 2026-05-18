@@ -45,7 +45,16 @@
             </header>
 
             <main class="relative main-scroll min-h-0 min-w-0 flex-1 overflow-y-auto bg-slate-100/80 px-4 py-4 sm:px-5 sm:py-6 md:px-8 md:py-8 lg:px-10 lg:py-10 print:ml-0 print:w-full print:overflow-visible print:bg-white print:p-6">
-                @if (!Request::is('admin/penyakit') && !Request::is('admin/gejala') && !Request::is('admin/printer'))
+                @if (
+                    !Request::is('admin/penyakit') && 
+                    !Request::is('admin/gejala') && 
+                    !Request::is('admin/printer') &&
+                    !Request::is('admin/relasi') &&
+                    !Request::is('user/diagnosa*') &&
+                    !Request::is('user/hasil-diagnosa*') &&
+                    !Request::is('user/riwayat*') &&
+                    !Request::is('profile*')
+                )
                 <div class="mb-5 flex justify-end sm:absolute sm:right-5 sm:top-6 md:right-8 md:top-8 lg:right-10 lg:top-10 sm:mb-0 print:hidden z-10">
                     <span class="inline-flex items-center gap-2 rounded-full border border-slate-200/90 bg-white px-4 py-2 text-xs font-medium text-slate-600 shadow-sm sm:text-sm">
                         <i class="bi bi-calendar3 text-slate-400"></i>
@@ -103,7 +112,15 @@
                 });
             });
             window.addEventListener('resize', function () {
-                if (isDesktop()) setOpen(false);
+                if (isDesktop()) {
+                    sidebar.classList.remove('-translate-x-full');
+                    overlay.classList.add('hidden');
+                    document.body.classList.remove('overflow-hidden');
+                } else {
+                    sidebar.classList.add('-translate-x-full');
+                    overlay.classList.add('hidden');
+                    document.body.classList.remove('overflow-hidden');
+                }
             });
             document.addEventListener('keydown', function (e) {
                 if (e.key === 'Escape' && !isDesktop()) setOpen(false);

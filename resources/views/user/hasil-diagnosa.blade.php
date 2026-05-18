@@ -1,122 +1,187 @@
 @extends('layouts.dashboard')
 @section('title', 'Hasil Diagnosa')
 @section('content')
+
 @php
-    $tingkat = diagnosis_tingkat_label($d->confidence !== null ? (float) $d->confidence : null);
-    $tingkatClass = $tingkat === 'Berat' ? 'border border-red-200 bg-red-50 text-red-800' : ($tingkat === 'Sedang' ? 'border border-amber-200 bg-amber-50 text-amber-900' : 'border border-emerald-200 bg-emerald-50 text-emerald-800');
-    $penyebabLines = $penyakit && $penyakit->deskripsi ? array_filter(preg_split('/\r\n|\r|\n/', trim($penyakit->deskripsi))) : [];
+    $tingkat = $penyakit && $penyakit->tingkat ? $penyakit->tingkat : 'Sedang';
+    $tingkatClass = $tingkat === 'Berat' ? 'border-red-200 bg-red-50 text-red-700' : ($tingkat === 'Sedang' ? 'border-amber-250 bg-amber-50 text-amber-800' : 'border-emerald-200 bg-emerald-50 text-emerald-700');
     $solusiLines = $penyakit && $penyakit->solusi ? array_filter(preg_split('/\r\n|\r|\n/', trim($penyakit->solusi))) : [];
 @endphp
-<div class="mx-auto max-w-4xl space-y-8">
-    <div class="flex flex-col gap-4">
+
+<div class="mx-auto max-w-5xl space-y-6">
+    <!-- Header Block -->
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
             <h1 class="text-2xl font-bold tracking-tight text-[#152238] sm:text-3xl">Hasil Diagnosa</h1>
-            <p class="mt-1 text-[15px] text-slate-600">Berikut adalah hasil analisa berdasarkan gejala yang dipilih.</p>
+            <p class="mt-1 text-[15px] text-slate-600">Berikut adalah hasil analisa berdasarkan gejala yang dipilih</p>
         </div>
-        <div class="flex flex-wrap items-center gap-3">
-            <div class="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-500 sm:text-sm">
-                <span class="flex h-7 w-7 items-center justify-center rounded-full bg-slate-200 text-xs font-bold text-slate-600">1</span>
-                Pilih Gejala
-            </div>
-            <i class="bi bi-chevron-right text-slate-300"></i>
-            <div class="flex items-center gap-2 rounded-full border border-blue-600 bg-blue-50 px-3 py-2 text-xs font-semibold text-blue-800 sm:text-sm">
-                <span class="flex h-7 w-7 items-center justify-center rounded-full bg-blue-600 text-xs font-bold text-white">2</span>
-                Hasil Diagnosa
-            </div>
-            <button type="button" onclick="window.print()" class="ml-auto inline-flex items-center gap-2 rounded-xl border-2 border-brand-600 bg-white px-4 py-2 text-sm font-bold text-brand-600 shadow-sm hover:bg-blue-50 print:hidden">
-                <i class="bi bi-printer"></i> Cetak hasil
+        <div class="shrink-0 print:hidden">
+            <button type="button" onclick="window.print()" class="inline-flex items-center gap-2 rounded-xl border border-blue-600 px-5 py-2.5 text-sm font-bold text-blue-600 hover:bg-blue-50 transition-colors shadow-sm bg-white">
+                <svg class="h-4.5 w-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-5a2 2 0 00-2-2H5a2 2 0 00-2 2v5a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                </svg>
+                Cetak Hasil
             </button>
         </div>
     </div>
 
-    <div class="overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-[0_8px_40px_rgba(15,23,42,0.08)] print:border-0 print:shadow-none">
-        <div class="border-b border-slate-100 bg-gradient-to-r from-slate-50 to-white px-5 py-8 sm:px-8 print:bg-white">
-            <div class="flex flex-col gap-6 sm:flex-row sm:items-start">
-                <div class="flex shrink-0 justify-center sm:block">
-                    <img src="{{ asset('images/printer.png') }}" alt="" class="h-28 w-auto max-w-[200px] object-contain sm:h-32" width="200" height="200" decoding="async">
+    <!-- Stepper Indicator (Matches current active state) -->
+    <div class="flex items-center justify-center gap-4 py-2 print:hidden">
+        <div class="flex items-center gap-2 opacity-60">
+            <span class="flex h-7 w-7 items-center justify-center rounded-full bg-slate-200 font-bold text-slate-600 text-xs">1</span>
+            <span class="text-sm font-medium text-slate-500">Pilih Gejala</span>
+        </div>
+        <div class="h-[1.5px] w-20 bg-slate-200"></div>
+        <div class="flex items-center gap-2">
+            <span class="flex h-7 w-7 items-center justify-center rounded-full bg-blue-600 font-bold text-white text-xs shadow-sm">2</span>
+            <span class="text-sm font-bold text-blue-800">Hasil Diagnosa</span>
+        </div>
+    </div>
+
+    <!-- Main Results Container Card -->
+    <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8 space-y-8 print:border-0 print:shadow-none">
+        
+        <!-- Red/Amber Header Box inside the main card -->
+        <div class="rounded-2xl border border-red-100 bg-red-50/40 p-5 sm:p-6 print:bg-white print:border-0">
+            <div class="flex flex-col gap-5 sm:flex-row sm:items-center">
+                <!-- Printer Printing Paper with Red Stripes Illustration -->
+                <div class="shrink-0 flex justify-center">
+                    <svg class="h-24 w-auto drop-shadow-sm" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Input paper tray -->
+                        <path d="M28 35 v-15 h44 v15" fill="#475569" stroke="#1e293b" stroke-width="2.5" stroke-linejoin="round"/>
+                        <!-- Sheet of paper going in -->
+                        <rect x="34" y="10" width="32" height="15" fill="#ffffff" stroke="#94a3b8" stroke-width="1.2"/>
+                        
+                        <!-- Printer main base body -->
+                        <rect x="12" y="32" width="76" height="42" rx="8" fill="#1e293b" stroke="#0f172a" stroke-width="3"/>
+                        
+                        <!-- Exit slot -->
+                        <rect x="22" y="52" width="56" height="6" rx="2" fill="#0f172a"/>
+                        
+                        <!-- Output printed paper sliding down -->
+                        <rect x="25" y="56" width="50" height="28" rx="2" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+                        
+                        <!-- RED LINES representing faulty striped printing -->
+                        <line x1="32" y1="62" x2="68" y2="62" stroke="#ef4444" stroke-width="2" stroke-linecap="round"/>
+                        <line x1="32" y1="67" x2="68" y2="67" stroke="#ef4444" stroke-width="2" stroke-linecap="round"/>
+                        <line x1="32" y1="72" x2="68" y2="72" stroke="#ef4444" stroke-width="2" stroke-linecap="round"/>
+                        <line x1="32" y1="77" x2="68" y2="77" stroke="#ef4444" stroke-width="2" stroke-linecap="round"/>
+                        
+                        <!-- LEDs -->
+                        <circle cx="20" cy="42" r="2.2" fill="#eab308"/>
+                        <circle cx="27" cy="42" r="2.2" fill="#22c55e"/>
+                    </svg>
                 </div>
-                <div class="min-w-0 flex-1 text-center sm:text-left">
-                    <p class="text-xs font-bold uppercase tracking-[0.2em] text-slate-500">Diagnosa kerusakan</p>
+                <!-- Damage details -->
+                <div class="text-center sm:text-left space-y-2">
+                    <p class="text-[13px] font-bold uppercase tracking-wider text-slate-500">Diagnosa Kerusakan</p>
                     @if ($penyakit)
-                        <h2 class="mt-2 text-2xl font-bold leading-tight tracking-tight text-red-600 sm:text-3xl">{{ $penyakit->nama_penyakit }}</h2>
+                        <h2 class="text-2xl font-extrabold text-red-600 leading-tight tracking-tight sm:text-3xl">
+                            {{ $penyakit->nama_penyakit }}
+                        </h2>
+                        <div class="mt-2">
+                            <span class="inline-flex items-center rounded-full border border-red-200 bg-red-100/60 px-3.5 py-1 text-xs font-bold text-red-700">
+                                Tingkat Kerusakan : {{ $tingkat }}
+                            </span>
+                        </div>
                     @else
-                        <h2 class="mt-2 text-2xl font-bold text-slate-700">Tidak ada hasil spesifik</h2>
+                        <h2 class="text-2xl font-bold text-slate-700">Tidak ada kerusakan yang terdeteksi</h2>
+                        <p class="text-sm text-slate-500">Kombinasi gejala yang Anda pilih tidak cocok dengan aturan kerusakan printer manapun.</p>
                     @endif
-                    <div class="mt-4 flex flex-wrap items-center justify-center gap-2 sm:justify-start">
-                        <span class="inline-flex rounded-full px-3 py-1 text-xs font-bold {{ $tingkatClass }}">Tingkat kerusakan: {{ $tingkat }}</span>
-                        @if ($pct !== null)
-                            <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">Kecocokan {{ number_format($pct, 1) }}%</span>
-                        @endif
-                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="space-y-8 px-5 py-8 sm:px-8">
-            @if (count($penyebabLines))
-                <div>
-                    <h3 class="text-sm font-bold uppercase tracking-wide text-slate-500">Penyebab</h3>
-                    <ul class="mt-3 list-decimal space-y-2 pl-5 text-sm leading-relaxed text-slate-700">
-                        @foreach ($penyebabLines as $line)
-                            <li>{{ $line }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @elseif ($penyakit && $penyakit->deskripsi)
-                <div>
-                    <h3 class="text-sm font-bold uppercase tracking-wide text-slate-500">Penyebab</h3>
-                    <p class="mt-3 text-sm leading-relaxed text-slate-700">{{ $penyakit->deskripsi }}</p>
-                </div>
-            @endif
+        @if ($penyakit)
+            <!-- Penyebab Section -->
+            <div class="space-y-3">
+                <h3 class="text-base font-bold text-slate-900">Penyebab</h3>
+                <p class="text-[15px] leading-relaxed text-slate-700">
+                    {{ $penyakit->deskripsi }}
+                </p>
+            </div>
 
-            @if (count($solusiLines))
-                <div>
-                    <h3 class="text-sm font-bold uppercase tracking-wide text-slate-500">Solusi</h3>
-                    <ol class="mt-3 list-decimal space-y-2 pl-5 text-sm leading-relaxed text-slate-700">
+            <!-- Solusi Section -->
+            <div class="space-y-3">
+                <h3 class="text-base font-bold text-slate-900">Solusi</h3>
+                @if (count($solusiLines))
+                    <ol class="list-decimal pl-5 text-[15px] space-y-2.5 text-slate-700 leading-relaxed">
                         @foreach ($solusiLines as $line)
                             <li>{{ $line }}</li>
                         @endforeach
                     </ol>
-                </div>
-            @elseif ($penyakit && $penyakit->solusi)
+                @else
+                    <p class="text-[15px] leading-relaxed text-slate-700">{{ $penyakit->solusi }}</p>
+                @endif
+            </div>
+        @endif
+
+        <!-- Selected Symptoms Badge List -->
+        <div class="border-t border-slate-100 pt-6">
+            <h4 class="text-sm font-bold uppercase tracking-wider text-slate-500 mb-3">Gejala yang Anda pilih</h4>
+            <div class="flex flex-wrap gap-2">
+                @foreach ($kodes as $k)
+                    <span class="inline-flex items-center rounded-lg bg-slate-50 border border-slate-200 px-3 py-1 text-xs font-semibold text-slate-700">
+                        {{ $namaGejala[$k] ?? $k }}
+                    </span>
+                @endforeach
+            </div>
+        </div>
+
+        <!-- Action Cards Grid (Exactly matches the mockup) -->
+        <div class="grid gap-6 sm:grid-cols-2 pt-4 print:hidden">
+            <!-- Green Card: Perbaikan Sendiri -->
+            <div class="rounded-2xl border border-slate-200 bg-white p-6 flex flex-col justify-between shadow-sm">
                 <div>
-                    <h3 class="text-sm font-bold uppercase tracking-wide text-slate-500">Solusi</h3>
-                    <p class="mt-3 text-sm leading-relaxed text-slate-700">{{ $penyakit->solusi }}</p>
-                </div>
-            @endif
-
-            <div>
-                <h3 class="text-sm font-bold uppercase tracking-wide text-slate-500">Gejala yang dipilih</h3>
-                <ul class="mt-3 flex flex-wrap gap-2">
-                    @foreach ($kodes as $k)
-                        <li class="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-medium text-slate-700">{{ $namaGejala[$k] ?? $k }}</li>
-                    @endforeach
-                </ul>
-            </div>
-
-            <div class="grid gap-4 sm:grid-cols-2">
-                <div class="rounded-2xl border border-emerald-200/80 bg-emerald-50/80 p-6 shadow-sm">
-                    <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-600 text-white">
-                        <i class="bi bi-file-earmark-check text-xl"></i>
+                    <div class="flex items-center gap-3">
+                        <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">
+                            <svg class="h-5.5 w-5.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </span>
+                        <h4 class="font-bold text-slate-950 text-[15px]">Perbaikan Sendiri</h4>
                     </div>
-                    <p class="mt-4 font-bold text-emerald-950">Perbaikan sendiri</p>
-                    <p class="mt-2 text-sm leading-relaxed text-emerald-900/85">Kerusakan ini dapat diperbaiki sendiri dengan langkah-langkah di atas jika kondisi aman.</p>
-                    <a href="/user/riwayat" class="mt-5 inline-flex w-full items-center justify-center rounded-xl bg-emerald-600 py-3 text-sm font-bold text-white shadow-md hover:bg-emerald-700 sm:w-auto sm:px-6">Lakukan sendiri</a>
+                    <p class="mt-4 text-[14px] leading-relaxed text-slate-600">
+                        Kerusakan ini dapat diperbaiki sendiri dengan langkah-langkah di atas.
+                    </p>
                 </div>
-                <div class="rounded-2xl border border-orange-200/80 bg-orange-50/80 p-6 shadow-sm">
-                    <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-orange-500 text-white">
-                        <i class="bi bi-wrench-adjustable text-xl"></i>
-                    </div>
-                    <p class="mt-4 font-bold text-orange-950">Panggil teknisi</p>
-                    <p class="mt-2 text-sm leading-relaxed text-orange-900/85">Jika kerusakan tidak dapat diatasi atau tingkat berat, hubungi teknisi resmi.</p>
-                    <span class="mt-5 flex w-full cursor-default items-center justify-center rounded-xl bg-orange-500 py-3 text-sm font-bold text-white shadow-md sm:inline-flex sm:w-auto sm:px-6">Hubungi teknisi</span>
+                <div class="mt-6">
+                    <a href="/user/riwayat" class="inline-flex w-full items-center justify-center rounded-xl bg-emerald-600 px-5 py-3 text-sm font-bold text-white hover:bg-emerald-700 transition-colors shadow-sm">
+                        Lakukan Sendiri
+                    </a>
                 </div>
             </div>
 
-            <div class="border-t border-slate-100 pt-6">
-                <a href="/user/riwayat" class="text-sm font-bold text-brand-600 hover:text-brand-700">Ke riwayat diagnosa →</a>
+            <!-- Orange Card: Panggil Teknisi -->
+            <div class="rounded-2xl border border-slate-200 bg-white p-6 flex flex-col justify-between shadow-sm">
+                <div>
+                    <div class="flex items-center gap-3">
+                        <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-orange-50 text-orange-600">
+                            <svg class="h-5.5 w-5.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                            </svg>
+                        </span>
+                        <h4 class="font-bold text-slate-950 text-[15px]">Panggil Teknisi</h4>
+                    </div>
+                    <p class="mt-4 text-[14px] leading-relaxed text-slate-600">
+                        Jika kerusakan tidak dapat diatasi, sebaiknya hubungi teknisi.
+                    </p>
+                </div>
+                <div class="mt-6">
+                    <button type="button" onclick="alert('Hubungi Teknisi Resmi di Nomor WhatsApp: 0812-3456-7890')" class="inline-flex w-full items-center justify-center rounded-xl bg-orange-500 px-5 py-3 text-sm font-bold text-white hover:bg-orange-600 transition-colors shadow-sm">
+                        Hubungi Teknisi
+                    </button>
+                </div>
             </div>
+        </div>
+
+        <!-- Back Link -->
+        <div class="border-t border-slate-100 pt-6 print:hidden">
+            <a href="/user/diagnosa" class="inline-flex items-center gap-1 text-sm font-bold text-brand-600 hover:text-brand-700 transition-colors">
+                <i class="bi bi-arrow-left"></i> Kembali ke Diagnosa
+            </a>
         </div>
     </div>
 </div>
+
 @endsection

@@ -50,10 +50,14 @@
                 </tr>
             </thead>
             <tbody>
+                @php
+                    static $diseasesMap = null;
+                    if ($diseasesMap === null) {
+                        $diseasesMap = DB::table('penyakit')->get()->keyBy('kode_penyakit')->all();
+                    }
+                @endphp
                 @foreach ($rows as $i => $r)
                     @php
-                        $lbl = diagnosis_tingkat_label($r->confidence !== null ? (float) $r->confidence : null);
-                        
                         static $dbPrinters = null;
                         if ($dbPrinters === null) {
                             $dbPrinters = DB::table('printers')->orderBy('id', 'asc')->get();
@@ -64,21 +68,19 @@
                             $p = $dbPrinters->values()->get($idx);
                             $printerName = $p->nama_printer . ' (' . $p->model . ')';
                         } else {
-                            $printers = [
-                                0 => 'Unit 4 (Canon iR 2002)',
-                                1 => 'Unit 1 (Canon iR 3245)',
-                                2 => 'Unit 2 (Canon iR 3235)',
-                                3 => 'Unit 3 (Canon iR 2520)',
-                            ];
-                            $printerName = $printers[$r->id % 4] ?? 'Unit 1 (Canon iR 3245)';
+                            $printerName = 'Unit 1 (Canon iR 3245)';
                         }
+                        
+                        $dp = $r->hasil_penyakit ? ($diseasesMap[$r->hasil_penyakit] ?? null) : null;
+                        $lbl = $dp ? $dp->tingkat : '—';
+                        $lblClass = $lbl === 'Berat' ? 'text-red-650 font-bold' : ($lbl === 'Sedang' ? 'text-amber-600 font-bold' : ($lbl === 'Ringan' ? 'text-emerald-600 font-bold' : 'text-slate-500'));
                     @endphp
                     <tr class="border-t border-slate-100 odd:bg-white even:bg-slate-50/80">
                         <td class="px-4 py-3.5 text-slate-500">{{ $i + 1 }}</td>
                         <td class="whitespace-nowrap px-4 py-3.5 text-slate-600">{{ format_date_id($r->tanggal_diagnosa) }}</td>
                         <td class="px-4 py-3.5 font-semibold text-slate-700">{{ $printerName }}</td>
                         <td class="px-4 py-3.5 font-medium text-slate-900">{{ $r->hasil_penyakit ? ($namaPenyakit[$r->hasil_penyakit] ?? $r->hasil_penyakit) : '—' }}</td>
-                        <td class="px-4 py-3.5 text-slate-600 font-semibold">{{ $lbl }}</td>
+                        <td class="px-4 py-3.5 {{ $lblClass }}">{{ $lbl }}</td>
                         <td class="whitespace-nowrap px-4 py-3.5">
                             @if ($lbl === 'Ringan')
                                 <a href="/user/riwayat/{{ $r->id }}" class="inline-flex items-center gap-1.5 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-bold text-emerald-700 shadow-sm hover:bg-emerald-100/70 transition-colors">

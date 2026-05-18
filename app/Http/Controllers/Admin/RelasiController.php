@@ -10,6 +10,8 @@ class RelasiController extends Controller
 {
     public function index(Request $request)
     {
+        $q = $request->query('q', '');
+        
         $relasi = DB::table('relasi')->orderBy('id')->get();
         $penyakit = DB::table('penyakit')->orderBy('kode_penyakit')->get();
         $gejala = DB::table('gejala')->orderBy('kode_gejala')->get();
@@ -23,6 +25,7 @@ class RelasiController extends Controller
             'gejala' => $gejala,
             'pn' => $pn,
             'gn' => $gn,
+            'q' => $q,
             'success' => $request->query('success'),
             'notice' => $request->query('notice'),
             'error' => $request->query('error'),
@@ -54,22 +57,30 @@ class RelasiController extends Controller
 
     public function destroy(Request $request)
     {
-        $id = (int) $request->input('id');
-        $r = DB::table('relasi')->where('id', $id)->first();
-        $namaPenyakit = $r ? DB::table('penyakit')->where('kode_penyakit', $r->kode_penyakit)->value('nama_penyakit') : null;
-        $namaGejala = $r ? DB::table('gejala')->where('kode_gejala', $r->kode_gejala)->value('nama_gejala') : null;
+        $kodePenyakit = $request->input('kode_penyakit');
+        
+        if ($kodePenyakit) {
+            $namaPenyakit = DB::table('penyakit')->where('kode_penyakit', $kodePenyakit)->value('nama_penyakit');
+            DB::table('relasi')->where('kode_penyakit', $kodePenyakit)->delete();
+            $detail = "Seluruh aturan untuk kerusakan {$kodePenyakit}" . ($namaPenyakit ? " ({$namaPenyakit})" : "") . " berhasil dihapus.";
+        } else {
+            $id = (int) $request->input('id');
+            $r = DB::table('relasi')->where('id', $id)->first();
+            $namaPenyakit = $r ? DB::table('penyakit')->where('kode_penyakit', $r->kode_penyakit)->value('nama_penyakit') : null;
+            $namaGejala = $r ? DB::table('gejala')->where('kode_gejala', $r->kode_gejala)->value('nama_gejala') : null;
 
-        DB::table('relasi')->where('id', $id)->delete();
+            DB::table('relasi')->where('id', $id)->delete();
 
-        $detail = $r
-            ? sprintf(
-                'Relasi %s%s dengan gejala %s%s berhasil dihapus.',
-                $r->kode_penyakit,
-                $namaPenyakit ? " ({$namaPenyakit})" : '',
-                $r->kode_gejala,
-                $namaGejala ? " ({$namaGejala})" : ''
-            )
-            : 'Relasi berhasil dihapus.';
+            $detail = $r
+                ? sprintf(
+                    'Relasi %s%s dengan gejala %s%s berhasil dihapus.',
+                    $r->kode_penyakit,
+                    $namaPenyakit ? " ({$namaPenyakit})" : '',
+                    $r->kode_gejala,
+                    $namaGejala ? " ({$namaGejala})" : ''
+                )
+                : 'Relasi berhasil dihapus.';
+        }
 
         return redirect('/admin/relasi?notice='.urlencode($detail));
     }
