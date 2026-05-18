@@ -1,34 +1,33 @@
 @php
     $adminNav = [
-        ['/admin/dashboard', 'Dashboard', 'bi-speedometer2'],
+        ['/admin/dashboard', 'Dashboard', 'bi-house-door-fill'],
+        ['/user/diagnosa', 'Diagnosa Kerusakan', 'bi-clipboard2-check'],
         ['/admin/riwayat', 'Riwayat Diagnosa', 'bi-clock-history'],
-        ['/admin/penyakit', 'Data Kerusakan', 'bi-exclamation-octagon'],
+        ['/admin/penyakit', 'Data Kerusakan', 'bi-shield-exclamation'],
         ['/admin/gejala', 'Data Gejala', 'bi-clipboard2-pulse'],
-        ['/admin/relasi', 'Data Rule (Aturan)', 'bi-diagram-3'],
-        ['/admin/pengguna', 'Data Pengguna', 'bi-people'],
+        ['/admin/relasi', 'Data Rule (Aturan)', 'bi-bezier2'],
+        ['/admin/pengguna', 'Data Printer', 'bi-printer'],
         ['/admin/laporan', 'Laporan', 'bi-file-earmark-bar-graph'],
         ['/profile', 'Pengaturan', 'bi-gear'],
     ];
     $userNav = [
-        ['/user/dashboard', 'Dashboard', 'bi-speedometer2'],
-        ['/user/diagnosa', 'Diagnosa Kerusakan', 'bi-search-heart'],
+        ['/user/dashboard', 'Dashboard', 'bi-house-door-fill'],
+        ['/user/diagnosa', 'Diagnosa Kerusakan', 'bi-clipboard2-check'],
         ['/user/riwayat', 'Riwayat Diagnosa', 'bi-clock-history'],
         ['/profile', 'Pengaturan', 'bi-gear'],
     ];
     $items = $role === 'admin' ? $adminNav : $userNav;
-    $printerUrl = asset('images/printer.jpg');
-    $brandName = config('app.name', 'Sistem Pakar');
 @endphp
 <aside id="app-sidebar"
        class="fixed inset-y-0 left-0 z-50 flex h-[100dvh] w-[min(100vw-3rem,18rem)] max-w-[288px] -translate-x-full flex-col overflow-hidden border-r border-slate-900/50 bg-[#152238] text-slate-200 shadow-2xl print:hidden motion-safe:transition-transform motion-safe:duration-200 motion-safe:ease-out sm:w-72 lg:translate-x-0">
     <div class="shrink-0 border-b border-white/10 px-4 py-5 md:px-5">
         <div class="flex items-center gap-3">
-            <div class="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-[#152238] ring-1 ring-white/15">
-                <img src="{{ $printerUrl }}" alt="" class="h-10 w-10 object-contain mix-blend-multiply contrast-[1.05]" width="40" height="40" decoding="async">
+            <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/10 ring-1 ring-white/15 text-white">
+                <i class="bi bi-printer text-2xl"></i>
             </div>
             <div class="min-w-0">
-                <p class="text-[11px] font-bold uppercase tracking-[0.2em] text-white">Sistem Pakar</p>
-                <p class="mt-1 text-[13px] font-semibold leading-snug text-slate-300">{{ $brandName }}</p>
+                <p class="text-xs font-black uppercase tracking-wider text-white">SISTEM PAKAR</p>
+                <p class="text-[11px] font-medium leading-normal text-slate-300">Fotocopy Berkah Andirra</p>
             </div>
         </div>
     </div>

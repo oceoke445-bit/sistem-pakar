@@ -64,7 +64,7 @@
                 Pilih semua gejala yang sesuai agar sistem dapat memberikan diagnosa yang lebih akurat.
             </p>
             <div class="mt-6 flex justify-center">
-                <img src="{{ asset('images/printer.jpg') }}" alt="" class="h-32 w-auto max-w-[220px] object-contain drop-shadow-md" width="220" height="220" decoding="async">
+                <img src="{{ asset('images/printer.png') }}" alt="" class="h-32 w-auto max-w-[220px] object-contain drop-shadow-md" width="220" height="220" decoding="async">
             </div>
         </aside>
     </form>

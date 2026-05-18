@@ -24,6 +24,7 @@
         };
     </script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     @stack('head')
 </head>
 <body class="overflow-hidden bg-slate-100 font-sans text-slate-800 antialiased">
@@ -43,13 +44,15 @@
                 </div>
             </header>
 
-            <main class="main-scroll min-h-0 min-w-0 flex-1 overflow-y-auto bg-slate-100/80 px-4 py-4 sm:px-5 sm:py-6 md:px-8 md:py-8 lg:px-10 lg:py-10 print:ml-0 print:w-full print:overflow-visible print:bg-white print:p-6">
-                <div class="mb-5 flex justify-end print:hidden">
+            <main class="relative main-scroll min-h-0 min-w-0 flex-1 overflow-y-auto bg-slate-100/80 px-4 py-4 sm:px-5 sm:py-6 md:px-8 md:py-8 lg:px-10 lg:py-10 print:ml-0 print:w-full print:overflow-visible print:bg-white print:p-6">
+                @if (!Request::is('admin/penyakit'))
+                <div class="mb-5 flex justify-end sm:absolute sm:right-5 sm:top-6 md:right-8 md:top-8 lg:right-10 lg:top-10 sm:mb-0 print:hidden z-10">
                     <span class="inline-flex items-center gap-2 rounded-full border border-slate-200/90 bg-white px-4 py-2 text-xs font-medium text-slate-600 shadow-sm sm:text-sm">
                         <i class="bi bi-calendar3 text-slate-400"></i>
                         <span id="toolbar-datetime-text"></span>
                     </span>
                 </div>
+                @endif
                 @yield('content')
             </main>
         </div>

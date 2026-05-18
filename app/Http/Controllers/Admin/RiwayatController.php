@@ -56,15 +56,15 @@ class RiwayatController extends Controller
             });
         }
 
-        $rows = $query->orderByDesc('tanggal_diagnosa')->get();
+        $rows = $query->orderByDesc('tanggal_diagnosa')->paginate(10)->withQueryString();
 
-        $userIds = $rows->pluck('id_user')->unique()->filter()->values()->all();
+        $userIds = collect($rows->items())->pluck('id_user')->unique()->filter()->values()->all();
         $namaUser = [];
         if ($userIds !== []) {
             $namaUser = DB::table('users')->whereIn('id', $userIds)->pluck('nama_lengkap', 'id')->all();
         }
 
-        $kodes = $rows->pluck('hasil_penyakit')->filter()->unique()->values()->all();
+        $kodes = collect($rows->items())->pluck('hasil_penyakit')->filter()->unique()->values()->all();
         $namaPenyakit = [];
         if ($kodes !== []) {
             $namaPenyakit = DB::table('penyakit')->whereIn('kode_penyakit', $kodes)->pluck('nama_penyakit', 'kode_penyakit')->all();

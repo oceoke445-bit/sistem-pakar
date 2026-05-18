@@ -47,9 +47,9 @@ class RiwayatController extends Controller
             });
         }
 
-        $rows = $query->orderByDesc('tanggal_diagnosa')->get();
+        $rows = $query->orderByDesc('tanggal_diagnosa')->paginate(10)->withQueryString();
 
-        $kodes = $rows->pluck('hasil_penyakit')->filter()->unique()->values()->all();
+        $kodes = collect($rows->items())->pluck('hasil_penyakit')->filter()->unique()->values()->all();
         $namaPenyakit = [];
         if ($kodes !== []) {
             $namaPenyakit = DB::table('penyakit')->whereIn('kode_penyakit', $kodes)->pluck('nama_penyakit', 'kode_penyakit')->all();

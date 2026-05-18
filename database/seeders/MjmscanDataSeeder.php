@@ -33,21 +33,22 @@ class MjmscanDataSeeder extends Seeder
             }
 
             $penyakit = [
-                ['JK01', 'Busi Bermasalah', 'Busi bermasalah dapat menyebabkan kinerja mesin menjadi tidak optimal, seperti sulitnya mesin menyala, mesin tersendat-sendat, atau konsumsi bahan bakar yang boros.', 'Mengecek jalur pengapian dan lihatlah apakah ada kabel yang terbakar atau terlihat krosleting, pastikan posisi busi pas, setting ulang setelan bahan bakar.', 'Pemeriksaan rutin, Penggantian busi secara berkala, Menggunakan bahan bakar berkualitas, Menghindari penggunaan mesin yang berlebihan'],
-                ['JK02', 'Masalah Pada Sistem Transmisi (CVT)', 'Masalah pada sistem transmisi CVT dapat menyebabkan kinerja mobil menjadi tidak optimal.', 'Ganti komponen CVT yang rusak dengan suku cadang berkualitas baik.', 'Perawatan rutin, Pemeriksaan sistem transmisi, Menggunakan oli transmisi yang sesuai'],
-                ['JK03', 'Filter Udara Tersumbat', 'Filter udara tersumbat dapat menyebabkan kinerja mesin menjadi tidak optimal.', 'Bersihkan filter udara dan karburator agar aliran udara kembali lancar.', 'Perawatan rutin, Pemeriksaan filter udara, Menggunakan filter udara berkualitas'],
-                ['JK04', 'Pengaturan Knalpot Tidak Tepat', 'Pengaturan knalpot yang tidak tepat dapat menyebabkan kinerja mesin menjadi tidak optimal.', 'Ganti knalpot jika diperlukan dan lakukan penyetelan ulang sistem bahan bakar atau ECU.', 'Pemasangan knalpot yang benar, Perawatan rutin'],
-                ['JK05', 'Pengaturan Jarum Skep Tidak Sesuai', 'Pengaturan jarum skep yang tidak sesuai dapat menyebabkan kinerja karburator menjadi tidak optimal.', 'Pastikan jarum skep terpasang dengan lurus dan presisi. Lakukan penyetelan ulang karburator.', 'Pengaturan jarum skep yang benar, Perawatan rutin'],
-                ['JK06', 'Piston Haus atau Tergores', 'Piston haus atau tergores dapat menyebabkan kinerja mesin menjadi tidak optimal.', 'Lakukan penggantian piston dan perawatan berkala.', 'Perawatan rutin, Menggunakan oli berkualitas'],
-                ['JK07', 'Aki Soak atau Lemah', 'Aki soak atau lemah dapat menyebabkan kinerja mobil menjadi tidak optimal.', 'Lakukan pengisian ulang daya (cas aki), periksa voltase. Jika perlu, ganti aki dengan yang baru.', 'Perawatan rutin, Menggunakan aki yang sesuai'],
+                ['JK01', 'Busi Bermasalah', 'ringan', 'Busi bermasalah dapat menyebabkan kinerja mesin menjadi tidak optimal, seperti sulitnya mesin menyala, mesin tersendat-sendat, atau konsumsi bahan bakar yang boros.', 'Mengecek jalur pengapian dan lihatlah apakah ada kabel yang terbakar atau terlihat krosleting, pastikan posisi busi pas, setting ulang setelan bahan bakar.', 'Pemeriksaan rutin, Penggantian busi secara berkala, Menggunakan bahan bakar berkualitas, Menghindari penggunaan mesin yang berlebihan'],
+                ['JK02', 'Masalah Pada Sistem Transmisi (CVT)', 'sedang', 'Masalah pada sistem transmisi CVT dapat menyebabkan kinerja mobil menjadi tidak optimal.', 'Ganti komponen CVT yang rusak dengan suku cadang berkualitas baik.', 'Perawatan rutin, Pemeriksaan sistem transmisi, Menggunakan oli transmisi yang sesuai'],
+                ['JK03', 'Filter Udara Tersumbat', 'ringan', 'Filter udara tersumbat dapat menyebabkan kinerja mesin menjadi tidak optimal.', 'Bersihkan filter udara dan karburator agar aliran udara kembali lancar.', 'Perawatan rutin, Pemeriksaan filter udara, Menggunakan filter udara berkualitas'],
+                ['JK04', 'Pengaturan Knalpot Tidak Tepat', 'ringan', 'Pengaturan knalpot yang tidak tepat dapat menyebabkan kinerja mesin menjadi tidak optimal.', 'Ganti knalpot jika diperlukan dan lakukan penyetelan ulang sistem bahan bakar atau ECU.', 'Pemasangan knalpot yang benar, Perawatan rutin'],
+                ['JK05', 'Pengaturan Jarum Skep Tidak Sesuai', 'ringan', 'Pengaturan jarum skep yang tidak sesuai dapat menyebabkan kinerja karburator menjadi tidak optimal.', 'Pastikan jarum skep terpasang dengan lurus dan presisi. Lakukan penyetelan ulang karburator.', 'Pengaturan jarum skep yang benar, Perawatan rutin'],
+                ['JK06', 'Piston Haus atau Tergores', 'berat', 'Piston haus atau tergores dapat menyebabkan kinerja mesin menjadi tidak optimal.', 'Lakukan penggantian piston dan perawatan berkala.', 'Perawatan rutin, Menggunakan oli berkualitas'],
+                ['JK07', 'Aki Soak atau Lemah', 'sedang', 'Aki soak atau lemah dapat menyebabkan kinerja mobil menjadi tidak optimal.', 'Lakukan pengisian ulang daya (cas aki), periksa voltase. Jika perlu, ganti aki dengan yang baru.', 'Perawatan rutin, Menggunakan aki yang sesuai'],
             ];
             foreach ($penyakit as $row) {
                 DB::table('penyakit')->insertOrIgnore([
                     'kode_penyakit' => $row[0],
                     'nama_penyakit' => $row[1],
-                    'deskripsi' => $row[2],
-                    'solusi' => $row[3],
-                    'pencegahan' => $row[4],
+                    'tingkat' => $row[2],
+                    'deskripsi' => $row[3],
+                    'solusi' => $row[4],
+                    'pencegahan' => $row[5],
                 ]);
             }
 

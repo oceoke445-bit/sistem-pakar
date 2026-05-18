@@ -33,7 +33,7 @@
         <div class="border-b border-slate-100 bg-gradient-to-r from-slate-50 to-white px-5 py-8 sm:px-8 print:bg-white">
             <div class="flex flex-col gap-6 sm:flex-row sm:items-start">
                 <div class="flex shrink-0 justify-center sm:block">
-                    <img src="{{ asset('images/printer.jpg') }}" alt="" class="h-28 w-auto max-w-[200px] object-contain sm:h-32" width="200" height="200" decoding="async">
+                    <img src="{{ asset('images/printer.png') }}" alt="" class="h-28 w-auto max-w-[200px] object-contain sm:h-32" width="200" height="200" decoding="async">
                 </div>
                 <div class="min-w-0 flex-1 text-center sm:text-left">
                     <p class="text-xs font-bold uppercase tracking-[0.2em] text-slate-500">Diagnosa kerusakan</p>

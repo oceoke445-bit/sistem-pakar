@@ -22,6 +22,7 @@ return new class extends Migration
         Schema::create('penyakit', function (Blueprint $table) {
             $table->string('kode_penyakit')->primary();
             $table->string('nama_penyakit');
+            $table->string('tingkat')->nullable();
             $table->text('deskripsi')->nullable();
             $table->text('solusi')->nullable();
             $table->text('pencegahan')->nullable();

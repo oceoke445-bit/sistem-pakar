@@ -38,6 +38,7 @@ class PenyakitController extends Controller
         $request->validate([
             'kode_penyakit' => 'required|string|max:50',
             'nama_penyakit' => 'required|string|max:255',
+            'tingkat' => 'required|string|in:ringan,sedang,berat',
             'deskripsi' => 'nullable|string',
             'solusi' => 'nullable|string',
             'pencegahan' => 'nullable|string',
@@ -47,6 +48,7 @@ class PenyakitController extends Controller
             DB::table('penyakit')->insert([
                 'kode_penyakit' => trim($request->input('kode_penyakit')),
                 'nama_penyakit' => trim($request->input('nama_penyakit')),
+                'tingkat' => $request->input('tingkat'),
                 'deskripsi' => $request->input('deskripsi'),
                 'solusi' => $request->input('solusi'),
                 'pencegahan' => $request->input('pencegahan'),
@@ -67,6 +69,7 @@ class PenyakitController extends Controller
         $request->validate([
             'kode_penyakit' => 'required|string|max:50',
             'nama_penyakit' => 'required|string|max:255',
+            'tingkat' => 'required|string|in:ringan,sedang,berat',
             'deskripsi' => 'nullable|string',
             'solusi' => 'nullable|string',
             'pencegahan' => 'nullable|string',
@@ -76,6 +79,7 @@ class PenyakitController extends Controller
             ->where('kode_penyakit', trim($request->input('kode_penyakit')))
             ->update([
                 'nama_penyakit' => trim($request->input('nama_penyakit')),
+                'tingkat' => $request->input('tingkat'),
                 'deskripsi' => $request->input('deskripsi'),
                 'solusi' => $request->input('solusi'),
                 'pencegahan' => $request->input('pencegahan'),

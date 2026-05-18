@@ -2,7 +2,7 @@
 @section('title', 'Daftar | '.config('app.name', 'Sistem Pakar'))
 @section('content')
 @php
-    $printerUrl = asset('images/printer.jpg');
+    $printerUrl = asset('images/printer.png');
     $brand = config('app.name', 'Sistem Pakar');
     $tagline = config('app.tagline', 'Diagnosa kerusakan printer — Forward Chaining');
 @endphp

@@ -12,24 +12,28 @@
         <div class="rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-900">{{ request('notice') }}</div>
     @endif
 
-    <form method="get" action="/user/riwayat" class="flex flex-col gap-3 rounded-2xl border border-slate-200/90 bg-white p-4 shadow-[0_4px_24px_rgba(15,23,42,0.06)] sm:flex-row sm:flex-wrap sm:items-end">
+    <form method="get" action="/user/riwayat" class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end bg-transparent p-0 border-0 shadow-none">
         <div class="relative min-w-0 flex-1">
             <i class="bi bi-search pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
             <input type="search" name="q" value="{{ $q }}" placeholder="Cari riwayat…"
-                   class="w-full rounded-xl border border-slate-200 bg-slate-50 py-3 pl-11 pr-4 text-sm outline-none focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/20">
+                   class="w-full rounded-xl border border-slate-200 bg-white py-3 pl-11 pr-4 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 shadow-sm">
         </div>
         <div class="w-full sm:w-52">
             <label class="mb-1 block text-xs font-bold uppercase tracking-wide text-slate-500">Tingkat</label>
-            <select name="tingkat" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/20">
-                <option value="" @selected($tingkat === '')>Semua tingkat</option>
-                <option value="ringan" @selected($tingkat === 'ringan')>Ringan</option>
-                <option value="sedang" @selected($tingkat === 'sedang')>Sedang</option>
-                <option value="berat" @selected($tingkat === 'berat')>Berat</option>
-            </select>
+            <div class="relative w-full">
+                <select name="tingkat" onchange="this.form.submit()" class="w-full appearance-none rounded-xl border border-slate-200 bg-white pl-4 pr-10 py-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 shadow-sm">
+                    <option value="" @selected($tingkat === '')>Semua tingkat</option>
+                    <option value="ringan" @selected($tingkat === 'ringan')>Ringan</option>
+                    <option value="sedang" @selected($tingkat === 'sedang')>Sedang</option>
+                    <option value="berat" @selected($tingkat === 'berat')>Berat</option>
+                </select>
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3.5 text-slate-400">
+                    <i class="bi bi-chevron-down text-xs"></i>
+                </div>
+            </div>
         </div>
-        <button type="submit" class="rounded-xl bg-brand-600 px-6 py-3 text-sm font-bold text-white shadow-sm hover:bg-brand-700">Terapkan</button>
         @if ($q !== '' || $tingkat !== '')
-            <a href="/user/riwayat" class="rounded-xl border border-slate-200 px-5 py-3 text-center text-sm font-semibold text-slate-600 hover:bg-slate-50">Reset</a>
+            <a href="/user/riwayat" class="rounded-xl border border-slate-200 bg-white px-5 py-3 text-center text-sm font-semibold text-slate-600 hover:bg-slate-50 shadow-sm transition-colors">Reset</a>
         @endif
     </form>
 
@@ -39,25 +43,40 @@
                 <tr>
                     <th class="px-4 py-3.5">No</th>
                     <th class="px-4 py-3.5">Tanggal</th>
+                    <th class="px-4 py-3.5">Unit Printer</th>
                     <th class="px-4 py-3.5">Kerusakan</th>
                     <th class="px-4 py-3.5">Tingkat</th>
-                    <th class="px-4 py-3.5">%</th>
                     <th class="px-4 py-3.5">Tindakan</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($rows as $i => $r)
-                    @php $lbl = diagnosis_tingkat_label($r->confidence !== null ? (float) $r->confidence : null); @endphp
+                    @php
+                        $lbl = diagnosis_tingkat_label($r->confidence !== null ? (float) $r->confidence : null);
+                        $printers = [
+                            0 => 'Unit 4 (Canon iR 2002)',
+                            1 => 'Unit 1 (Canon iR 3245)',
+                            2 => 'Unit 2 (Canon iR 3235)',
+                            3 => 'Unit 3 (Canon iR 2520)',
+                        ];
+                        $printerName = $printers[$r->id % 4] ?? 'Unit 1 (Canon iR 3245)';
+                    @endphp
                     <tr class="border-t border-slate-100 odd:bg-white even:bg-slate-50/80">
                         <td class="px-4 py-3.5 text-slate-500">{{ $i + 1 }}</td>
                         <td class="whitespace-nowrap px-4 py-3.5 text-slate-600">{{ format_date_id($r->tanggal_diagnosa) }}</td>
+                        <td class="px-4 py-3.5 font-semibold text-slate-700">{{ $printerName }}</td>
                         <td class="px-4 py-3.5 font-medium text-slate-900">{{ $r->hasil_penyakit ? ($namaPenyakit[$r->hasil_penyakit] ?? $r->hasil_penyakit) : '—' }}</td>
-                        <td class="px-4 py-3.5">
-                            <span class="inline-flex rounded-full px-2.5 py-0.5 text-xs font-bold {{ $lbl === 'Berat' ? 'bg-red-100 text-red-800' : ($lbl === 'Sedang' ? 'bg-amber-100 text-amber-900' : 'bg-emerald-100 text-emerald-800') }}">{{ $lbl }}</span>
-                        </td>
-                        <td class="px-4 py-3.5 text-slate-600">{{ $r->confidence !== null ? number_format($r->confidence * 100, 1) : '—' }}</td>
+                        <td class="px-4 py-3.5 text-slate-600 font-semibold">{{ $lbl }}</td>
                         <td class="whitespace-nowrap px-4 py-3.5">
-                            <a href="/user/riwayat/{{ $r->id }}" class="font-bold text-brand-600 hover:text-brand-700">Detail</a>
+                            @if ($lbl === 'Ringan')
+                                <a href="/user/riwayat/{{ $r->id }}" class="inline-flex items-center gap-1.5 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-bold text-emerald-700 shadow-sm hover:bg-emerald-100/70 transition-colors">
+                                    Perbaikan Sendiri
+                                </a>
+                            @else
+                                <a href="/user/riwayat/{{ $r->id }}" class="inline-flex items-center gap-1.5 rounded-xl border border-amber-200 bg-amber-50 px-3 py-1.5 text-xs font-bold text-amber-700 shadow-sm hover:bg-amber-100/70 transition-colors">
+                                    Teknisi
+                                </a>
+                            @endif
                         </td>
                     </tr>
                 @endforeach
@@ -67,5 +86,44 @@
             <p class="px-4 py-12 text-center text-slate-500">Tidak ada data yang cocok.</p>
         @endif
     </div>
+
+    @if ($rows->hasPages())
+        <div class="flex items-center justify-center gap-4 py-6">
+            {{-- Previous Page Link --}}
+            @if ($rows->onFirstPage())
+                <span class="inline-flex h-10 w-10 items-center justify-center text-slate-300 cursor-not-allowed">
+                    <i class="bi bi-chevron-left text-[14px]"></i>
+                </span>
+            @else
+                <a href="{{ $rows->previousPageUrl() }}" class="inline-flex h-10 w-10 items-center justify-center text-slate-400 hover:text-slate-600 transition-colors">
+                    <i class="bi bi-chevron-left text-[14px]"></i>
+                </a>
+            @endif
+
+            {{-- Page Numbers --}}
+            @foreach (range(1, $rows->lastPage()) as $page)
+                @if ($page == $rows->currentPage())
+                    <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl border-2 border-blue-200 bg-white font-bold text-blue-600 shadow-[0_2px_8px_rgba(59,130,246,0.08)]">
+                        {{ $page }}
+                    </span>
+                @else
+                    <a href="{{ $rows->url($page) }}" class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white font-semibold text-slate-500 hover:bg-slate-50 transition-colors shadow-sm">
+                        {{ $page }}
+                    </a>
+                @endif
+            @endforeach
+
+            {{-- Next Page Link --}}
+            @if ($rows->hasMorePages())
+                <a href="{{ $rows->nextPageUrl() }}" class="inline-flex h-10 w-10 items-center justify-center text-slate-400 hover:text-slate-600 transition-colors">
+                    <i class="bi bi-chevron-right text-[14px]"></i>
+                </a>
+            @else
+                <span class="inline-flex h-10 w-10 items-center justify-center text-slate-300 cursor-not-allowed">
+                    <i class="bi bi-chevron-right text-[14px]"></i>
+                </span>
+            @endif
+        </div>
+    @endif
 </div>
 @endsection
