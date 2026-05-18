@@ -41,7 +41,7 @@
                 <i class="bi bi-x-lg text-[14px]"></i>
             </button>
         </div>
-        <form method="post" action="/admin/gejala" class="flex flex-wrap items-end gap-3">
+        <form method="post" action="/admin/gejala" onsubmit="event.preventDefault(); confirmSave(this, 'Tambah Gejala?', 'Apakah Anda yakin ingin menambahkan data gejala baru ini?');" class="flex flex-wrap items-end gap-3">
             @csrf
             <div>
                 <label class="mb-1.5 block text-xs font-bold uppercase text-slate-500">Kode</label>
@@ -58,7 +58,7 @@
     @if ($editing)
         <div class="rounded-2xl border border-amber-200 bg-amber-50/60 p-6">
             <h2 class="font-bold text-amber-950">Edit {{ $editing->kode_gejala }}</h2>
-            <form method="post" action="/admin/gejala/update" class="mt-4 flex flex-wrap items-end gap-3">
+            <form method="post" action="/admin/gejala/update" onsubmit="event.preventDefault(); confirmUpdate(this, 'Perbarui Gejala?', 'Apakah Anda yakin ingin menyimpan perubahan data gejala ini?');" class="mt-4 flex flex-wrap items-end gap-3">
                 @csrf
                 <input type="hidden" name="kode_gejala" value="{{ $editing->kode_gejala }}">
                 <input name="nama_gejala" value="{{ $editing->nama_gejala }}" required class="min-w-[200px] flex-1 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm">
@@ -82,7 +82,7 @@
                         <td class="px-4 py-3.5 font-medium text-slate-900">{{ $row->nama_gejala }}</td>
                         <td class="px-4 py-3.5 text-right">
                             <a href="/admin/gejala?edit={{ urlencode($row->kode_gejala) }}{{ $gq }}" class="mr-2 inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-brand-600 hover:bg-blue-50"><i class="bi bi-pencil"></i></a>
-                            <form method="post" action="/admin/gejala/hapus" class="inline" onsubmit="return confirm('Hapus?');">@csrf<input type="hidden" name="kode_gejala" value="{{ $row->kode_gejala }}"><button type="submit" class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-red-100 text-red-600 hover:bg-red-50"><i class="bi bi-trash"></i></button></form>
+                            <form method="post" action="/admin/gejala/hapus" class="inline" onsubmit="event.preventDefault(); confirmDelete(this, 'Hapus Gejala?', 'Apakah Anda yakin ingin menghapus data gejala ini? Tindakan ini tidak dapat dibatalkan.');">@csrf<input type="hidden" name="kode_gejala" value="{{ $row->kode_gejala }}"><button type="submit" class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-red-100 text-red-600 hover:bg-red-50"><i class="bi bi-trash"></i></button></form>
                         </td>
                     </tr>
                 @empty

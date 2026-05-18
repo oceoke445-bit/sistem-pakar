@@ -63,7 +63,7 @@
                                 <input name="password" placeholder="Pwd baru" class="w-28 rounded-lg border border-slate-200 px-2 py-1 text-xs">
                                 <button type="submit" class="rounded-lg bg-brand-600 px-3 py-1 text-xs font-semibold text-white">Simpan</button>
                             </form>
-                            <form method="post" action="/admin/pengguna/hapus" class="inline" onsubmit="return confirm('Hapus user?');">@csrf<input type="hidden" name="id" value="{{ $u->id }}"><button type="submit" class="text-xs font-semibold text-red-600 hover:underline">Hapus</button></form>
+                            <form method="post" action="/admin/pengguna/hapus" class="inline" onsubmit="event.preventDefault(); confirmDelete(this, 'Hapus Pengguna?', 'Apakah Anda yakin ingin menghapus akun pengguna ini? Tindakan ini tidak dapat dibatalkan.');">@csrf<input type="hidden" name="id" value="{{ $u->id }}"><button type="submit" class="text-xs font-semibold text-red-600 hover:underline">Hapus</button></form>
                         </td>
                     </tr>
                 @endforeach

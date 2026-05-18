@@ -41,7 +41,7 @@
                 <i class="bi bi-x-lg text-[14px]"></i>
             </a>
         </div>
-        <form method="post" action="/admin/printer/update" class="grid gap-4 md:grid-cols-4 items-end">
+        <form method="post" action="/admin/printer/update" onsubmit="event.preventDefault(); confirmUpdate(this, 'Perbarui Printer?', 'Apakah Anda yakin ingin menyimpan perubahan data printer ini?');" class="grid gap-4 md:grid-cols-4 items-end">
             @csrf
             <input type="hidden" name="id" value="{{ $editing->id }}">
             <div>
@@ -81,7 +81,7 @@
                 <i class="bi bi-x-lg text-[14px]"></i>
             </button>
         </div>
-        <form method="post" action="/admin/printer" class="grid gap-4 md:grid-cols-4 items-end">
+        <form method="post" action="/admin/printer" onsubmit="event.preventDefault(); confirmSave(this, 'Tambah Printer?', 'Apakah Anda yakin ingin menambahkan data printer baru ini?');" class="grid gap-4 md:grid-cols-4 items-end">
             @csrf
             <div>
                 <label class="mb-1.5 block text-xs font-bold uppercase tracking-wider text-slate-500">Nama Printer</label>
@@ -160,7 +160,7 @@
                                 <a href="?edit={{ $row->id }}" class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-blue-100 text-blue-600 hover:bg-blue-50 transition-colors" title="Edit">
                                     <i class="bi bi-pencil"></i>
                                 </a>
-                                <form method="post" action="/admin/printer/hapus" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus printer ini?');">
+                                <form method="post" action="/admin/printer/hapus" class="inline" onsubmit="event.preventDefault(); confirmDelete(this, 'Hapus Printer?', 'Apakah Anda yakin ingin menghapus unit printer ini? Tindakan ini tidak dapat dibatalkan.');">
                                     @csrf
                                     <input type="hidden" name="id" value="{{ $row->id }}">
                                     <button type="submit" class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-red-100 text-red-600 hover:bg-red-50 transition-colors" title="Hapus">

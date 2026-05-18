@@ -45,7 +45,7 @@
             <span class="float-right hidden text-sm font-normal text-slate-500 group-open:inline">Tutup</span>
         </summary>
         <div class="border-t border-slate-100 px-5 pb-6 pt-2 sm:px-6">
-            <form method="post" action="/admin/penyakit" class="grid gap-4 md:grid-cols-2">
+            <form method="post" action="/admin/penyakit" onsubmit="event.preventDefault(); confirmSave(this, 'Tambah Kerusakan?', 'Apakah Anda yakin ingin menambahkan data jenis kerusakan baru ini?');" class="grid gap-4 md:grid-cols-2">
                 @csrf
                 <div>
                     <label class="mb-1.5 block text-xs font-bold uppercase tracking-wide text-slate-500">Kode</label>
@@ -85,7 +85,7 @@
     @if ($editing)
         <div class="rounded-2xl border border-amber-200 bg-amber-50/60 p-6 shadow-sm">
             <h2 class="text-lg font-bold text-amber-950">Edit {{ $editing->kode_penyakit }}</h2>
-            <form method="post" action="/admin/penyakit/update" class="mt-4 grid gap-4 md:grid-cols-2">
+            <form method="post" action="/admin/penyakit/update" onsubmit="event.preventDefault(); confirmUpdate(this, 'Perbarui Kerusakan?', 'Apakah Anda yakin ingin menyimpan perubahan data jenis kerusakan ini?');" class="mt-4 grid gap-4 md:grid-cols-2">
                 @csrf
                 <input type="hidden" name="kode_penyakit" value="{{ $editing->kode_penyakit }}">
                 <div>
@@ -149,7 +149,7 @@
                         <td class="px-4 py-3.5 text-right">
                             @php $eq = $q !== '' ? '&q='.urlencode($q) : ''; @endphp
                             <a href="/admin/penyakit?edit={{ urlencode($row->kode_penyakit) }}{{ $eq }}" class="mr-2 inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-brand-600 hover:bg-blue-50" title="Edit"><i class="bi bi-pencil"></i></a>
-                            <form method="post" action="/admin/penyakit/hapus" class="inline" onsubmit="return confirm('Hapus?');">
+                            <form method="post" action="/admin/penyakit/hapus" class="inline" onsubmit="event.preventDefault(); confirmDelete(this, 'Hapus Kerusakan?', 'Apakah Anda yakin ingin menghapus data jenis kerusakan ini? Tindakan ini tidak dapat dibatalkan.');">
                                 @csrf
                                 <input type="hidden" name="kode_penyakit" value="{{ $row->kode_penyakit }}">
                                 <button type="submit" class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-red-100 text-red-600 hover:bg-red-50" title="Hapus"><i class="bi bi-trash"></i></button>

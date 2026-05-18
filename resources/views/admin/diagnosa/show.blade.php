@@ -24,7 +24,7 @@
                 <li class="rounded-xl border border-slate-100 bg-slate-50 px-4 py-2 text-sm">{{ $namaGejala[$k] ?? $k }}</li>
             @endforeach
         </ul>
-        <form method="post" action="{{ route('admin.diagnosa.hapus') }}" class="mt-8 border-t border-slate-100 pt-6" onsubmit="return confirm('Hapus diagnosa ini?');">
+        <form method="post" action="{{ route('admin.diagnosa.hapus') }}" class="mt-8 border-t border-slate-100 pt-6" onsubmit="event.preventDefault(); confirmDelete(this, 'Hapus Diagnosa?', 'Apakah Anda yakin ingin menghapus data diagnosa ini? Tindakan ini tidak dapat dibatalkan.');">
             @csrf
             <input type="hidden" name="id" value="{{ $d->id }}">
             <button type="submit" class="rounded-xl border border-red-200 bg-red-50 px-5 py-2.5 text-sm font-semibold text-red-700 hover:bg-red-100">Hapus diagnosa</button>

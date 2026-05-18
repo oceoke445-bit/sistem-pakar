@@ -141,6 +141,215 @@
             setInterval(fmt, 30000);
         })();
     </script>
+    <!-- Premium Logout Confirmation Modal -->
+    <div id="logoutModal" class="fixed inset-0 z-[9999] hidden flex items-center justify-center p-4">
+        <div class="fixed inset-0 bg-slate-900/40 backdrop-blur-[2px] transition-opacity" onclick="closeLogoutModal()"></div>
+        <div class="relative w-full max-w-sm transform overflow-hidden rounded-2xl border border-slate-100 bg-white p-6 text-center shadow-xl transition-all sm:p-8">
+            <div class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-50 text-amber-500 border border-amber-100">
+                <i class="bi bi-box-arrow-right text-3xl"></i>
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 leading-6">Keluar dari Akun?</h3>
+            <p class="mt-2.5 text-sm leading-relaxed text-slate-500">
+                Apakah Anda yakin ingin keluar? Sesi Anda akan berakhir dan Anda harus masuk kembali untuk mengakses sistem.
+            </p>
+            <div class="mt-6 flex flex-col gap-2 sm:flex-row sm:justify-center">
+                <button type="button" onclick="closeLogoutModal()" class="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-bold text-slate-600 hover:bg-slate-50 transition-colors shadow-sm sm:w-auto">
+                    Batal
+                </button>
+                <button type="button" id="confirmLogoutBtn" class="w-full rounded-xl bg-red-600 px-5 py-2.5 text-sm font-bold text-white hover:bg-red-700 transition-colors shadow-sm sm:w-auto active:scale-95">
+                    Ya, Keluar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Premium Delete Confirmation Modal -->
+    <div id="deleteModal" class="fixed inset-0 z-[9999] hidden flex items-center justify-center p-4">
+        <div class="fixed inset-0 bg-slate-900/40 backdrop-blur-[2px] transition-opacity" onclick="closeDeleteModal()"></div>
+        <div class="relative w-full max-w-sm transform overflow-hidden rounded-2xl border border-slate-100 bg-white p-6 text-center shadow-xl transition-all sm:p-8">
+            <div class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-red-50 text-red-500 border border-red-100">
+                <i class="bi bi-trash3-fill text-2xl"></i>
+            </div>
+            <h3 id="deleteModalTitle" class="text-lg font-bold text-slate-900 leading-6">Hapus Data?</h3>
+            <p id="deleteModalDescription" class="mt-2.5 text-sm leading-relaxed text-slate-500">
+                Apakah Anda yakin ingin menghapus data ini? Tindakan ini tidak dapat dibatalkan.
+            </p>
+            <div class="mt-6 flex flex-col gap-2 sm:flex-row sm:justify-center">
+                <button type="button" onclick="closeDeleteModal()" class="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-bold text-slate-600 hover:bg-slate-50 transition-colors shadow-sm sm:w-auto">
+                    Batal
+                </button>
+                <button type="button" id="confirmDeleteBtn" class="w-full rounded-xl bg-red-600 px-5 py-2.5 text-sm font-bold text-white hover:bg-red-700 transition-colors shadow-sm sm:w-auto active:scale-95">
+                    Ya, Hapus
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Premium Save Confirmation Modal -->
+    <div id="saveModal" class="fixed inset-0 z-[9999] hidden flex items-center justify-center p-4">
+        <div class="fixed inset-0 bg-slate-900/40 backdrop-blur-[2px] transition-opacity" onclick="closeSaveModal()"></div>
+        <div class="relative w-full max-w-sm transform overflow-hidden rounded-2xl border border-slate-100 bg-white p-6 text-center shadow-xl transition-all sm:p-8">
+            <div class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-500 border border-emerald-100">
+                <i class="bi bi-plus-circle text-2xl"></i>
+            </div>
+            <h3 id="saveModalTitle" class="text-lg font-bold text-slate-900 leading-6">Tambah Data?</h3>
+            <p id="saveModalDescription" class="mt-2.5 text-sm leading-relaxed text-slate-500">
+                Apakah Anda yakin ingin menambahkan data baru ini?
+            </p>
+            <div class="mt-6 flex flex-col gap-2 sm:flex-row sm:justify-center">
+                <button type="button" onclick="closeSaveModal()" class="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-bold text-slate-600 hover:bg-slate-50 transition-colors shadow-sm sm:w-auto">
+                    Batal
+                </button>
+                <button type="button" id="confirmSaveBtn" class="w-full rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-bold text-white hover:bg-emerald-700 transition-colors shadow-sm sm:w-auto active:scale-95">
+                    Ya, Simpan
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Premium Update Confirmation Modal -->
+    <div id="updateModal" class="fixed inset-0 z-[9999] hidden flex items-center justify-center p-4">
+        <div class="fixed inset-0 bg-slate-900/40 backdrop-blur-[2px] transition-opacity" onclick="closeUpdateModal()"></div>
+        <div class="relative w-full max-w-sm transform overflow-hidden rounded-2xl border border-slate-100 bg-white p-6 text-center shadow-xl transition-all sm:p-8">
+            <div class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-50 text-blue-500 border border-blue-100">
+                <i class="bi bi-check2-circle text-3xl"></i>
+            </div>
+            <h3 id="updateModalTitle" class="text-lg font-bold text-slate-900 leading-6">Simpan Perubahan?</h3>
+            <p id="updateModalDescription" class="mt-2.5 text-sm leading-relaxed text-slate-500">
+                Apakah Anda yakin ingin memperbarui data ini?
+            </p>
+            <div class="mt-6 flex flex-col gap-2 sm:flex-row sm:justify-center">
+                <button type="button" onclick="closeUpdateModal()" class="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-bold text-slate-600 hover:bg-slate-50 transition-colors shadow-sm sm:w-auto">
+                    Batal
+                </button>
+                <button type="button" id="confirmUpdateBtn" class="w-full rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-bold text-white hover:bg-blue-700 transition-colors shadow-sm sm:w-auto active:scale-95">
+                    Ya, Perbarui
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Modal helpers
+        window.openLogoutModal = function() {
+            var modal = document.getElementById('logoutModal');
+            if (modal) modal.classList.remove('hidden');
+        }
+        window.closeLogoutModal = function() {
+            var modal = document.getElementById('logoutModal');
+            if (modal) modal.classList.add('hidden');
+        }
+
+        var confirmLogoutBtn = document.getElementById('confirmLogoutBtn');
+        if (confirmLogoutBtn) {
+            confirmLogoutBtn.addEventListener('click', function() {
+                var form = document.getElementById('logoutForm');
+                if (form) form.submit();
+            });
+        }
+
+        var deleteFormToSubmit = null;
+        window.confirmDelete = function(formIdOrElement, customTitle, customDesc) {
+            deleteFormToSubmit = formIdOrElement;
+            var titleEl = document.getElementById('deleteModalTitle');
+            var descEl = document.getElementById('deleteModalDescription');
+            if (titleEl) titleEl.textContent = customTitle || 'Hapus Data?';
+            if (descEl) descEl.textContent = customDesc || 'Apakah Anda yakin ingin menghapus data ini? Tindakan ini tidak dapat dibatalkan.';
+            
+            var modal = document.getElementById('deleteModal');
+            if (modal) modal.classList.remove('hidden');
+        }
+        window.closeDeleteModal = function() {
+            var modal = document.getElementById('deleteModal');
+            if (modal) modal.classList.add('hidden');
+            deleteFormToSubmit = null;
+        }
+
+        var confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+        if (confirmDeleteBtn) {
+            confirmDeleteBtn.addEventListener('click', function() {
+                if (deleteFormToSubmit) {
+                    if (typeof deleteFormToSubmit === 'string') {
+                        var form = document.getElementById(deleteFormToSubmit);
+                        if (form) form.submit();
+                    } else if (deleteFormToSubmit instanceof HTMLFormElement) {
+                        deleteFormToSubmit.submit();
+                    } else if (deleteFormToSubmit.closest('form')) {
+                        deleteFormToSubmit.closest('form').submit();
+                    }
+                }
+                closeDeleteModal();
+            });
+        }
+
+        var saveFormToSubmit = null;
+        window.confirmSave = function(formIdOrElement, customTitle, customDesc) {
+            saveFormToSubmit = formIdOrElement;
+            var titleEl = document.getElementById('saveModalTitle');
+            var descEl = document.getElementById('saveModalDescription');
+            if (titleEl) titleEl.textContent = customTitle || 'Tambah Data?';
+            if (descEl) descEl.textContent = customDesc || 'Apakah Anda yakin ingin menambahkan data baru ini?';
+            
+            var modal = document.getElementById('saveModal');
+            if (modal) modal.classList.remove('hidden');
+        }
+        window.closeSaveModal = function() {
+            var modal = document.getElementById('saveModal');
+            if (modal) modal.classList.add('hidden');
+            saveFormToSubmit = null;
+        }
+
+        var confirmSaveBtn = document.getElementById('confirmSaveBtn');
+        if (confirmSaveBtn) {
+            confirmSaveBtn.addEventListener('click', function() {
+                if (saveFormToSubmit) {
+                    if (typeof saveFormToSubmit === 'string') {
+                        var form = document.getElementById(saveFormToSubmit);
+                        if (form) form.submit();
+                    } else if (saveFormToSubmit instanceof HTMLFormElement) {
+                        saveFormToSubmit.submit();
+                    } else if (saveFormToSubmit.closest('form')) {
+                        saveFormToSubmit.closest('form').submit();
+                    }
+                }
+                closeSaveModal();
+            });
+        }
+
+        var updateFormToSubmit = null;
+        window.confirmUpdate = function(formIdOrElement, customTitle, customDesc) {
+            updateFormToSubmit = formIdOrElement;
+            var titleEl = document.getElementById('updateModalTitle');
+            var descEl = document.getElementById('updateModalDescription');
+            if (titleEl) titleEl.textContent = customTitle || 'Simpan Perubahan?';
+            if (descEl) descEl.textContent = customDesc || 'Apakah Anda yakin ingin memperbarui data ini?';
+            
+            var modal = document.getElementById('updateModal');
+            if (modal) modal.classList.remove('hidden');
+        }
+        window.closeUpdateModal = function() {
+            var modal = document.getElementById('updateModal');
+            if (modal) modal.classList.add('hidden');
+            updateFormToSubmit = null;
+        }
+
+        var confirmUpdateBtn = document.getElementById('confirmUpdateBtn');
+        if (confirmUpdateBtn) {
+            confirmUpdateBtn.addEventListener('click', function() {
+                if (updateFormToSubmit) {
+                    if (typeof updateFormToSubmit === 'string') {
+                        var form = document.getElementById(updateFormToSubmit);
+                        if (form) form.submit();
+                    } else if (updateFormToSubmit instanceof HTMLFormElement) {
+                        updateFormToSubmit.submit();
+                    } else if (updateFormToSubmit.closest('form')) {
+                        updateFormToSubmit.closest('form').submit();
+                    }
+                }
+                closeUpdateModal();
+            });
+        }
+    </script>
     @stack('scripts')
 </body>
 </html>

@@ -24,7 +24,7 @@
                 </svg>
                 Cetak Hasil
             </button>
-            <form method="post" action="{{ route('user.riwayat.hapus') }}" onsubmit="return confirm('Hapus riwayat diagnosa ini?');" class="inline">
+            <form method="post" action="{{ route('user.riwayat.hapus') }}" onsubmit="event.preventDefault(); confirmDelete(this, 'Hapus Riwayat?', 'Apakah Anda yakin ingin menghapus riwayat diagnosa ini? Tindakan ini tidak dapat dibatalkan.');" class="inline">
                 @csrf
                 <input type="hidden" name="id" value="{{ $d->id }}">
                 <button type="submit" class="inline-flex items-center gap-1.5 rounded-xl border border-red-200 bg-red-50 px-5 py-2.5 text-sm font-bold text-red-700 hover:bg-red-100/70 transition-colors shadow-sm">

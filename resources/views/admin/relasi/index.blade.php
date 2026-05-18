@@ -70,7 +70,7 @@
                 <i class="bi bi-x-lg text-[14px]"></i>
             </button>
         </div>
-        <form method="post" action="/admin/relasi" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_auto] lg:items-end">
+        <form method="post" action="/admin/relasi" onsubmit="event.preventDefault(); confirmSave(this, 'Tambah Rule?', 'Apakah Anda yakin ingin menambahkan data rule baru ini?');" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_auto] lg:items-end">
             @csrf
             <div>
                 <label class="mb-1.5 block text-xs font-bold uppercase tracking-wider text-slate-500">Kerusakan (THEN)</label>
@@ -160,7 +160,7 @@
                                 <i class="bi bi-pencil text-sm"></i>
                             </button>
                             {{-- Delete Rule Form --}}
-                            <form method="post" action="/admin/relasi/hapus" class="inline" onsubmit="return confirm('Hapus seluruh relasi rule untuk kerusakan ini?');">
+                            <form id="delete-rule-form-{{ $kodePenyakit }}" method="post" action="/admin/relasi/hapus" class="inline" onsubmit="event.preventDefault(); confirmDelete(this, 'Hapus Rule?', 'Apakah Anda yakin ingin menghapus seluruh relasi rule untuk kerusakan ini? Tindakan ini tidak dapat dibatalkan.');">
                                 @csrf
                                 <input type="hidden" name="kode_penyakit" value="{{ $kodePenyakit }}">
                                 <button type="submit" class="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-red-200 bg-white text-red-600 hover:bg-red-50 hover:border-red-300 shadow-sm transition-all active:scale-95" title="Hapus Rule">

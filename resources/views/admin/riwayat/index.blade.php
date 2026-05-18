@@ -92,7 +92,7 @@
                                     </a>
                                 @endif
                                 
-                                <form method="post" action="/admin/riwayat/hapus" class="inline" onsubmit="return confirm('Hapus?');">
+                                <form method="post" action="/admin/riwayat/hapus" class="inline" onsubmit="event.preventDefault(); confirmDelete(this, 'Hapus Riwayat?', 'Apakah Anda yakin ingin menghapus riwayat diagnosa ini? Tindakan ini tidak dapat dibatalkan.');">
                                     @csrf
                                     <input type="hidden" name="id" value="{{ $r->id }}">
                                     <button type="submit" class="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-400 hover:border-red-200 hover:bg-red-50 hover:text-red-600 transition-all shadow-sm" title="Hapus">

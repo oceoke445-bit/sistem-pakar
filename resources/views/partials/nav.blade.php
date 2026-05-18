@@ -47,9 +47,9 @@
             </a>
         @endforeach
     </nav>
-    <form action="{{ route('logout') }}" method="post" class="shrink-0 border-t border-white/10 p-3 md:p-4">
+    <form id="logoutForm" action="{{ route('logout') }}" method="post" class="shrink-0 border-t border-white/10 p-3 md:p-4">
         @csrf
-        <button type="submit" class="flex w-full items-center justify-center gap-2 rounded-xl border border-white/10 bg-slate-900/40 px-3 py-2.5 text-[13px] font-semibold text-slate-100 transition hover:bg-slate-800/60 md:text-sm">
+        <button type="button" onclick="openLogoutModal()" class="flex w-full items-center justify-center gap-2 rounded-xl border border-white/10 bg-slate-900/40 px-3 py-2.5 text-[13px] font-semibold text-slate-100 transition hover:bg-slate-800/60 md:text-sm">
             <i class="bi bi-box-arrow-right text-lg"></i> Keluar
         </button>
     </form>
