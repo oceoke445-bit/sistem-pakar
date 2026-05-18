@@ -161,6 +161,7 @@ class DashboardController extends Controller
         ];
 
         $masterPreview = DB::table('penyakit')->orderBy('kode_penyakit')->limit(4)->get();
+        $printersList = DB::table('printers')->orderBy('id', 'asc')->get();
 
         return view('admin.dashboard', compact(
             'penyakit',
@@ -182,6 +183,7 @@ class DashboardController extends Controller
             'monthSeries',
             'donut',
             'masterPreview',
+            'printersList',
         ));
     }
 }

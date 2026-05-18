@@ -52,13 +52,25 @@
                 @forelse ($rows as $i => $r)
                     @php
                         $lbl = diagnosis_tingkat_label($r->confidence !== null ? (float) $r->confidence : null);
-                        $printers = [
-                            0 => 'Unit 4 (Canon iR 2002)',
-                            1 => 'Unit 1 (Canon iR 3245)',
-                            2 => 'Unit 2 (Canon iR 3235)',
-                            3 => 'Unit 3 (Canon iR 2520)',
-                        ];
-                        $printerName = $printers[$r->id % 4] ?? 'Unit 1 (Canon iR 3245)';
+                        
+                        static $dbPrinters = null;
+                        if ($dbPrinters === null) {
+                            $dbPrinters = DB::table('printers')->orderBy('id', 'asc')->get();
+                        }
+                        
+                        if ($dbPrinters->isNotEmpty()) {
+                            $idx = $r->id % $dbPrinters->count();
+                            $p = $dbPrinters->values()->get($idx);
+                            $printerName = $p->nama_printer . ' (' . $p->model . ')';
+                        } else {
+                            $printers = [
+                                0 => 'Unit 4 (Canon iR 2002)',
+                                1 => 'Unit 1 (Canon iR 3245)',
+                                2 => 'Unit 2 (Canon iR 3235)',
+                                3 => 'Unit 3 (Canon iR 2520)',
+                            ];
+                            $printerName = $printers[$r->id % 4] ?? 'Unit 1 (Canon iR 3245)';
+                        }
                     @endphp
                     <tr class="border-t border-slate-100 odd:bg-white even:bg-slate-50/80">
                         <td class="px-4 py-3.5 text-slate-500">{{ $i + 1 }}</td>

@@ -53,6 +53,10 @@ Route::middleware('auth.mjm')->group(function () {
         Route::post('/pengguna', [\App\Http\Controllers\Admin\PenggunaController::class, 'store']);
         Route::post('/pengguna/update', [\App\Http\Controllers\Admin\PenggunaController::class, 'update'])->name('pengguna.update');
         Route::post('/pengguna/hapus', [\App\Http\Controllers\Admin\PenggunaController::class, 'destroy'])->name('pengguna.hapus');
+        Route::get('/printer', [\App\Http\Controllers\Admin\PrinterController::class, 'index'])->name('printer');
+        Route::post('/printer', [\App\Http\Controllers\Admin\PrinterController::class, 'store']);
+        Route::post('/printer/update', [\App\Http\Controllers\Admin\PrinterController::class, 'update'])->name('printer.update');
+        Route::post('/printer/hapus', [\App\Http\Controllers\Admin\PrinterController::class, 'destroy'])->name('printer.hapus');
         Route::get('/riwayat', [\App\Http\Controllers\Admin\RiwayatController::class, 'index'])->name('riwayat');
         Route::post('/riwayat/hapus', [\App\Http\Controllers\Admin\RiwayatController::class, 'destroy'])->name('riwayat.hapus');
         Route::get('/laporan', [\App\Http\Controllers\Admin\LaporanController::class, 'index'])->name('laporan');

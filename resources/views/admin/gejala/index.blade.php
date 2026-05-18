@@ -3,51 +3,57 @@
 @section('content')
 @php $q = $q ?? ''; @endphp
 <div class="mx-auto max-w-6xl space-y-6">
-    <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
             <h1 class="text-2xl font-bold tracking-tight text-[#152238] sm:text-3xl">Data Gejala</h1>
             <p class="mt-1 text-[15px] text-slate-600">Kelola data gejala kerusakan printer.</p>
+        </div>
+        <div>
+            <button onclick="toggleForm()" class="inline-flex items-center gap-2 rounded-xl bg-brand-600 px-5 py-3 text-sm font-bold text-white shadow-sm hover:bg-brand-700 transition-all active:scale-95">
+                <i class="bi bi-plus-lg"></i> Tambah Gejala
+            </button>
         </div>
     </div>
     @if (request('success'))<div class="rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-900">Berhasil.</div>@endif
     @if (request('notice'))<div class="rounded-xl border border-sky-200 bg-sky-50 p-4 text-sm text-sky-900">{{ request('notice') }}</div>@endif
     @if (request('error'))<div class="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-900">{{ request('error') }}</div>@endif
 
-    <div class="rounded-2xl border border-slate-200/90 bg-white p-5 shadow-[0_4px_24px_rgba(15,23,42,0.06)] sm:p-6">
-        <form method="get" action="/admin/gejala" class="flex flex-col gap-3 sm:flex-row sm:items-end">
-            <div class="relative min-w-0 flex-1">
-                <i class="bi bi-search pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                <input type="search" name="q" value="{{ $q }}" placeholder="Cari gejala…"
-                       class="w-full rounded-xl border border-slate-200 bg-slate-50 py-3 pl-11 pr-4 text-sm outline-none focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/20">
-            </div>
-            <button type="submit" class="rounded-xl bg-brand-600 px-6 py-3 text-sm font-semibold text-white hover:bg-brand-700">Cari</button>
+    <form method="get" action="/admin/gejala" class="flex flex-col gap-3 sm:flex-row sm:items-center bg-transparent p-0 border-0 shadow-none">
+        <div class="relative min-w-0 flex-1 w-full">
+            <i class="bi bi-search pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
+            <input type="search" name="q" value="{{ $q }}" placeholder="Cari gejala…"
+                   class="w-full rounded-xl border border-slate-200 bg-white py-3 pl-11 pr-4 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 shadow-sm">
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+            <button type="submit" class="rounded-xl bg-brand-600 px-6 py-3 text-sm font-bold text-white shadow-sm hover:bg-brand-700 transition-colors">Cari</button>
             @if ($q !== '')
-                <a href="/admin/gejala" class="rounded-xl border border-slate-200 px-5 py-3 text-center text-sm font-semibold text-slate-600 hover:bg-slate-50">Reset</a>
+                <a href="/admin/gejala" class="rounded-xl border border-slate-200 bg-white px-5 py-3 text-center text-sm font-semibold text-slate-600 hover:bg-slate-50 shadow-sm transition-colors">Reset</a>
             @endif
+        </div>
+    </form>
+
+    <div id="tambah-form" class="hidden rounded-2xl border border-slate-200/90 bg-white p-5 shadow-[0_4px_24px_rgba(15,23,42,0.06)] sm:p-6">
+        <div class="flex items-center justify-between mb-4">
+            <h2 class="text-lg font-bold text-[#152238] flex items-center gap-2">
+                <i class="bi bi-plus-circle text-brand-600"></i> Tambah Gejala
+            </h2>
+            <button type="button" onclick="toggleForm()" class="inline-flex h-8 w-8 items-center justify-center rounded-lg hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition-colors" title="Tutup">
+                <i class="bi bi-x-lg text-[14px]"></i>
+            </button>
+        </div>
+        <form method="post" action="/admin/gejala" class="flex flex-wrap items-end gap-3">
+            @csrf
+            <div>
+                <label class="mb-1.5 block text-xs font-bold uppercase text-slate-500">Kode</label>
+                <input name="kode_gejala" placeholder="G001" required class="w-36 rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/20">
+            </div>
+            <div class="min-w-[200px] flex-1">
+                <label class="mb-1.5 block text-xs font-bold uppercase text-slate-500">Nama gejala</label>
+                <input name="nama_gejala" required class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/20">
+            </div>
+            <button type="submit" class="rounded-xl bg-brand-600 px-6 py-2.5 text-sm font-bold text-white shadow-md hover:bg-brand-700">Tambah</button>
         </form>
     </div>
-
-    <details class="group rounded-2xl border border-slate-200/90 bg-white shadow-[0_4px_24px_rgba(15,23,42,0.06)]" @if (! $editing) open @endif>
-        <summary class="cursor-pointer list-none rounded-2xl px-5 py-4 font-bold text-[#152238] marker:content-none sm:px-6 sm:py-5 [&::-webkit-details-marker]:hidden">
-            <span class="inline-flex items-center gap-2"><i class="bi bi-plus-circle text-brand-600"></i> Tambah gejala</span>
-            <span class="float-right text-sm font-normal text-slate-500 group-open:hidden">Buka form</span>
-            <span class="float-right hidden text-sm font-normal text-slate-500 group-open:inline">Tutup</span>
-        </summary>
-        <div class="border-t border-slate-100 px-5 pb-6 pt-3 sm:px-6">
-            <form method="post" action="/admin/gejala" class="flex flex-wrap items-end gap-3">
-                @csrf
-                <div>
-                    <label class="mb-1.5 block text-xs font-bold uppercase text-slate-500">Kode</label>
-                    <input name="kode_gejala" placeholder="G001" required class="w-36 rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/20">
-                </div>
-                <div class="min-w-[200px] flex-1">
-                    <label class="mb-1.5 block text-xs font-bold uppercase text-slate-500">Nama gejala</label>
-                    <input name="nama_gejala" required class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/20">
-                </div>
-                <button type="submit" class="rounded-xl bg-brand-600 px-6 py-2.5 text-sm font-bold text-white shadow-md hover:bg-brand-700">Tambah</button>
-            </form>
-        </div>
-    </details>
 
     @if ($editing)
         <div class="rounded-2xl border border-amber-200 bg-amber-50/60 p-6">
@@ -86,4 +92,24 @@
         </table>
     </div>
 </div>
+
+@push('scripts')
+<script>
+    function toggleForm() {
+        const form = document.getElementById('tambah-form');
+        const input = document.querySelector('input[name="kode_gejala"]');
+        if (form) {
+            if (form.classList.contains('hidden')) {
+                form.classList.remove('hidden');
+                form.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                setTimeout(() => {
+                    if (input) input.focus();
+                }, 300);
+            } else {
+                form.classList.add('hidden');
+            }
+        }
+    }
+</script>
+@endpush
 @endsection

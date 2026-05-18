@@ -13,7 +13,7 @@
         <div class="flex gap-4 rounded-2xl border border-slate-200/90 bg-white p-5 shadow-[0_4px_24px_rgba(15,23,42,0.06)]">
             <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-blue-600 text-white shadow-lg shadow-blue-600/35"><i class="bi bi-display text-2xl"></i></div>
             <div class="min-w-0">
-                <p class="text-2xl font-bold tabular-nums text-slate-900">{{ $penyakit }}</p>
+                <p class="text-2xl font-bold tabular-nums text-slate-900">{{ $printersList->count() }}</p>
                 <p class="mt-0.5 text-[13px] font-bold text-slate-700 truncate">Total Printer</p>
                 <p class="text-[11px] text-slate-400 font-medium truncate">Unit Aktif</p>
             </div>
@@ -62,52 +62,26 @@
             </div>
         </div>
         <div class="rounded-2xl border border-slate-200/90 bg-white p-5 shadow-[0_4px_24px_rgba(15,23,42,0.06)]">
-            <h2 class="text-lg font-bold tracking-tight text-[#152238]">Status 4 Unit Printer</h2>
+            <h2 class="text-lg font-bold tracking-tight text-[#152238]">Status {{ $printersList->count() }} Unit Printer</h2>
             <ul class="mt-3 divide-y divide-slate-100">
-                {{-- Printer Unit 1 --}}
+                @forelse ($printersList as $p)
                 <li class="flex items-center justify-between gap-3 py-2">
                     <div class="flex items-center gap-3">
                         <img src="{{ asset('images/printer.jpg') }}" alt="" class="h-12 w-12 shrink-0 object-contain" decoding="async">
                         <div class="min-w-0">
-                            <p class="truncate text-sm font-bold text-slate-800">Printer Unit 1 (Canon iR 3245)</p>
-                            <p class="text-xs text-slate-500 font-medium">Mesin Fotocopy 1</p>
+                            <p class="truncate text-sm font-bold text-slate-800">{{ $p->nama_printer }} ({{ $p->model }})</p>
+                            <p class="text-xs text-slate-500 font-medium">{{ $p->lokasi }}</p>
                         </div>
                     </div>
-                    <span class="shrink-0 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-800">Aktif</span>
+                    @if ($p->status === 'aktif')
+                        <span class="shrink-0 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-800">Aktif</span>
+                    @else
+                        <span class="shrink-0 rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-bold text-amber-800">Perlu Perawatan</span>
+                    @endif
                 </li>
-                {{-- Printer Unit 2 --}}
-                <li class="flex items-center justify-between gap-3 py-2">
-                    <div class="flex items-center gap-3">
-                        <img src="{{ asset('images/printer.jpg') }}" alt="" class="h-12 w-12 shrink-0 object-contain" decoding="async">
-                        <div class="min-w-0">
-                            <p class="truncate text-sm font-bold text-slate-800">Printer Unit 2 (Canon iR 3235)</p>
-                            <p class="text-xs text-slate-500 font-medium">Mesin Fotocopy 2</p>
-                        </div>
-                    </div>
-                    <span class="shrink-0 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-800">Aktif</span>
-                </li>
-                {{-- Printer Unit 3 --}}
-                <li class="flex items-center justify-between gap-3 py-2">
-                    <div class="flex items-center gap-3">
-                        <img src="{{ asset('images/printer.jpg') }}" alt="" class="h-12 w-12 shrink-0 object-contain" decoding="async">
-                        <div class="min-w-0">
-                            <p class="truncate text-sm font-bold text-slate-800">Printer Unit 3 (Canon iR 2520)</p>
-                            <p class="text-xs text-slate-500 font-medium">Mesin Fotocopy 3</p>
-                        </div>
-                    </div>
-                    <span class="shrink-0 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-800">Aktif</span>
-                </li>
-                {{-- Printer Unit 4 --}}
-                <li class="flex items-center justify-between gap-3 py-2">
-                    <div class="flex items-center gap-3">
-                        <img src="{{ asset('images/printer.jpg') }}" alt="" class="h-12 w-12 shrink-0 object-contain" decoding="async">
-                        <div class="min-w-0">
-                            <p class="truncate text-sm font-bold text-slate-800">Printer Unit 4 (Canon iR 2002)</p>
-                            <p class="text-xs text-slate-500 font-medium">Mesin Fotocopy 4</p>
-                        </div>
-                    </div>
-                    <span class="shrink-0 rounded-full border border-red-200 bg-red-50 px-3 py-1 text-xs font-bold text-red-800">Perlu Perawatan</span>
-                </li>
+                @empty
+                <li class="py-6 text-center text-slate-500 text-sm">Tidak ada printer terdaftar.</li>
+                @endforelse
             </ul>
         </div>
     </div>

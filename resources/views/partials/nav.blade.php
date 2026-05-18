@@ -6,7 +6,8 @@
         ['/admin/penyakit', 'Data Kerusakan', 'bi-shield-exclamation'],
         ['/admin/gejala', 'Data Gejala', 'bi-clipboard2-pulse'],
         ['/admin/relasi', 'Data Rule (Aturan)', 'bi-bezier2'],
-        ['/admin/pengguna', 'Data Printer', 'bi-printer'],
+        ['/admin/printer', 'Data Printer', 'bi-printer'],
+        ['/admin/pengguna', 'Data Pengguna', 'bi-people'],
         ['/admin/laporan', 'Laporan', 'bi-file-earmark-bar-graph'],
         ['/profile', 'Pengaturan', 'bi-gear'],
     ];
