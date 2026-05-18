@@ -140,6 +140,58 @@
             fmt();
             setInterval(fmt, 30000);
         })();
+
+        // Smooth global auto-dismiss alert script
+        document.addEventListener('DOMContentLoaded', function() {
+            var alerts = document.querySelectorAll(
+                'div.rounded-xl.bg-emerald-50, div.rounded-xl.bg-red-50, div.rounded-xl.bg-sky-50, div.rounded-xl.bg-amber-50, ' +
+                'div.rounded-xl.bg-emerald-100, div.rounded-xl.bg-red-100, div.rounded-xl.bg-sky-100, div.rounded-xl.bg-amber-100'
+            );
+
+            alerts.forEach(function(alert) {
+                // Ignore modal alerts or elements inside hidden templates
+                if (alert.closest('#logoutModal') || alert.closest('#deleteModal') || alert.closest('#saveModal') || alert.closest('#updateModal')) return;
+
+                // Ensure parent is relative and set smooth transitions
+                alert.classList.add('relative', 'pr-10', 'transition-all', 'duration-500', 'ease-out');
+                alert.style.opacity = '1';
+                alert.style.transform = 'translateY(0)';
+                
+                // Create close button
+                var closeBtn = document.createElement('button');
+                closeBtn.type = 'button';
+                closeBtn.className = 'absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors focus:outline-none';
+                closeBtn.innerHTML = '<i class="bi bi-x-lg text-[13px]"></i>';
+                
+                closeBtn.addEventListener('click', function() {
+                    dismissAlert(alert);
+                });
+                
+                alert.appendChild(closeBtn);
+
+                // Auto dismiss after 4 seconds
+                setTimeout(function() {
+                    dismissAlert(alert);
+                }, 4000);
+            });
+
+            function dismissAlert(alert) {
+                alert.style.opacity = '0';
+                alert.style.transform = 'translateY(-8px)';
+                setTimeout(function() {
+                    alert.style.height = '0';
+                    alert.style.paddingTop = '0';
+                    alert.style.paddingBottom = '0';
+                    alert.style.marginTop = '0';
+                    alert.style.marginBottom = '0';
+                    alert.style.borderWidth = '0';
+                    alert.style.overflow = 'hidden';
+                    setTimeout(function() {
+                        alert.remove();
+                    }, 500);
+                }, 500);
+            }
+        });
     </script>
     <!-- Premium Logout Confirmation Modal -->
     <div id="logoutModal" class="fixed inset-0 z-[9999] hidden flex items-center justify-center p-4">
