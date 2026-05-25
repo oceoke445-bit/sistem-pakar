@@ -41,7 +41,7 @@
                 <h2 class="text-xl font-bold text-slate-900">Informasi Profil</h2>
                 <p class="mt-1 text-[13px] text-slate-500">Perbarui informasi profil dan alamat email akun Anda.</p>
                 
-                <form method="post" action="/profile" onsubmit="event.preventDefault(); confirmUpdate(this, 'Simpan Perubahan?', 'Apakah Anda yakin ingin menyimpan perubahan profil dan password Anda?');" class="mt-6 space-y-5">
+                <form method="post" action="/profile" onsubmit="event.preventDefault(); confirmUpdate(this, 'Simpan Perubahan?', 'Apakah Anda yakin ingin menyimpan perubahan profil?');" class="mt-6 space-y-5">
                     @csrf
                     
                     <!-- Nama Lengkap Field -->

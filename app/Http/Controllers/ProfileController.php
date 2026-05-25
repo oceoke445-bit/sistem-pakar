@@ -34,25 +34,26 @@ class ProfileController extends Controller
             return redirect('/login');
         }
 
-        $password = $request->input('password', '');
-        if ($password !== '') {
-            if (! $request->filled('current_password') || ! Hash::check($request->input('current_password'), $user->password_hash)) {
-                return redirect('/profile')->with('error', 'Password lama salah');
+        $newPassword = trim((string) $request->input('password', ''));
+        $update = [
+            'nama_lengkap' => trim($request->input('nama_lengkap')),
+            'email' => strtolower(trim($request->input('email'))),
+        ];
+
+        if ($newPassword !== '') {
+            if (! $request->filled('current_password')) {
+                return redirect('/profile')->with('error', 'Password saat ini wajib diisi untuk mengubah password.');
             }
-            DB::table('users')->where('id', $auth['id'])->update([
-                'nama_lengkap' => trim($request->input('nama_lengkap')),
-                'email' => strtolower(trim($request->input('email'))),
-                'password_hash' => Hash::make($password),
-            ]);
-        } else {
-            DB::table('users')->where('id', $auth['id'])->update([
-                'nama_lengkap' => trim($request->input('nama_lengkap')),
-                'email' => strtolower(trim($request->input('email'))),
-            ]);
+            if (! verify_password_hash($request->input('current_password'), $user->password_hash)) {
+                return redirect('/profile')->with('error', 'Password lama salah.');
+            }
+            $update['password_hash'] = Hash::make($newPassword);
         }
 
-        $request->session()->put('auth.nama_lengkap', trim($request->input('nama_lengkap')));
-        $request->session()->put('auth.email', strtolower(trim($request->input('email'))));
+        DB::table('users')->where('id', $auth['id'])->update($update);
+
+        $request->session()->put('auth.nama_lengkap', $update['nama_lengkap']);
+        $request->session()->put('auth.email', $update['email']);
 
         return redirect('/profile?success=1');
     }
