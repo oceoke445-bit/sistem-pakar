@@ -67,7 +67,7 @@
                             $p = $dbPrinters->values()->get($idx);
                             $printerName = $p->nama_printer . ' (' . $p->model . ')';
                         } else {
-                            $printerName = 'Unit 1 (Canon iR 3245)';
+                            $printerName = 'Unit 1 (Canon IR 2425)';
                         }
                         
                         $dp = $r->hasil_penyakit ? ($diseasesMap[$r->hasil_penyakit] ?? null) : null;

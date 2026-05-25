@@ -30,35 +30,19 @@ return new class extends Migration
         DB::table('printers')->insert([
             [
                 'nama_printer' => 'Unit 1',
-                'model' => 'Canon iR 3345',
+                'model' => 'Canon IR 2425',
                 'lokasi' => 'Mesin Fotocopy 1',
                 'status' => 'aktif',
                 'created_at' => now(),
-                'updated_at' => now()
+                'updated_at' => now(),
             ],
             [
                 'nama_printer' => 'Unit 2',
-                'model' => 'Canon iR 3235',
+                'model' => 'Canon IR 3045',
                 'lokasi' => 'Mesin Fotocopy 2',
                 'status' => 'aktif',
                 'created_at' => now(),
-                'updated_at' => now()
-            ],
-            [
-                'nama_printer' => 'Unit 3',
-                'model' => 'Canon iR 2520',
-                'lokasi' => 'Mesin Fotocopy 3',
-                'status' => 'aktif',
-                'created_at' => now(),
-                'updated_at' => now()
-            ],
-            [
-                'nama_printer' => 'Unit 4',
-                'model' => 'Canon iR 2002',
-                'lokasi' => 'Mesin Fotocopy 4',
-                'status' => 'perlu_perawatan',
-                'created_at' => now(),
-                'updated_at' => now()
+                'updated_at' => now(),
             ],
         ]);
     }

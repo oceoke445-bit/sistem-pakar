@@ -89,7 +89,7 @@
             </div>
             <div>
                 <label class="mb-1.5 block text-xs font-bold uppercase tracking-wider text-slate-500">Model</label>
-                <input name="model" required placeholder="Contoh: Canon iR 3345" class="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-800 placeholder-slate-400 focus:border-brand-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-brand-500 transition-all">
+                <input name="model" required placeholder="Contoh: Canon IR 3045" class="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-800 placeholder-slate-400 focus:border-brand-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-brand-500 transition-all">
             </div>
             <div>
                 <label class="mb-1.5 block text-xs font-bold uppercase tracking-wider text-slate-500">Lokasi</label>

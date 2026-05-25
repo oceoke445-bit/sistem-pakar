@@ -133,15 +133,39 @@
         (function () {
             var el = document.getElementById('toolbar-datetime-text');
             if (!el) return;
+
+            var months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+
             function fmt() {
                 var d = new Date();
-                var months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-                var dd = d.getDate(), mm = months[d.getMonth()], yy = d.getFullYear();
-                var hh = String(d.getHours()).padStart(2, '0'), mi = String(d.getMinutes()).padStart(2, '0');
-                el.textContent = dd + ' ' + mm + ' ' + yy + ' | ' + hh + ':' + mi;
+                var parts = new Intl.DateTimeFormat('en-GB', {
+                    timeZone: 'Asia/Jakarta',
+                    day: 'numeric',
+                    month: 'numeric',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                    hour12: false,
+                }).formatToParts(d);
+
+                var map = {};
+                parts.forEach(function (p) {
+                    if (p.type !== 'literal') map[p.type] = p.value;
+                });
+
+                var dd = parseInt(map.day, 10);
+                var mm = months[parseInt(map.month, 10) - 1];
+                var yy = map.year;
+                var hh = map.hour;
+                var mi = map.minute;
+                var ss = map.second;
+
+                el.textContent = dd + ' ' + mm + ' ' + yy + ' | ' + hh + ':' + mi + ':' + ss;
             }
+
             fmt();
-            setInterval(fmt, 30000);
+            setInterval(fmt, 1000);
         })();
 
         // Smooth global auto-dismiss alert script
