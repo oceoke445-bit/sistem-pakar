@@ -4,14 +4,15 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 
 class RelasiController extends Controller
 {
     public function index(Request $request)
     {
-        $q = $request->query('q', '');
-        
+        $q = trim((string) $request->query('q', ''));
+
         $relasi = DB::table('relasi')->orderBy('id')->get();
         $penyakit = DB::table('penyakit')->orderBy('kode_penyakit')->get();
         $gejala = DB::table('gejala')->orderBy('kode_gejala')->get();
@@ -19,8 +20,58 @@ class RelasiController extends Controller
         $pn = DB::table('penyakit')->pluck('nama_penyakit', 'kode_penyakit')->all();
         $gn = DB::table('gejala')->pluck('nama_gejala', 'kode_gejala')->all();
 
+        $grouped = [];
+        foreach ($relasi as $r) {
+            $grouped[$r->kode_penyakit][] = $r;
+        }
+
+        $ruleCodes = [];
+        $idx = 1;
+        foreach ($grouped as $kodePenyakit => $items) {
+            $ruleCodes[$kodePenyakit] = 'R'.str_pad((string) $idx++, 3, '0', STR_PAD_LEFT);
+        }
+
+        if ($q !== '') {
+            $qLower = strtolower($q);
+            foreach ($grouped as $kodePenyakit => $items) {
+                $match = false;
+                if (str_contains(strtolower($kodePenyakit), $qLower)) {
+                    $match = true;
+                }
+                if (str_contains(strtolower($pn[$kodePenyakit] ?? ''), $qLower)) {
+                    $match = true;
+                }
+                if (str_contains(strtolower($ruleCodes[$kodePenyakit] ?? ''), $qLower)) {
+                    $match = true;
+                }
+                foreach ($items as $item) {
+                    if (str_contains(strtolower($item->kode_gejala), $qLower)) {
+                        $match = true;
+                    }
+                    if (str_contains(strtolower($gn[$item->kode_gejala] ?? ''), $qLower)) {
+                        $match = true;
+                    }
+                }
+                if (! $match) {
+                    unset($grouped[$kodePenyakit]);
+                }
+            }
+        }
+
+        $page = max(1, (int) $request->query('page', 1));
+        $perPage = 10;
+        $groupedCollection = collect($grouped);
+        $groupedPaginator = new LengthAwarePaginator(
+            $groupedCollection->slice(($page - 1) * $perPage, $perPage)->all(),
+            $groupedCollection->count(),
+            $perPage,
+            $page,
+            ['path' => $request->url(), 'query' => $request->query()]
+        );
+
         return view('admin.relasi.index', [
-            'relasi' => $relasi,
+            'grouped' => $groupedPaginator,
+            'ruleCodes' => $ruleCodes,
             'penyakit' => $penyakit,
             'gejala' => $gejala,
             'pn' => $pn,
@@ -58,11 +109,11 @@ class RelasiController extends Controller
     public function destroy(Request $request)
     {
         $kodePenyakit = $request->input('kode_penyakit');
-        
+
         if ($kodePenyakit) {
             $namaPenyakit = DB::table('penyakit')->where('kode_penyakit', $kodePenyakit)->value('nama_penyakit');
             DB::table('relasi')->where('kode_penyakit', $kodePenyakit)->delete();
-            $detail = "Seluruh aturan untuk kerusakan {$kodePenyakit}" . ($namaPenyakit ? " ({$namaPenyakit})" : "") . " berhasil dihapus.";
+            $detail = "Seluruh aturan untuk kerusakan {$kodePenyakit}".($namaPenyakit ? " ({$namaPenyakit})" : '').' berhasil dihapus.';
         } else {
             $id = (int) $request->input('id');
             $r = DB::table('relasi')->where('id', $id)->first();

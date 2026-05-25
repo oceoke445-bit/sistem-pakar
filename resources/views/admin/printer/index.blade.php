@@ -125,7 +125,8 @@
     </form>
 
     {{-- Printers Table --}}
-    <div class="overflow-x-auto rounded-2xl border border-slate-200/90 bg-white shadow-[0_2px_12px_rgba(15,23,42,0.03)]">
+    <div class="overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-[0_2px_12px_rgba(15,23,42,0.03)]">
+        <div class="overflow-x-auto">
         <table class="w-full min-w-[700px] text-sm">
             <thead class="border-b border-slate-100 bg-slate-50 text-left text-xs font-bold uppercase tracking-wider text-slate-500">
                 <tr>
@@ -138,9 +139,9 @@
                 </tr>
             </thead>
             <tbody class="divide-y divide-slate-100">
-                @forelse ($rows as $row)
+                @forelse ($rows as $i => $row)
                     <tr class="hover:bg-slate-50/40 transition-colors">
-                        <td class="px-5 py-4 text-center font-bold text-slate-400">{{ $loop->iteration }}</td>
+                        <td class="px-5 py-4 text-center font-bold text-slate-400">{{ $rows->firstItem() + $i }}</td>
                         <td class="px-5 py-4 font-semibold text-slate-800">{{ $row->nama_printer }}</td>
                         <td class="px-5 py-4 text-slate-600 font-medium">{{ $row->model }}</td>
                         <td class="px-5 py-4 text-slate-600 font-medium">{{ $row->lokasi }}</td>
@@ -182,6 +183,8 @@
                 @endforelse
             </tbody>
         </table>
+        </div>
+        @include('partials.pagination', ['paginator' => $rows])
     </div>
 </div>
 

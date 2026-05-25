@@ -37,7 +37,8 @@
         @endif
     </form>
 
-    <div class="overflow-x-auto rounded-2xl border border-slate-200/90 bg-white shadow-[0_4px_24px_rgba(15,23,42,0.06)]">
+    <div class="overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-[0_4px_24px_rgba(15,23,42,0.06)]">
+        <div class="overflow-x-auto">
         <table class="w-full min-w-[640px] text-sm">
             <thead class="border-b border-slate-200 bg-slate-100/90 text-left text-xs font-bold uppercase tracking-wide text-slate-600">
                 <tr>
@@ -76,21 +77,16 @@
                         $lblClass = $lbl === 'Berat' ? 'text-red-650 font-bold' : ($lbl === 'Sedang' ? 'text-amber-600 font-bold' : ($lbl === 'Ringan' ? 'text-emerald-600 font-bold' : 'text-slate-500'));
                     @endphp
                     <tr class="border-t border-slate-100 odd:bg-white even:bg-slate-50/80">
-                        <td class="px-4 py-3.5 text-slate-500">{{ $i + 1 }}</td>
+                        <td class="px-4 py-3.5 text-slate-500">{{ $rows->firstItem() + $i }}</td>
                         <td class="whitespace-nowrap px-4 py-3.5 text-slate-600">{{ format_date_id($r->tanggal_diagnosa) }}</td>
                         <td class="px-4 py-3.5 font-semibold text-slate-700">{{ $printerName }}</td>
                         <td class="px-4 py-3.5 font-medium text-slate-900">{{ $r->hasil_penyakit ? ($namaPenyakit[$r->hasil_penyakit] ?? $r->hasil_penyakit) : '—' }}</td>
                         <td class="px-4 py-3.5 {{ $lblClass }}">{{ $lbl }}</td>
                         <td class="whitespace-nowrap px-4 py-3.5">
-                            @if ($lbl === 'Ringan')
-                                <a href="/user/riwayat/{{ $r->id }}" class="inline-flex items-center gap-1.5 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-bold text-emerald-700 shadow-sm hover:bg-emerald-100/70 transition-colors">
-                                    Perbaikan Sendiri
-                                </a>
-                            @else
-                                <a href="/user/riwayat/{{ $r->id }}" class="inline-flex items-center gap-1.5 rounded-xl border border-amber-200 bg-amber-50 px-3 py-1.5 text-xs font-bold text-amber-700 shadow-sm hover:bg-amber-100/70 transition-colors">
-                                    Teknisi
-                                </a>
-                            @endif
+                            @include('partials.diagnosa-tindakan-badge', [
+                                'tindakan' => $r->tindakan ?? null,
+                                'href' => '/user/riwayat/'.$r->id,
+                            ])
                         </td>
                     </tr>
                 @endforeach
@@ -99,45 +95,8 @@
         @if ($rows->isEmpty())
             <p class="px-4 py-12 text-center text-slate-500">Tidak ada data yang cocok.</p>
         @endif
-    </div>
-
-    @if ($rows->hasPages())
-        <div class="flex items-center justify-center gap-4 py-6">
-            {{-- Previous Page Link --}}
-            @if ($rows->onFirstPage())
-                <span class="inline-flex h-10 w-10 items-center justify-center text-slate-300 cursor-not-allowed">
-                    <i class="bi bi-chevron-left text-[14px]"></i>
-                </span>
-            @else
-                <a href="{{ $rows->previousPageUrl() }}" class="inline-flex h-10 w-10 items-center justify-center text-slate-400 hover:text-slate-600 transition-colors">
-                    <i class="bi bi-chevron-left text-[14px]"></i>
-                </a>
-            @endif
-
-            {{-- Page Numbers --}}
-            @foreach (range(1, $rows->lastPage()) as $page)
-                @if ($page == $rows->currentPage())
-                    <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl border-2 border-blue-200 bg-white font-bold text-blue-600 shadow-[0_2px_8px_rgba(59,130,246,0.08)]">
-                        {{ $page }}
-                    </span>
-                @else
-                    <a href="{{ $rows->url($page) }}" class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white font-semibold text-slate-500 hover:bg-slate-50 transition-colors shadow-sm">
-                        {{ $page }}
-                    </a>
-                @endif
-            @endforeach
-
-            {{-- Next Page Link --}}
-            @if ($rows->hasMorePages())
-                <a href="{{ $rows->nextPageUrl() }}" class="inline-flex h-10 w-10 items-center justify-center text-slate-400 hover:text-slate-600 transition-colors">
-                    <i class="bi bi-chevron-right text-[14px]"></i>
-                </a>
-            @else
-                <span class="inline-flex h-10 w-10 items-center justify-center text-slate-300 cursor-not-allowed">
-                    <i class="bi bi-chevron-right text-[14px]"></i>
-                </span>
-            @endif
         </div>
-    @endif
+        @include('partials.pagination', ['paginator' => $rows])
+    </div>
 </div>
 @endsection

@@ -145,7 +145,8 @@
 
     <div class="rounded-2xl border border-slate-200/90 bg-white p-6 shadow-[0_4px_24px_rgba(15,23,42,0.06)] sm:p-7">
         <h2 class="text-lg font-bold tracking-tight text-[#152238]">Diagnosa terbaru</h2>
-        <div class="mt-4 overflow-x-auto rounded-xl border border-slate-100">
+        <div class="mt-4 overflow-hidden rounded-xl border border-slate-100">
+            <div class="overflow-x-auto">
             <table class="w-full min-w-[520px] text-sm">
                 <thead class="bg-slate-100/90 text-left text-xs font-bold uppercase tracking-wide text-slate-600">
                     <tr><th class="px-4 py-3">Tanggal</th><th class="px-4 py-3">Pengguna</th><th class="px-4 py-3">Hasil</th></tr>
@@ -160,6 +161,8 @@
                     @endforeach
                 </tbody>
             </table>
+            </div>
+            @include('partials.pagination', ['paginator' => $recent])
         </div>
     </div>
 </div>

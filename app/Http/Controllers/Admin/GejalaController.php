@@ -18,7 +18,7 @@ class GejalaController extends Controller
                     ->orWhere('kode_gejala', 'ilike', '%'.$q.'%');
             });
         }
-        $rows = $builder->orderBy('kode_gejala')->get();
+        $rows = $builder->orderBy('kode_gejala')->paginate(10)->withQueryString();
         $editing = $request->query('edit')
             ? DB::table('gejala')->where('kode_gejala', $request->query('edit'))->first()
             : null;

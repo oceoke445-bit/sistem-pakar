@@ -2,39 +2,6 @@
 @section('title', 'Data Rule (Aturan)')
 @section('content')
 
-@php
-    // Group relations by kode_penyakit
-    $grouped = [];
-    foreach ($relasi as $r) {
-        $grouped[$r->kode_penyakit][] = $r;
-    }
-
-    // Map disease code to its rule index (1-based) to keep Rule Codes (R001, etc.) consistent even when filtered!
-    $ruleCodes = [];
-    $idx = 1;
-    foreach ($grouped as $kodePenyakit => $items) {
-        $ruleCodes[$kodePenyakit] = 'R' . str_pad($idx++, 3, '0', STR_PAD_LEFT);
-    }
-
-    // Apply search filter if query q is set
-    if (!empty($q)) {
-        $qLower = strtolower($q);
-        foreach ($grouped as $kodePenyakit => $items) {
-            $match = false;
-            if (str_contains(strtolower($kodePenyakit), $qLower)) $match = true;
-            if (str_contains(strtolower($pn[$kodePenyakit] ?? ''), $qLower)) $match = true;
-            if (str_contains(strtolower($ruleCodes[$kodePenyakit] ?? ''), $qLower)) $match = true;
-            foreach ($items as $item) {
-                if (str_contains(strtolower($item->kode_gejala), $qLower)) $match = true;
-                if (str_contains(strtolower($gn[$item->kode_gejala] ?? ''), $qLower)) $match = true;
-            }
-            if (!$match) {
-                unset($grouped[$kodePenyakit]);
-            }
-        }
-    }
-@endphp
-
 <div class="mx-auto max-w-6xl space-y-6">
     {{-- Header Section --}}
     <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -113,7 +80,8 @@
     </form>
 
     {{-- Rules Table --}}
-    <div class="overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
+    <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <div class="overflow-x-auto">
         <table class="w-full min-w-[720px] text-sm">
             <thead class="border-b border-slate-100 bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
                 <tr>
@@ -125,14 +93,14 @@
                 </tr>
             </thead>
             <tbody class="divide-y divide-slate-100">
+                @php $rowOffset = $grouped->firstItem() ?? 1; @endphp
                 @forelse ($grouped as $kodePenyakit => $items)
                     @php
-                        // Third disease (JK03/K003) or items with specific suffix has OR connector as requested in screenshot
                         $connector = ($kodePenyakit === 'JK03' || $kodePenyakit === 'K003' || str_ends_with($kodePenyakit, '03')) ? 'OR' : 'AND';
                         $ruleCode = $ruleCodes[$kodePenyakit] ?? 'R000';
                     @endphp
                     <tr class="hover:bg-slate-50/50 transition-colors">
-                        <td class="px-6 py-4 text-center font-medium text-slate-500">{{ $loop->iteration }}</td>
+                        <td class="px-6 py-4 text-center font-medium text-slate-500">{{ $rowOffset + $loop->index }}</td>
                         <td class="px-6 py-4 font-bold text-slate-700">{{ $ruleCode }}</td>
                         <td class="px-6 py-4">
                             <div class="flex flex-wrap items-center gap-1.5">
@@ -176,6 +144,8 @@
                 @endforelse
             </tbody>
         </table>
+        </div>
+        @include('partials.pagination', ['paginator' => $grouped])
     </div>
 </div>
 

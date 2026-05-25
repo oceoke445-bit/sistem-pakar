@@ -15,7 +15,9 @@
             <span class="flex h-7 w-7 items-center justify-center rounded-full bg-blue-600 font-bold text-white text-xs shadow-sm">1</span>
             <span class="text-sm font-bold text-blue-800">Pilih Gejala</span>
         </div>
-        <div class="h-[1.5px] w-20 bg-slate-200"></div>
+        <div class="relative mx-1 h-[2px] w-24 shrink-0 overflow-hidden rounded-full bg-slate-200">
+            <div class="absolute inset-y-0 left-0 w-1/2 rounded-full bg-blue-600"></div>
+        </div>
         <div class="flex items-center gap-2">
             <span class="flex h-7 w-7 items-center justify-center rounded-full bg-slate-200 font-bold text-slate-500 text-xs">2</span>
             <span class="text-sm font-semibold text-slate-400">Hasil Diagnosa</span>

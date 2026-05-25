@@ -68,7 +68,8 @@
         </div>
     @endif
 
-    <div class="overflow-x-auto rounded-2xl border border-slate-200/90 bg-white shadow-[0_4px_24px_rgba(15,23,42,0.06)]">
+    <div class="overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-[0_4px_24px_rgba(15,23,42,0.06)]">
+        <div class="overflow-x-auto">
         <table class="w-full min-w-[560px] text-sm">
             <thead class="border-b border-slate-200 bg-slate-100/90 text-left text-xs font-bold uppercase tracking-wide text-slate-600">
                 <tr><th class="px-4 py-3.5">No</th><th class="px-4 py-3.5">Kode</th><th class="px-4 py-3.5">Nama gejala</th><th class="px-4 py-3.5 text-right">Aksi</th></tr>
@@ -77,7 +78,7 @@
                 @php $gq = $q !== '' ? '&q='.urlencode($q) : ''; @endphp
                 @forelse ($rows as $i => $row)
                     <tr class="border-t border-slate-100 odd:bg-white even:bg-slate-50/80">
-                        <td class="px-4 py-3.5 text-slate-500">{{ $i + 1 }}</td>
+                        <td class="px-4 py-3.5 text-slate-500">{{ $rows->firstItem() + $i }}</td>
                         <td class="px-4 py-3.5 font-mono text-xs">{{ $row->kode_gejala }}</td>
                         <td class="px-4 py-3.5 font-medium text-slate-900">{{ $row->nama_gejala }}</td>
                         <td class="px-4 py-3.5 text-right">
@@ -90,6 +91,8 @@
                 @endforelse
             </tbody>
         </table>
+        </div>
+        @include('partials.pagination', ['paginator' => $rows])
     </div>
 </div>
 

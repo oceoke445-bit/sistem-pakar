@@ -29,6 +29,9 @@ Route::middleware('auth.mjm')->group(function () {
         Route::get('/hasil-diagnosa/{id}', [\App\Http\Controllers\User\HasilDiagnosaController::class, 'show'])
             ->whereNumber('id')
             ->name('hasil-diagnosa');
+        Route::post('/hasil-diagnosa/{id}/tindakan', [\App\Http\Controllers\User\HasilDiagnosaController::class, 'setTindakan'])
+            ->whereNumber('id')
+            ->name('hasil-diagnosa.tindakan');
         Route::get('/riwayat', [\App\Http\Controllers\User\RiwayatController::class, 'index'])->name('riwayat');
         Route::get('/riwayat/{id}', [\App\Http\Controllers\User\RiwayatController::class, 'show'])
             ->whereNumber('id')

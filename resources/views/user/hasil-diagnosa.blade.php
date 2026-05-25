@@ -27,11 +27,13 @@
 
     <!-- Stepper Indicator (Matches current active state) -->
     <div class="flex items-center justify-center gap-4 py-2 print:hidden">
-        <div class="flex items-center gap-2 opacity-60">
-            <span class="flex h-7 w-7 items-center justify-center rounded-full bg-slate-200 font-bold text-slate-600 text-xs">1</span>
-            <span class="text-sm font-medium text-slate-500">Pilih Gejala</span>
+        <div class="flex items-center gap-2">
+            <span class="flex h-7 w-7 items-center justify-center rounded-full bg-blue-600 font-bold text-white text-xs shadow-sm">1</span>
+            <span class="text-sm font-bold text-blue-800">Pilih Gejala</span>
         </div>
-        <div class="h-[1.5px] w-20 bg-slate-200"></div>
+        <div class="relative mx-1 h-[2px] w-24 shrink-0 overflow-hidden rounded-full bg-slate-200">
+            <div class="absolute inset-y-0 left-0 w-full rounded-full bg-blue-600"></div>
+        </div>
         <div class="flex items-center gap-2">
             <span class="flex h-7 w-7 items-center justify-center rounded-full bg-blue-600 font-bold text-white text-xs shadow-sm">2</span>
             <span class="text-sm font-bold text-blue-800">Hasil Diagnosa</span>
@@ -146,9 +148,13 @@
                     </p>
                 </div>
                 <div class="mt-6">
-                    <a href="/user/riwayat" class="inline-flex w-full items-center justify-center rounded-xl bg-emerald-600 px-5 py-3 text-sm font-bold text-white hover:bg-emerald-700 transition-colors shadow-sm">
-                        Lakukan Sendiri
-                    </a>
+                    <form method="post" action="{{ route('user.hasil-diagnosa.tindakan', $d->id) }}">
+                        @csrf
+                        <input type="hidden" name="tindakan" value="sendiri">
+                        <button type="submit" class="inline-flex w-full items-center justify-center rounded-xl bg-emerald-600 px-5 py-3 text-sm font-bold text-white hover:bg-emerald-700 transition-colors shadow-sm">
+                            Lakukan Sendiri
+                        </button>
+                    </form>
                 </div>
             </div>
 
@@ -168,9 +174,13 @@
                     </p>
                 </div>
                 <div class="mt-6">
-                    <button type="button" onclick="alert('Hubungi Teknisi Resmi di Nomor WhatsApp: 0812-3456-7890')" class="inline-flex w-full items-center justify-center rounded-xl bg-orange-500 px-5 py-3 text-sm font-bold text-white hover:bg-orange-600 transition-colors shadow-sm">
-                        Hubungi Teknisi
-                    </button>
+                    <form method="post" action="{{ route('user.hasil-diagnosa.tindakan', $d->id) }}">
+                        @csrf
+                        <input type="hidden" name="tindakan" value="teknisi">
+                        <button type="submit" class="inline-flex w-full items-center justify-center rounded-xl bg-orange-500 px-5 py-3 text-sm font-bold text-white hover:bg-orange-600 transition-colors shadow-sm">
+                            Hubungi Teknisi
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>

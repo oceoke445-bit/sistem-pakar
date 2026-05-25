@@ -121,9 +121,13 @@
                     </p>
                 </div>
                 <div class="mt-6">
-                    <a href="/user/riwayat" class="inline-flex w-full items-center justify-center rounded-xl bg-emerald-600 px-5 py-3 text-sm font-bold text-white hover:bg-emerald-700 transition-colors shadow-sm">
-                        Lakukan Sendiri
-                    </a>
+                    <form method="post" action="{{ route('user.hasil-diagnosa.tindakan', $d->id) }}">
+                        @csrf
+                        <input type="hidden" name="tindakan" value="sendiri">
+                        <button type="submit" class="inline-flex w-full items-center justify-center rounded-xl bg-emerald-600 px-5 py-3 text-sm font-bold text-white hover:bg-emerald-700 transition-colors shadow-sm">
+                            Lakukan Sendiri
+                        </button>
+                    </form>
                 </div>
             </div>
 
@@ -143,9 +147,13 @@
                     </p>
                 </div>
                 <div class="mt-6">
-                    <button type="button" onclick="alert('Hubungi Teknisi Resmi di Nomor WhatsApp: 0812-3456-7890')" class="inline-flex w-full items-center justify-center rounded-xl bg-orange-500 px-5 py-3 text-sm font-bold text-white hover:bg-orange-600 transition-colors shadow-sm">
-                        Hubungi Teknisi
-                    </button>
+                    <form method="post" action="{{ route('user.hasil-diagnosa.tindakan', $d->id) }}">
+                        @csrf
+                        <input type="hidden" name="tindakan" value="teknisi">
+                        <button type="submit" class="inline-flex w-full items-center justify-center rounded-xl bg-orange-500 px-5 py-3 text-sm font-bold text-white hover:bg-orange-600 transition-colors shadow-sm">
+                            Hubungi Teknisi
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>

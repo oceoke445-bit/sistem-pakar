@@ -12,7 +12,7 @@ class PenggunaController extends Controller
 {
     public function index(Request $request)
     {
-        $users = DB::table('users')->orderBy('created_at', 'desc')->get();
+        $users = DB::table('users')->orderBy('created_at', 'desc')->paginate(10)->withQueryString();
 
         return view('admin.pengguna.index', [
             'users' => $users,

@@ -18,7 +18,7 @@ class PenyakitController extends Controller
                     ->orWhere('kode_penyakit', 'ilike', '%'.$q.'%');
             });
         }
-        $rows = $builder->orderBy('kode_penyakit')->get();
+        $rows = $builder->orderBy('kode_penyakit')->paginate(10)->withQueryString();
         $editing = $request->query('edit')
             ? DB::table('penyakit')->where('kode_penyakit', $request->query('edit'))->first()
             : null;

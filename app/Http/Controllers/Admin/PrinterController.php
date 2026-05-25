@@ -22,7 +22,7 @@ class PrinterController extends Controller
             });
         }
         
-        $rows = $query->orderBy('nama_printer', 'asc')->get();
+        $rows = $query->orderBy('nama_printer', 'asc')->paginate(10)->withQueryString();
         
         $editing = null;
         if ($request->query('edit')) {

@@ -30,4 +30,23 @@ class HasilDiagnosaController extends Controller
 
         return view('user.hasil-diagnosa', compact('d', 'penyakit', 'kodes', 'namaGejala', 'pct'));
     }
+
+    public function setTindakan(Request $request, int $id)
+    {
+        $request->validate([
+            'tindakan' => 'required|in:sendiri,teknisi',
+        ]);
+
+        $auth = $request->session()->get('auth');
+        $updated = DB::table('diagnosa')
+            ->where('id', $id)
+            ->where('id_user', $auth['id'])
+            ->update(['tindakan' => $request->input('tindakan')]);
+
+        if (! $updated) {
+            abort(404);
+        }
+
+        return redirect('/user/riwayat');
+    }
 }

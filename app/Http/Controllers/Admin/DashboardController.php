@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         // 1. Consolidate separate counts into a single query to save 4 database roundtrips
         $counts = DB::select("
@@ -34,8 +34,8 @@ class DashboardController extends Controller
 
         $recent = DB::table('diagnosa')
             ->orderByDesc('tanggal_diagnosa')
-            ->limit(5)
-            ->get();
+            ->paginate(10)
+            ->withQueryString();
 
         $userIds = $recent->pluck('id_user')->unique()->filter()->values()->all();
         $namaUser = [];

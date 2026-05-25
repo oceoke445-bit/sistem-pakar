@@ -75,20 +75,20 @@
     </div>
 
     {{-- Right Panel: Soft off-white background with a beautifully styled white card in the center --}}
-    <div class="relative flex min-h-0 flex-col items-center justify-center bg-[#f8fafc] px-6 py-14 sm:px-12 sm:py-16 lg:min-h-screen lg:px-16">
-        <div class="flex w-full flex-col items-center justify-center">
+    <div class="relative flex min-h-screen flex-col items-center bg-[#f8fafc] px-6 pt-12 pb-14 sm:px-12 sm:pt-16 sm:pb-16 lg:px-16 lg:pt-[4.5rem]">
+        <div class="flex w-full max-w-[420px] flex-col items-center">
             
-            {{-- Header: logo di atas Selamat Datang --}}
-            <div class="mb-8 w-full max-w-[420px] text-center">
+            {{-- Header: logo di atas judul (posisi tetap, tidak ikut naik/turun dengan tinggi form) --}}
+            <div class="mb-8 w-full text-center">
                 <img src="{{ $logoUrl }}" alt="Logo Fotocopy Berkah Andirra"
                      class="mx-auto mb-5 h-24 w-24 object-contain sm:h-28 sm:w-28"
                      width="112" height="112" decoding="async">
                 <h2 class="text-2xl font-extrabold tracking-tight text-[#133075] sm:text-3xl">Selamat Datang</h2>
-                <p class="mt-2 text-sm font-normal text-slate-500 sm:text-base">Silakan login untuk masuk ke sistem</p>
+                <p class="mt-2 min-h-[2.5rem] text-sm font-normal text-slate-500 sm:text-base">Silakan login untuk masuk ke sistem</p>
             </div>
 
             {{-- Central white card container with soft slate-100 border --}}
-            <div class="w-full max-w-[420px] bg-white rounded-2xl border border-slate-100/80 shadow-[0_8px_30px_rgba(0,0,0,0.02)] p-6 sm:p-8">
+            <div class="w-full rounded-2xl border border-slate-100/80 bg-white p-6 shadow-[0_8px_30px_rgba(0,0,0,0.02)] sm:p-8">
                 
                 @if (!empty($error) || session('error'))
                     <div class="mb-5 rounded-lg border border-amber-200 bg-amber-50 p-3.5 text-sm text-amber-900">{{ $error ?? session('error') }}</div>
