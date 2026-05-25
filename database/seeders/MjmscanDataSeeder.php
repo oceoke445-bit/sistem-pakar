@@ -18,23 +18,20 @@ class MjmscanDataSeeder extends Seeder
         DB::table('gejala')->delete();
         DB::table('penyakit')->delete();
 
-        // 2. Seed Gejala Printer (matches the checkbox grid in the user's screenshot exactly!)
+        // 2. Seed Gejala Printer (G01–G12, sesuai UI pilih gejala)
         $gejala = [
-            ['G001', 'Printer tidak menyala'],
-            ['G002', 'Lampu indikator berkedip'],
-            ['G003', 'Printer tidak terdeteksi komputer'],
-            ['G004', 'Hasil cetak bergaris'],
-            ['G005', 'Hasil cetak buram / pudar'],
-            ['G006', 'Tinta tidak keluar'],
-            ['G007', 'Kertas macet (paper jam)'],
-            ['G008', 'Hasil cetak kosong'],
-            ['G009', 'Cartridge tidak terdeteksi'],
-            ['G010', 'Suara berisik saat mencetak'],
-            ['G011', 'Printer offline'],
-            ['G012', 'Koneksi USB bermasalah'],
-            ['G013', 'Hasil cetak terpotong'],
-            ['G014', 'Hasil cetak miring'],
-            ['G015', 'Lainnya'],
+            ['G01', 'Printer tidak menyala'],
+            ['G02', 'Lampu indikator mati'],
+            ['G03', 'Printer tidak merespon perintah'],
+            ['G04', 'Hasil cetak kosong'],
+            ['G05', 'Hasil cetak bergaris'],
+            ['G06', 'Tinta tidak keluar'],
+            ['G07', 'Kertas tidak tertarik'],
+            ['G08', 'Kertas Macet (Paper Jam)'],
+            ['G09', 'Hasil cetak buram'],
+            ['G10', 'Printer mengeluarkan suara kasar'],
+            ['G11', 'Cartridge tidak terdeteksi'],
+            ['G12', 'Muncul pesan error di komputer'],
         ];
         foreach ($gejala as [$k, $nama]) {
             DB::table('gejala')->insert(['kode_gejala' => $k, 'nama_gejala' => $nama]);
@@ -96,11 +93,11 @@ class MjmscanDataSeeder extends Seeder
 
         // 4. Seed Relasi Printer (Rules)
         $relasi = [
-            ['K001', 'G001'], ['K001', 'G012'],
-            ['K002', 'G002'], ['K002', 'G010'],
-            ['K003', 'G004'], ['K003', 'G005'],
-            ['K004', 'G007'], ['K004', 'G014'],
-            ['K005', 'G006'], ['K005', 'G009'],
+            ['K001', 'G01'], ['K001', 'G02'],
+            ['K002', 'G02'], ['K002', 'G10'],
+            ['K003', 'G05'], ['K003', 'G09'],
+            ['K004', 'G08'], ['K004', 'G07'],
+            ['K005', 'G06'], ['K005', 'G11'],
         ];
         foreach ($relasi as [$pk, $gk]) {
             DB::table('relasi')->insert(['kode_penyakit' => $pk, 'kode_gejala' => $gk]);

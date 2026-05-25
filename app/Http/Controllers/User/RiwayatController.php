@@ -49,15 +49,27 @@ class RiwayatController extends Controller
 
         $rows = $query->orderByDesc('tanggal_diagnosa')->paginate(10)->withQueryString();
 
-        $kodes = collect($rows->items())->pluck('hasil_penyakit')->filter()->unique()->values()->all();
-        $namaPenyakit = [];
-        if ($kodes !== []) {
-            $namaPenyakit = DB::table('penyakit')->whereIn('kode_penyakit', $kodes)->pluck('nama_penyakit', 'kode_penyakit')->all();
+        $diagnosaIds = collect($rows->items())->pluck('id')->all();
+        $gejalaByDiagnosa = [];
+        if ($diagnosaIds !== []) {
+            $details = DB::table('diagnosa_detail')
+                ->whereIn('id_diagnosa', $diagnosaIds)
+                ->orderBy('kode_gejala')
+                ->get(['id_diagnosa', 'kode_gejala']);
+            foreach ($details as $detail) {
+                $gejalaByDiagnosa[$detail->id_diagnosa][] = $detail->kode_gejala;
+            }
         }
+
+        $allGejalaKodes = collect($gejalaByDiagnosa)->flatten()->unique()->values()->all();
+        $namaGejala = $allGejalaKodes !== []
+            ? DB::table('gejala')->whereIn('kode_gejala', $allGejalaKodes)->pluck('nama_gejala', 'kode_gejala')->all()
+            : [];
 
         return view('user.riwayat.index', [
             'rows' => $rows,
-            'namaPenyakit' => $namaPenyakit,
+            'gejalaByDiagnosa' => $gejalaByDiagnosa,
+            'namaGejala' => $namaGejala,
             'notice' => $request->query('notice'),
             'q' => $q,
             'tingkat' => $tingkat,

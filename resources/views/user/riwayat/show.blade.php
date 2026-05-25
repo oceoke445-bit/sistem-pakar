@@ -22,8 +22,11 @@
             <form method="post" action="{{ route('user.riwayat.hapus') }}" onsubmit="event.preventDefault(); confirmDelete(this, 'Hapus Riwayat?', 'Apakah Anda yakin ingin menghapus riwayat diagnosa ini? Tindakan ini tidak dapat dibatalkan.');" class="inline">
                 @csrf
                 <input type="hidden" name="id" value="{{ $d->id }}">
-                <button type="submit" class="inline-flex items-center gap-1.5 rounded-xl border border-red-200 bg-red-50 px-5 py-2.5 text-sm font-bold text-red-700 hover:bg-red-100/70 transition-colors shadow-sm">
-                    <i class="bi bi-trash"></i> Hapus
+                <button type="submit" class="inline-flex items-center gap-1.5 rounded-lg border border-red-200 bg-red-50 px-3 py-1.5 text-xs font-bold text-red-700 shadow-sm transition-colors hover:bg-red-100/70 whitespace-nowrap">
+                    <svg class="h-3.5 w-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                    Hapus
                 </button>
             </form>
         </div>
@@ -95,61 +98,6 @@
                         {{ $namaGejala[$k] ?? $k }}
                     </span>
                 @endforeach
-            </div>
-        </div>
-
-        <!-- Action Cards Grid (Exactly matches the mockup) -->
-        <div class="grid gap-6 sm:grid-cols-2 pt-4 print:hidden">
-            <!-- Green Card: Perbaikan Sendiri -->
-            <div class="rounded-2xl border border-slate-200 bg-white p-6 flex flex-col justify-between shadow-sm">
-                <div>
-                    <div class="flex items-center gap-3">
-                        <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">
-                            <svg class="h-5.5 w-5.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                        </span>
-                        <h4 class="font-bold text-slate-950 text-[15px]">Perbaikan Sendiri</h4>
-                    </div>
-                    <p class="mt-4 text-[14px] leading-relaxed text-slate-600">
-                        Kerusakan ini dapat diperbaiki sendiri dengan langkah-langkah di atas.
-                    </p>
-                </div>
-                <div class="mt-6">
-                    <form method="post" action="{{ route('user.hasil-diagnosa.tindakan', $d->id) }}">
-                        @csrf
-                        <input type="hidden" name="tindakan" value="sendiri">
-                        <button type="submit" class="inline-flex w-full items-center justify-center rounded-xl bg-emerald-600 px-5 py-3 text-sm font-bold text-white hover:bg-emerald-700 transition-colors shadow-sm">
-                            Lakukan Sendiri
-                        </button>
-                    </form>
-                </div>
-            </div>
-
-            <!-- Orange Card: Panggil Teknisi -->
-            <div class="rounded-2xl border border-slate-200 bg-white p-6 flex flex-col justify-between shadow-sm">
-                <div>
-                    <div class="flex items-center gap-3">
-                        <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-orange-50 text-orange-600">
-                            <svg class="h-5.5 w-5.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                            </svg>
-                        </span>
-                        <h4 class="font-bold text-slate-950 text-[15px]">Panggil Teknisi</h4>
-                    </div>
-                    <p class="mt-4 text-[14px] leading-relaxed text-slate-600">
-                        Jika kerusakan tidak dapat diatasi, sebaiknya hubungi teknisi.
-                    </p>
-                </div>
-                <div class="mt-6">
-                    <form method="post" action="{{ route('user.hasil-diagnosa.tindakan', $d->id) }}">
-                        @csrf
-                        <input type="hidden" name="tindakan" value="teknisi">
-                        <button type="submit" class="inline-flex w-full items-center justify-center rounded-xl bg-orange-500 px-5 py-3 text-sm font-bold text-white hover:bg-orange-600 transition-colors shadow-sm">
-                            Hubungi Teknisi
-                        </button>
-                    </form>
-                </div>
             </div>
         </div>
     </div>

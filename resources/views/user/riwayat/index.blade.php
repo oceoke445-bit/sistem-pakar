@@ -44,10 +44,11 @@
                 <tr>
                     <th class="px-4 py-3.5">No</th>
                     <th class="px-4 py-3.5">Tanggal</th>
-                    <th class="px-4 py-3.5">Unit Printer</th>
-                    <th class="px-4 py-3.5">Kerusakan</th>
+                    <th class="px-4 py-3.5">Gejala yang Dipilih</th>
+                    <th class="px-4 py-3.5">Hasil Kerusakan</th>
                     <th class="px-4 py-3.5">Tingkat</th>
                     <th class="px-4 py-3.5">Tindakan</th>
+                    <th class="px-4 py-3.5 text-right">Aksi</th>
                 </tr>
             </thead>
             <tbody>
@@ -59,34 +60,40 @@
                 @endphp
                 @foreach ($rows as $i => $r)
                     @php
-                        static $dbPrinters = null;
-                        if ($dbPrinters === null) {
-                            $dbPrinters = DB::table('printers')->orderBy('id', 'asc')->get();
-                        }
-                        
-                        if ($dbPrinters->isNotEmpty()) {
-                            $idx = $r->id % $dbPrinters->count();
-                            $p = $dbPrinters->values()->get($idx);
-                            $printerName = $p->nama_printer . ' (' . $p->model . ')';
-                        } else {
-                            $printerName = 'Unit 1 (Canon IR 2425)';
-                        }
-                        
                         $dp = $r->hasil_penyakit ? ($diseasesMap[$r->hasil_penyakit] ?? null) : null;
+                        $hasilKerusakan = $dp ? $dp->nama_penyakit : ($r->hasil_penyakit ?: null);
                         $lbl = $dp ? $dp->tingkat : '—';
                         $lblClass = $lbl === 'Berat' ? 'text-red-650 font-bold' : ($lbl === 'Sedang' ? 'text-amber-600 font-bold' : ($lbl === 'Ringan' ? 'text-emerald-600 font-bold' : 'text-slate-500'));
                     @endphp
                     <tr class="border-t border-slate-100 odd:bg-white even:bg-slate-50/80">
                         <td class="px-4 py-3.5 text-slate-500">{{ $rows->firstItem() + $i }}</td>
                         <td class="whitespace-nowrap px-4 py-3.5 text-slate-600">{{ format_date_id($r->tanggal_diagnosa) }}</td>
-                        <td class="px-4 py-3.5 font-semibold text-slate-700">{{ $printerName }}</td>
-                        <td class="px-4 py-3.5 font-medium text-slate-900">{{ $r->hasil_penyakit ? ($namaPenyakit[$r->hasil_penyakit] ?? $r->hasil_penyakit) : '—' }}</td>
+                        <td class="px-4 py-3.5">
+                            @include('partials.gejala-kode-badges', [
+                                'kodes' => $gejalaByDiagnosa[$r->id] ?? [],
+                                'namaGejala' => $namaGejala ?? [],
+                            ])
+                        </td>
+                        <td class="px-4 py-3.5">
+                            @if ($hasilKerusakan)
+                                <span class="inline-flex rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700 ring-1 ring-emerald-100">
+                                    {{ $hasilKerusakan }}
+                                </span>
+                            @else
+                                <span class="text-slate-400">—</span>
+                            @endif
+                        </td>
                         <td class="px-4 py-3.5 {{ $lblClass }}">{{ $lbl }}</td>
                         <td class="whitespace-nowrap px-4 py-3.5">
                             @include('partials.diagnosa-tindakan-badge', [
                                 'tindakan' => $r->tindakan ?? null,
-                                'href' => '/user/riwayat/'.$r->id,
                             ])
+                        </td>
+                        <td class="whitespace-nowrap px-4 py-3.5 text-right">
+                            <a href="/user/riwayat/{{ $r->id }}"
+                               class="inline-flex rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 transition hover:border-slate-300 hover:bg-slate-50">
+                                Detail
+                            </a>
                         </td>
                     </tr>
                 @endforeach
