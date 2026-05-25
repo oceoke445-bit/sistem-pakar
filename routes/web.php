@@ -32,6 +32,12 @@ Route::middleware('auth.mjm')->group(function () {
         Route::post('/hasil-diagnosa/{id}/tindakan', [\App\Http\Controllers\User\HasilDiagnosaController::class, 'setTindakan'])
             ->whereNumber('id')
             ->name('hasil-diagnosa.tindakan');
+        Route::get('/hasil-diagnosa/{id}/export/pdf', [\App\Http\Controllers\User\HasilDiagnosaController::class, 'exportPdf'])
+            ->whereNumber('id')
+            ->name('hasil-diagnosa.export.pdf');
+        Route::get('/hasil-diagnosa/{id}/export/word', [\App\Http\Controllers\User\HasilDiagnosaController::class, 'exportWord'])
+            ->whereNumber('id')
+            ->name('hasil-diagnosa.export.word');
         Route::get('/riwayat', [\App\Http\Controllers\User\RiwayatController::class, 'index'])->name('riwayat');
         Route::get('/riwayat/{id}', [\App\Http\Controllers\User\RiwayatController::class, 'show'])
             ->whereNumber('id')

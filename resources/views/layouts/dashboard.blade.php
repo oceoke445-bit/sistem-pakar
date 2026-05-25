@@ -162,7 +162,7 @@
                 var mi = map.minute;
                 var ss = map.second;
 
-                el.textContent = dd + ' ' + mm + ' ' + yy + ' | ' + hh + ':' + mi + ':' + ss;
+                el.textContent = dd + ' ' + mm + ' ' + yy + ' | ' + hh + ':' + mi + ':' + ss + ' WIB';
             }
 
             fmt();

@@ -42,7 +42,7 @@ class DiagnosaController extends Controller
                 'id_user' => $auth['id'],
                 'hasil_penyakit' => $hasil_penyakit,
                 'confidence' => $confidence,
-                'tanggal_diagnosa' => now(),
+                'tanggal_diagnosa' => now()->utc(),
             ]);
             foreach ($selected as $k) {
                 DB::table('diagnosa_detail')->insertOrIgnore([

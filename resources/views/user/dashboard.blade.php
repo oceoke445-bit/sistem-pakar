@@ -1,9 +1,6 @@
 @extends('layouts.dashboard')
 @section('title', 'Dashboard')
 @section('content')
-@php
-    $tz = config('app.timezone', 'Asia/Jakarta');
-@endphp
 <div class="mx-auto max-w-7xl space-y-6">
 
     @if (!empty($dbError))
@@ -58,7 +55,7 @@
             </div>
             <div class="min-w-0">
                 <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Diagnosa Terakhir</p>
-                <p class="mt-1 text-xl font-extrabold capitalize text-slate-900 sm:text-2xl">{{ $lastDiagnosaHuman }}</p>
+                <p class="mt-1 text-xl font-extrabold text-slate-900 sm:text-2xl">{{ $lastDiagnosaHuman }}</p>
             </div>
         </div>
     </div>
@@ -86,9 +83,7 @@
                     <tbody>
                         @forelse ($rows as $r)
                             @php
-                                $dt = $r->tanggal_diagnosa
-                                    ? \Carbon\Carbon::parse($r->tanggal_diagnosa)->timezone($tz)
-                                    : null;
+                                $dt = wib_from_db($r->tanggal_diagnosa);
                                 $hasil = $r->hasil_penyakit
                                     ? ($namaByKode[$r->hasil_penyakit] ?? $r->hasil_penyakit)
                                     : null;

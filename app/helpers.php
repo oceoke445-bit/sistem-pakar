@@ -19,14 +19,23 @@ if (! function_exists('verify_password_hash')) {
     }
 }
 
+if (! function_exists('wib_from_db')) {
+    function wib_from_db(?string $value): ?Carbon
+    {
+        if (! $value) {
+            return null;
+        }
+
+        return Carbon::parse($value)->utc()->timezone('Asia/Jakarta');
+    }
+}
+
 if (! function_exists('format_date_id')) {
     function format_date_id(?string $iso): string
     {
-        if (! $iso) {
-            return '—';
-        }
+        $dt = wib_from_db($iso);
 
-        return Carbon::parse($iso)->timezone(config('app.timezone', 'Asia/Jakarta'))->format('d/m/Y, H:i');
+        return $dt ? $dt->format('d/m/Y, H:i') : '—';
     }
 }
 

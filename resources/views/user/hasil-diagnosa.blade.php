@@ -16,12 +16,7 @@
             <p class="mt-1 text-[15px] text-slate-600">Berikut adalah hasil analisa berdasarkan gejala yang dipilih</p>
         </div>
         <div class="shrink-0 print:hidden">
-            <button type="button" onclick="window.print()" class="inline-flex items-center gap-2 rounded-xl border border-blue-600 px-5 py-2.5 text-sm font-bold text-blue-600 hover:bg-blue-50 transition-colors shadow-sm bg-white">
-                <svg class="h-4.5 w-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-5a2 2 0 00-2-2H5a2 2 0 00-2 2v5a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
-                </svg>
-                Cetak Hasil
-            </button>
+            @include('partials.diagnosa-export-dropdown', ['diagnosaId' => $d->id])
         </div>
     </div>
 

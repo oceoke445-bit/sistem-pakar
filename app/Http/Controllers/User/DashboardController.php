@@ -29,10 +29,12 @@ class DashboardController extends Controller
 
             $lastRow = $rows->first();
             if ($lastRow && $lastRow->tanggal_diagnosa) {
-                $lastDiagnosaHuman = Carbon::parse($lastRow->tanggal_diagnosa)
-                    ->timezone(config('app.timezone', 'Asia/Jakarta'))
-                    ->locale('id')
-                    ->diffForHumans();
+                $lastDt = wib_from_db($lastRow->tanggal_diagnosa);
+                if ($lastDt) {
+                    $lastDiagnosaHuman = $lastDt
+                        ->locale('id')
+                        ->diffForHumans(Carbon::now('Asia/Jakarta'));
+                }
             }
         } catch (\Throwable $e) {
             $dbError = true;
