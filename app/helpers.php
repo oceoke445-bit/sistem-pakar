@@ -12,10 +12,14 @@ if (! function_exists('verify_password_hash')) {
         }
 
         try {
-            return Hash::check($plain, $hash);
+            if (Hash::check($plain, $hash)) {
+                return true;
+            }
         } catch (\RuntimeException) {
-            return password_verify($plain, $hash);
+            // bcryptjs / format hash lama — coba password_verify di bawah
         }
+
+        return password_verify($plain, $hash);
     }
 }
 
@@ -154,5 +158,35 @@ if (! function_exists('export_printer_icon_data_uri')) {
         $cached = 'data:image/png;base64,'.base64_encode((string) file_get_contents($path));
 
         return $cached;
+    }
+}
+
+if (! function_exists('teknisi_phone_digits')) {
+    function teknisi_phone_digits(): string
+    {
+        $raw = (string) config('app.teknisi_phone', '6281234567890');
+        $digits = preg_replace('/\D/', '', $raw) ?? '';
+        if ($digits === '') {
+            return '6281234567890';
+        }
+        if (str_starts_with($digits, '0')) {
+            return '62'.substr($digits, 1);
+        }
+
+        return $digits;
+    }
+}
+
+if (! function_exists('teknisi_phone_display')) {
+    function teknisi_phone_display(): string
+    {
+        $digits = teknisi_phone_digits();
+        if (str_starts_with($digits, '62') && strlen($digits) >= 11) {
+            $local = substr($digits, 2);
+
+            return '+62 '.substr($local, 0, 3).'-'.substr($local, 3, 4).'-'.substr($local, 7);
+        }
+
+        return '+'.$digits;
     }
 }

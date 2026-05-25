@@ -147,14 +147,16 @@
                                 <span class="inline-flex rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-semibold text-emerald-800">Ringan</span>
                             @endif
                         </td>
-                        <td class="px-4 py-3.5 text-right">
+                        <td class="px-4 py-3.5">
                             @php $eq = $q !== '' ? '&q='.urlencode($q) : ''; @endphp
-                            <a href="/admin/penyakit?edit={{ urlencode($row->kode_penyakit) }}{{ $eq }}" class="mr-2 inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-brand-600 hover:bg-blue-50" title="Edit"><i class="bi bi-pencil"></i></a>
-                            <form method="post" action="/admin/penyakit/hapus" class="inline" onsubmit="event.preventDefault(); confirmDelete(this, 'Hapus Kerusakan?', 'Apakah Anda yakin ingin menghapus data jenis kerusakan ini? Tindakan ini tidak dapat dibatalkan.');">
-                                @csrf
-                                <input type="hidden" name="kode_penyakit" value="{{ $row->kode_penyakit }}">
-                                <button type="submit" class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-red-100 text-red-600 hover:bg-red-50" title="Hapus"><i class="bi bi-trash"></i></button>
-                            </form>
+                            <div class="flex items-center justify-end gap-2">
+                                <a href="/admin/penyakit?edit={{ urlencode($row->kode_penyakit) }}{{ $eq }}" class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-slate-200 text-brand-600 hover:bg-blue-50" title="Edit"><i class="bi bi-pencil"></i></a>
+                                <form method="post" action="/admin/penyakit/hapus" class="inline-flex shrink-0 m-0" onsubmit="event.preventDefault(); confirmDelete(this, 'Hapus Kerusakan?', 'Apakah Anda yakin ingin menghapus data jenis kerusakan ini? Tindakan ini tidak dapat dibatalkan.');">
+                                    @csrf
+                                    <input type="hidden" name="kode_penyakit" value="{{ $row->kode_penyakit }}">
+                                    <button type="submit" class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-red-100 text-red-600 hover:bg-red-50" title="Hapus"><i class="bi bi-trash"></i></button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                 @empty

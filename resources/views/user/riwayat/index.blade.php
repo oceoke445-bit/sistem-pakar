@@ -74,14 +74,8 @@
                                 'namaGejala' => $namaGejala ?? [],
                             ])
                         </td>
-                        <td class="px-4 py-3.5">
-                            @if ($hasilKerusakan)
-                                <span class="inline-flex rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700 ring-1 ring-emerald-100">
-                                    {{ $hasilKerusakan }}
-                                </span>
-                            @else
-                                <span class="text-slate-400">—</span>
-                            @endif
+                        <td class="px-4 py-3.5 align-top">
+                            @include('partials.hasil-kerusakan-badge', ['label' => $hasilKerusakan])
                         </td>
                         <td class="px-4 py-3.5 {{ $lblClass }}">{{ $lbl }}</td>
                         <td class="whitespace-nowrap px-4 py-3.5">
@@ -89,11 +83,13 @@
                                 'tindakan' => $r->tindakan ?? null,
                             ])
                         </td>
-                        <td class="whitespace-nowrap px-4 py-3.5 text-right">
+                        <td class="whitespace-nowrap px-4 py-3.5">
+                            <div class="flex items-center justify-end gap-2">
                             <a href="/user/riwayat/{{ $r->id }}"
-                               class="inline-flex rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 transition hover:border-slate-300 hover:bg-slate-50">
+                               class="inline-flex shrink-0 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 transition hover:border-slate-300 hover:bg-slate-50">
                                 Detail
                             </a>
+                            </div>
                         </td>
                     </tr>
                 @endforeach

@@ -24,7 +24,13 @@
             </div>
             <div>
                 <label class="mb-1 block text-xs font-semibold uppercase text-slate-500">Password</label>
-                <input type="password" name="password" required class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm">
+                @include('partials.password-input', [
+                    'name' => 'password',
+                    'placeholder' => 'Password baru',
+                    'autocomplete' => 'new-password',
+                    'required' => true,
+                    'inputClass' => 'bg-slate-50 py-2.5',
+                ])
             </div>
             <div>
                 <label class="mb-1 block text-xs font-semibold uppercase text-slate-500">Role</label>
@@ -61,7 +67,15 @@
                                     <option value="user" @selected($u->role==='user')>user</option>
                                     <option value="admin" @selected($u->role==='admin')>admin</option>
                                 </select>
-                                <input name="password" placeholder="Pwd baru" class="w-28 rounded-lg border border-slate-200 px-2 py-1 text-xs">
+                                @include('partials.password-input', [
+                                    'name' => 'password',
+                                    'id' => 'pwd-update-' . $u->id,
+                                    'placeholder' => 'Pwd baru',
+                                    'autocomplete' => 'new-password',
+                                    'size' => 'compact',
+                                    'class' => 'w-32',
+                                    'inputClass' => 'bg-white',
+                                ])
                                 <button type="submit" class="rounded-lg bg-brand-600 px-3 py-1 text-xs font-semibold text-white">Simpan</button>
                             </form>
                             <form method="post" action="/admin/pengguna/hapus" class="inline" onsubmit="event.preventDefault(); confirmDelete(this, 'Hapus Pengguna?', 'Apakah Anda yakin ingin menghapus akun pengguna ini? Tindakan ini tidak dapat dibatalkan.');">@csrf<input type="hidden" name="id" value="{{ $u->id }}"><button type="submit" class="text-xs font-semibold text-red-600 hover:underline">Hapus</button></form>

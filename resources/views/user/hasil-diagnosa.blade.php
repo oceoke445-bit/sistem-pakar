@@ -142,13 +142,10 @@
                     </p>
                 </div>
                 <div class="mt-6">
-                    <form method="post" action="{{ route('user.hasil-diagnosa.tindakan', $d->id) }}">
-                        @csrf
-                        <input type="hidden" name="tindakan" value="teknisi">
-                        <button type="submit" class="inline-flex w-full items-center justify-center rounded-xl bg-orange-500 px-5 py-3 text-sm font-bold text-white hover:bg-orange-600 transition-colors shadow-sm">
-                            Hubungi Teknisi
-                        </button>
-                    </form>
+                    <button type="button" onclick="openTeknisiModal()"
+                            class="inline-flex w-full items-center justify-center rounded-xl bg-orange-500 px-5 py-3 text-sm font-bold text-white hover:bg-orange-600 transition-colors shadow-sm">
+                        Hubungi Teknisi
+                    </button>
                 </div>
             </div>
         </div>
@@ -161,5 +158,118 @@
         </div>
     </div>
 </div>
+
+{{-- Modal Hubungi Teknisi --}}
+<div id="teknisiModal" class="fixed inset-0 z-[9999] hidden flex items-center justify-center p-4 print:hidden">
+    <div class="fixed inset-0 bg-slate-900/40 backdrop-blur-[2px]" onclick="closeTeknisiModal()"></div>
+    <div class="relative w-full max-w-sm overflow-hidden rounded-2xl border border-slate-100 bg-white p-6 text-center shadow-xl sm:p-8">
+        <div class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-orange-50 text-orange-500 border border-orange-100">
+            <i class="bi bi-person-workspace text-2xl"></i>
+        </div>
+        <h3 class="text-lg font-bold text-slate-900">Hubungi Teknisi</h3>
+        <p class="mt-1 text-sm text-slate-500">{{ config('app.teknisi_name') }}</p>
+        <p class="mt-4 text-2xl font-bold tracking-wide text-slate-900">{{ teknisi_phone_display() }}</p>
+        <p class="mt-2 text-xs text-slate-500">Pilih cara menghubungi teknisi. Diagnosa akan disimpan ke riwayat.</p>
+        <div class="mt-6 flex flex-col gap-2.5">
+            <button type="button" id="btnCallTeknisi"
+                    class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-bold text-white hover:bg-blue-700 transition-colors shadow-sm">
+                <i class="bi bi-telephone-fill"></i>
+                Call Teknisi
+            </button>
+            <button type="button" id="btnWaTeknisi"
+                    class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-sm font-bold text-white hover:bg-emerald-700 transition-colors shadow-sm">
+                <i class="bi bi-whatsapp"></i>
+                WA Teknisi
+            </button>
+            <button type="button" onclick="closeTeknisiModal()"
+                    class="inline-flex w-full items-center justify-center rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-600 hover:bg-slate-50 transition-colors">
+                Batal
+            </button>
+        </div>
+    </div>
+</div>
+
+@push('scripts')
+<script>
+    (function () {
+        var tindakanUrl = @json(route('user.hasil-diagnosa.tindakan', $d->id));
+        var riwayatUrl = @json(url('/user/riwayat'));
+        var phoneDigits = @json(teknisi_phone_digits());
+        var diagnosaId = @json($d->id);
+        var csrf = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+
+        window.openTeknisiModal = function () {
+            document.getElementById('teknisiModal')?.classList.remove('hidden');
+        };
+
+        window.closeTeknisiModal = function () {
+            document.getElementById('teknisiModal')?.classList.add('hidden');
+        };
+
+        async function simpanTindakanTeknisi() {
+            var res = await fetch(tindakanUrl, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': csrf,
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ tindakan: 'teknisi' }),
+            });
+
+            if (!res.ok) {
+                throw new Error('Gagal menyimpan tindakan');
+            }
+        }
+
+        async function hubungiTeknisi(channel) {
+            var callBtn = document.getElementById('btnCallTeknisi');
+            var waBtn = document.getElementById('btnWaTeknisi');
+            callBtn?.setAttribute('disabled', 'disabled');
+            waBtn?.setAttribute('disabled', 'disabled');
+
+            try {
+                await simpanTindakanTeknisi();
+            } catch (e) {
+                alert('Gagal menyimpan tindakan. Silakan coba lagi.');
+                callBtn?.removeAttribute('disabled');
+                waBtn?.removeAttribute('disabled');
+                return;
+            }
+
+            closeTeknisiModal();
+
+            var waText = encodeURIComponent('Halo teknisi, saya butuh bantuan perbaikan printer. Diagnosa #' + diagnosaId);
+            var waUrl = 'https://wa.me/' + phoneDigits + '?text=' + waText;
+            var telUrl = 'tel:+' + phoneDigits;
+
+            if (channel === 'wa') {
+                window.open(waUrl, '_blank', 'noopener');
+                window.location.href = riwayatUrl;
+                return;
+            }
+
+            var telLink = document.createElement('a');
+            telLink.href = telUrl;
+            telLink.style.display = 'none';
+            document.body.appendChild(telLink);
+            telLink.click();
+            telLink.remove();
+
+            setTimeout(function () {
+                window.location.href = riwayatUrl;
+            }, 400);
+        }
+
+        document.getElementById('btnCallTeknisi')?.addEventListener('click', function () {
+            hubungiTeknisi('call');
+        });
+
+        document.getElementById('btnWaTeknisi')?.addEventListener('click', function () {
+            hubungiTeknisi('wa');
+        });
+    })();
+</script>
+@endpush
 
 @endsection

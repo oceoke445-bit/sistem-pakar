@@ -129,18 +129,20 @@
                                 <span class="font-medium text-slate-700">— {{ $pn[$kodePenyakit] ?? '' }}</span>
                             </div>
                         </td>
-                        <td class="px-6 py-4 text-center whitespace-nowrap">
-                            <button type="button" onclick="editRule('{{ $kodePenyakit }}')" class="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-white text-brand-600 hover:bg-brand-50 hover:border-brand-200 shadow-sm transition-all active:scale-95 mr-1" title="Tambah gejala ke rule">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center justify-center gap-2">
+                            <button type="button" onclick="editRule('{{ $kodePenyakit }}')" class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-white text-brand-600 hover:bg-brand-50 hover:border-brand-200 shadow-sm transition-all active:scale-95" title="Tambah gejala ke rule">
                                 <i class="bi bi-pencil text-sm"></i>
                             </button>
                             {{-- Delete Rule Form --}}
-                            <form id="delete-rule-form-{{ $kodePenyakit }}" method="post" action="/admin/relasi/hapus" class="inline" onsubmit="event.preventDefault(); confirmDelete(this, 'Hapus Rule?', 'Apakah Anda yakin ingin menghapus seluruh relasi rule untuk kerusakan ini? Tindakan ini tidak dapat dibatalkan.');">
+                            <form id="delete-rule-form-{{ $kodePenyakit }}" method="post" action="/admin/relasi/hapus" class="inline-flex shrink-0 m-0" onsubmit="event.preventDefault(); confirmDelete(this, 'Hapus Rule?', 'Apakah Anda yakin ingin menghapus seluruh relasi rule untuk kerusakan ini? Tindakan ini tidak dapat dibatalkan.');">
                                 @csrf
                                 <input type="hidden" name="kode_penyakit" value="{{ $kodePenyakit }}">
-                                <button type="submit" class="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-red-200 bg-white text-red-600 hover:bg-red-50 hover:border-red-300 shadow-sm transition-all active:scale-95" title="Hapus Rule">
+                                <button type="submit" class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-red-200 bg-white text-red-600 hover:bg-red-50 hover:border-red-300 shadow-sm transition-all active:scale-95" title="Hapus Rule">
                                     <i class="bi bi-trash text-sm"></i>
                                 </button>
                             </form>
+                            </div>
                         </td>
                     </tr>
                 @empty

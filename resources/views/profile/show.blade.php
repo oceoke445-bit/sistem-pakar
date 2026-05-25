@@ -15,7 +15,14 @@
     </div>
 
     <!-- Notifications/Alerts -->
-    @if (request('success'))
+    @if (request('success') === 'password')
+        <div class="rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-900 shadow-sm flex items-center gap-2">
+            <svg class="h-5 w-5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Password berhasil diubah. Silakan <strong>logout</strong> lalu login kembali dengan password baru.
+        </div>
+    @elseif (request('success'))
         <div class="rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-900 shadow-sm flex items-center gap-2">
             <svg class="h-5 w-5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -73,28 +80,48 @@
                     <!-- Horizontal Divider -->
                     <hr class="my-6 border-slate-200">
 
-                    <!-- Password Baru Field -->
+                    <p class="text-[13px] font-semibold text-slate-700">Ubah Password</p>
+                    <p class="mt-0.5 text-[12px] text-slate-500">Kosongkan ketiga field di bawah jika tidak ingin mengubah password.</p>
+
+                    <!-- Password Saat Ini -->
                     <div>
-                        <label class="mb-1.5 block text-xs font-bold uppercase tracking-wider text-slate-500">Password Baru (Kosongkan jika tidak ingin diubah)</label>
-                        <div class="relative">
-                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
-                                <i class="bi bi-lock-fill text-base"></i>
-                            </span>
-                            <input type="password" name="password" placeholder="••••••••" autocomplete="new-password"
-                                   class="w-full rounded-xl border border-slate-200 bg-slate-50/60 px-4 py-3 pl-11 text-sm outline-none focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/15 transition-all text-slate-800 font-medium">
-                        </div>
+                        <label class="mb-1.5 block text-xs font-bold uppercase tracking-wider text-slate-500">Password Saat Ini</label>
+                        @include('partials.password-input', [
+                            'name' => 'current_password',
+                            'icon' => 'bi-shield-lock-fill',
+                            'placeholder' => '••••••••',
+                            'autocomplete' => 'current-password',
+                            'inputClass' => $errors->has('current_password') ? 'border-red-400' : '',
+                        ])
+                        @error('current_password')
+                            <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
+                        @enderror
                     </div>
 
-                    <!-- Konfirmasi Password Lama Field -->
+                    <!-- Password Baru -->
                     <div>
-                        <label class="mb-1.5 block text-xs font-bold uppercase tracking-wider text-slate-500">Password Saat Ini (Wajib diisi jika ingin mengubah password)</label>
-                        <div class="relative">
-                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
-                                <i class="bi bi-check-circle-fill text-base"></i>
-                            </span>
-                            <input type="password" name="current_password" placeholder="••••••••" autocomplete="new-password"
-                                   class="w-full rounded-xl border border-slate-200 bg-slate-50/60 px-4 py-3 pl-11 text-sm outline-none focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/15 transition-all text-slate-800 font-medium">
-                        </div>
+                        <label class="mb-1.5 block text-xs font-bold uppercase tracking-wider text-slate-500">Password Baru</label>
+                        @include('partials.password-input', [
+                            'name' => 'password',
+                            'icon' => 'bi-lock-fill',
+                            'placeholder' => '••••••••',
+                            'autocomplete' => 'new-password',
+                            'inputClass' => $errors->has('password') ? 'border-red-400' : '',
+                        ])
+                        @error('password')
+                            <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Konfirmasi Password Baru -->
+                    <div>
+                        <label class="mb-1.5 block text-xs font-bold uppercase tracking-wider text-slate-500">Konfirmasi Password Baru</label>
+                        @include('partials.password-input', [
+                            'name' => 'password_confirmation',
+                            'icon' => 'bi-check-circle-fill',
+                            'placeholder' => '••••••••',
+                            'autocomplete' => 'new-password',
+                        ])
                     </div>
 
                     <!-- Action Button -->

@@ -44,13 +44,21 @@ class HasilDiagnosaController extends Controller
         ]);
 
         $auth = $request->session()->get('auth');
-        $updated = DB::table('diagnosa')
+        $row = DB::table('diagnosa')->where('id', $id)->where('id_user', $auth['id'])->first();
+        if (! $row) {
+            abort(404);
+        }
+
+        DB::table('diagnosa')
             ->where('id', $id)
             ->where('id_user', $auth['id'])
             ->update(['tindakan' => $request->input('tindakan')]);
 
-        if (! $updated) {
-            abort(404);
+        if ($request->wantsJson()) {
+            return response()->json([
+                'ok' => true,
+                'redirect' => url('/user/riwayat'),
+            ]);
         }
 
         return redirect('/user/riwayat');

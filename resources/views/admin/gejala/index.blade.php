@@ -81,9 +81,11 @@
                         <td class="px-4 py-3.5 text-slate-500">{{ $rows->firstItem() + $i }}</td>
                         <td class="px-4 py-3.5 font-mono text-xs">{{ $row->kode_gejala }}</td>
                         <td class="px-4 py-3.5 font-medium text-slate-900">{{ $row->nama_gejala }}</td>
-                        <td class="px-4 py-3.5 text-right">
-                            <a href="/admin/gejala?edit={{ urlencode($row->kode_gejala) }}{{ $gq }}" class="mr-2 inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-brand-600 hover:bg-blue-50"><i class="bi bi-pencil"></i></a>
-                            <form method="post" action="/admin/gejala/hapus" class="inline" onsubmit="event.preventDefault(); confirmDelete(this, 'Hapus Gejala?', 'Apakah Anda yakin ingin menghapus data gejala ini? Tindakan ini tidak dapat dibatalkan.');">@csrf<input type="hidden" name="kode_gejala" value="{{ $row->kode_gejala }}"><button type="submit" class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-red-100 text-red-600 hover:bg-red-50"><i class="bi bi-trash"></i></button></form>
+                        <td class="px-4 py-3.5">
+                            <div class="flex items-center justify-end gap-2">
+                                <a href="/admin/gejala?edit={{ urlencode($row->kode_gejala) }}{{ $gq }}" class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-slate-200 text-brand-600 hover:bg-blue-50"><i class="bi bi-pencil"></i></a>
+                                <form method="post" action="/admin/gejala/hapus" class="inline-flex shrink-0 m-0" onsubmit="event.preventDefault(); confirmDelete(this, 'Hapus Gejala?', 'Apakah Anda yakin ingin menghapus data gejala ini? Tindakan ini tidak dapat dibatalkan.');">@csrf<input type="hidden" name="kode_gejala" value="{{ $row->kode_gejala }}"><button type="submit" class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-red-100 text-red-600 hover:bg-red-50"><i class="bi bi-trash"></i></button></form>
+                            </div>
                         </td>
                     </tr>
                 @empty

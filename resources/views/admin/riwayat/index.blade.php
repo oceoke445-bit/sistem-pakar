@@ -76,14 +76,8 @@
                                 'namaGejala' => $namaGejala ?? [],
                             ])
                         </td>
-                        <td class="px-4 py-3.5">
-                            @if ($hasilKerusakan)
-                                <span class="inline-flex rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700 ring-1 ring-emerald-100">
-                                    {{ $hasilKerusakan }}
-                                </span>
-                            @else
-                                <span class="text-slate-400">—</span>
-                            @endif
+                        <td class="px-4 py-3.5 align-top">
+                            @include('partials.hasil-kerusakan-badge', ['label' => $hasilKerusakan])
                         </td>
                         <td class="px-4 py-3.5 {{ $lblClass }}">{{ $lbl }}</td>
                         <td class="whitespace-nowrap px-4 py-3.5">
@@ -91,16 +85,16 @@
                                 'tindakan' => $r->tindakan ?? null,
                             ])
                         </td>
-                        <td class="whitespace-nowrap px-4 py-3.5 text-right">
-                            <div class="inline-flex items-center gap-2">
+                        <td class="whitespace-nowrap px-4 py-3.5">
+                            <div class="flex items-center justify-end gap-2">
                                 <a href="/admin/diagnosa/{{ $r->id }}"
-                                   class="inline-flex rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 transition hover:border-slate-300 hover:bg-slate-50">
+                                   class="inline-flex shrink-0 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 transition hover:border-slate-300 hover:bg-slate-50">
                                     Detail
                                 </a>
-                                <form method="post" action="/admin/riwayat/hapus" class="inline" onsubmit="event.preventDefault(); confirmDelete(this, 'Hapus Riwayat?', 'Apakah Anda yakin ingin menghapus riwayat diagnosa ini? Tindakan ini tidak dapat dibatalkan.');">
+                                <form method="post" action="/admin/riwayat/hapus" class="inline-flex shrink-0 m-0" onsubmit="event.preventDefault(); confirmDelete(this, 'Hapus Riwayat?', 'Apakah Anda yakin ingin menghapus riwayat diagnosa ini? Tindakan ini tidak dapat dibatalkan.');">
                                     @csrf
                                     <input type="hidden" name="id" value="{{ $r->id }}">
-                                    <button type="submit" class="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-400 hover:border-red-200 hover:bg-red-50 hover:text-red-600 transition-all shadow-sm" title="Hapus">
+                                    <button type="submit" class="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-400 hover:border-red-200 hover:bg-red-50 hover:text-red-600 transition-all shadow-sm" title="Hapus">
                                         <i class="bi bi-trash text-sm"></i>
                                     </button>
                                 </form>

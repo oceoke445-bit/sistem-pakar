@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\RegistrationSuccessMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
 class AuthController extends Controller
@@ -86,12 +89,16 @@ class AuthController extends Controller
             return redirect('/register')->with('error', 'Email sudah terdaftar');
         }
 
+        $userId = (string) Str::uuid();
+        $password = $request->input('password');
+        $namaLengkap = trim($request->input('nama_lengkap'));
+
         try {
             DB::table('users')->insert([
-                'id' => (string) Str::uuid(),
+                'id' => $userId,
                 'email' => $email,
-                'password_hash' => Hash::make($request->input('password')),
-                'nama_lengkap' => trim($request->input('nama_lengkap')),
+                'password_hash' => Hash::make($password),
+                'nama_lengkap' => $namaLengkap,
                 'role' => 'user',
                 'created_at' => now(),
             ]);
@@ -99,7 +106,35 @@ class AuthController extends Controller
             return redirect('/register')->with('error', 'Gagal mendaftar, coba lagi');
         }
 
-        return redirect('/login?registered=1');
+        $emailSent = false;
+        try {
+            Mail::to($email)->send(new RegistrationSuccessMail($namaLengkap, $email, $password));
+            $emailSent = true;
+        } catch (\Throwable $e) {
+            Log::warning('Gagal mengirim email pendaftaran', [
+                'email' => $email,
+                'error' => $e->getMessage(),
+            ]);
+        }
+
+        try {
+            session([
+                'auth' => [
+                    'id' => $userId,
+                    'email' => $email,
+                    'role' => 'user',
+                    'nama_lengkap' => $namaLengkap,
+                ],
+            ]);
+        } catch (\Throwable $e) {
+            return redirect('/login')->with('error', 'Akun berhasil dibuat, silakan masuk');
+        }
+
+        $message = $emailSent
+            ? 'Pendaftaran berhasil! Detail akun telah dikirim ke email Anda.'
+            : 'Pendaftaran berhasil! Email konfirmasi gagal dikirim, namun Anda sudah masuk.';
+
+        return redirect('/user/dashboard')->with('success', $message);
     }
 
     public function logout(Request $request)

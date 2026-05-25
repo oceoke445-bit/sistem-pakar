@@ -28,6 +28,12 @@
     </script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        input[type="password"]::-ms-reveal,
+        input[type="password"]::-ms-clear {
+            display: none;
+        }
+    </style>
     @stack('head')
 </head>
 <body class="overflow-hidden bg-slate-100 font-sans text-slate-800 antialiased">
@@ -310,6 +316,35 @@
     </div>
 
     <script>
+        function resolveForm(formRef) {
+            if (!formRef) return null;
+            if (typeof formRef === 'string') {
+                return document.getElementById(formRef);
+            }
+            if (formRef instanceof HTMLFormElement) {
+                return formRef;
+            }
+            if (formRef.closest) {
+                return formRef.closest('form');
+            }
+            return null;
+        }
+
+        function submitCapturedForm(form, formData) {
+            if (!form || !formData) return;
+
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                credentials: 'same-origin',
+                redirect: 'follow',
+            }).then(function(response) {
+                window.location.assign(response.url);
+            }).catch(function() {
+                form.submit();
+            });
+        }
+
         // Modal helpers
         window.openLogoutModal = function() {
             var modal = document.getElementById('logoutModal');
@@ -329,8 +364,10 @@
         }
 
         var deleteFormToSubmit = null;
+        var deleteFormData = null;
         window.confirmDelete = function(formIdOrElement, customTitle, customDesc) {
-            deleteFormToSubmit = formIdOrElement;
+            deleteFormToSubmit = resolveForm(formIdOrElement);
+            deleteFormData = deleteFormToSubmit ? new FormData(deleteFormToSubmit) : null;
             var titleEl = document.getElementById('deleteModalTitle');
             var descEl = document.getElementById('deleteModalDescription');
             if (titleEl) titleEl.textContent = customTitle || 'Hapus Data?';
@@ -343,28 +380,24 @@
             var modal = document.getElementById('deleteModal');
             if (modal) modal.classList.add('hidden');
             deleteFormToSubmit = null;
+            deleteFormData = null;
         }
 
         var confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
         if (confirmDeleteBtn) {
             confirmDeleteBtn.addEventListener('click', function() {
-                if (deleteFormToSubmit) {
-                    if (typeof deleteFormToSubmit === 'string') {
-                        var form = document.getElementById(deleteFormToSubmit);
-                        if (form) form.submit();
-                    } else if (deleteFormToSubmit instanceof HTMLFormElement) {
-                        deleteFormToSubmit.submit();
-                    } else if (deleteFormToSubmit.closest('form')) {
-                        deleteFormToSubmit.closest('form').submit();
-                    }
+                if (deleteFormToSubmit && deleteFormData) {
+                    submitCapturedForm(deleteFormToSubmit, deleteFormData);
                 }
                 closeDeleteModal();
             });
         }
 
         var saveFormToSubmit = null;
+        var saveFormData = null;
         window.confirmSave = function(formIdOrElement, customTitle, customDesc) {
-            saveFormToSubmit = formIdOrElement;
+            saveFormToSubmit = resolveForm(formIdOrElement);
+            saveFormData = saveFormToSubmit ? new FormData(saveFormToSubmit) : null;
             var titleEl = document.getElementById('saveModalTitle');
             var descEl = document.getElementById('saveModalDescription');
             if (titleEl) titleEl.textContent = customTitle || 'Tambah Data?';
@@ -377,28 +410,24 @@
             var modal = document.getElementById('saveModal');
             if (modal) modal.classList.add('hidden');
             saveFormToSubmit = null;
+            saveFormData = null;
         }
 
         var confirmSaveBtn = document.getElementById('confirmSaveBtn');
         if (confirmSaveBtn) {
             confirmSaveBtn.addEventListener('click', function() {
-                if (saveFormToSubmit) {
-                    if (typeof saveFormToSubmit === 'string') {
-                        var form = document.getElementById(saveFormToSubmit);
-                        if (form) form.submit();
-                    } else if (saveFormToSubmit instanceof HTMLFormElement) {
-                        saveFormToSubmit.submit();
-                    } else if (saveFormToSubmit.closest('form')) {
-                        saveFormToSubmit.closest('form').submit();
-                    }
+                if (saveFormToSubmit && saveFormData) {
+                    submitCapturedForm(saveFormToSubmit, saveFormData);
                 }
                 closeSaveModal();
             });
         }
 
         var updateFormToSubmit = null;
+        var updateFormData = null;
         window.confirmUpdate = function(formIdOrElement, customTitle, customDesc) {
-            updateFormToSubmit = formIdOrElement;
+            updateFormToSubmit = resolveForm(formIdOrElement);
+            updateFormData = updateFormToSubmit ? new FormData(updateFormToSubmit) : null;
             var titleEl = document.getElementById('updateModalTitle');
             var descEl = document.getElementById('updateModalDescription');
             if (titleEl) titleEl.textContent = customTitle || 'Simpan Perubahan?';
@@ -411,24 +440,34 @@
             var modal = document.getElementById('updateModal');
             if (modal) modal.classList.add('hidden');
             updateFormToSubmit = null;
+            updateFormData = null;
         }
 
         var confirmUpdateBtn = document.getElementById('confirmUpdateBtn');
         if (confirmUpdateBtn) {
             confirmUpdateBtn.addEventListener('click', function() {
-                if (updateFormToSubmit) {
-                    if (typeof updateFormToSubmit === 'string') {
-                        var form = document.getElementById(updateFormToSubmit);
-                        if (form) form.submit();
-                    } else if (updateFormToSubmit instanceof HTMLFormElement) {
-                        updateFormToSubmit.submit();
-                    } else if (updateFormToSubmit.closest('form')) {
-                        updateFormToSubmit.closest('form').submit();
-                    }
+                if (updateFormToSubmit && updateFormData) {
+                    submitCapturedForm(updateFormToSubmit, updateFormData);
                 }
                 closeUpdateModal();
             });
         }
+
+        document.querySelectorAll('.password-toggle-btn').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                var targetId = btn.getAttribute('data-target');
+                var input = targetId ? document.getElementById(targetId) : null;
+                if (!input) return;
+                var icon = btn.querySelector('i');
+                var show = input.type === 'password';
+                input.type = show ? 'text' : 'password';
+                if (icon) {
+                    icon.classList.toggle('bi-eye', show);
+                    icon.classList.toggle('bi-eye-slash', !show);
+                }
+                btn.setAttribute('aria-label', show ? 'Sembunyikan password' : 'Tampilkan password');
+            });
+        });
     </script>
     @stack('scripts')
 </body>

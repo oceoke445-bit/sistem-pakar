@@ -3,6 +3,12 @@
 @section('content')
 <div class="mx-auto max-w-7xl space-y-6">
 
+    @if (session('success'))
+        <div class="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-900">
+            {{ session('success') }}
+        </div>
+    @endif
+
     @if (!empty($dbError))
         <div class="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
             Database belum merespons. Coba refresh beberapa saat lagi.
@@ -97,20 +103,16 @@
                                         <span class="text-slate-400">—</span>
                                     @endif
                                 </td>
-                                <td class="px-4 py-4">
-                                    @if ($hasil)
-                                        <span class="inline-flex rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700 ring-1 ring-emerald-100">
-                                            {{ $hasil }}
-                                        </span>
-                                    @else
-                                        <span class="text-slate-400">—</span>
-                                    @endif
+                                <td class="px-4 py-4 align-top">
+                                    @include('partials.hasil-kerusakan-badge', ['label' => $hasil])
                                 </td>
-                                <td class="px-4 py-4 text-right">
+                                <td class="px-4 py-4">
+                                    <div class="flex items-center justify-end gap-2">
                                     <a href="/user/riwayat/{{ $r->id }}"
-                                       class="inline-flex rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 transition hover:border-slate-300 hover:bg-slate-50">
+                                       class="inline-flex shrink-0 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 transition hover:border-slate-300 hover:bg-slate-50">
                                         Detail
                                     </a>
+                                    </div>
                                 </td>
                             </tr>
                         @empty
