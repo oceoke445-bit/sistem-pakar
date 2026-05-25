@@ -80,19 +80,19 @@
                             <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
                                 <i class="bi bi-lock-fill text-base"></i>
                             </span>
-                            <input type="password" name="password" placeholder="••••••••"
+                            <input type="password" name="password" placeholder="••••••••" autocomplete="new-password"
                                    class="w-full rounded-xl border border-slate-200 bg-slate-50/60 px-4 py-3 pl-11 text-sm outline-none focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/15 transition-all text-slate-800 font-medium">
                         </div>
                     </div>
 
                     <!-- Konfirmasi Password Lama Field -->
                     <div>
-                        <label class="mb-1.5 block text-xs font-bold uppercase tracking-wider text-slate-500">Konfirmasi Password Baru</label>
+                        <label class="mb-1.5 block text-xs font-bold uppercase tracking-wider text-slate-500">Password Saat Ini (Wajib diisi jika ingin mengubah password)</label>
                         <div class="relative">
                             <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
                                 <i class="bi bi-check-circle-fill text-base"></i>
                             </span>
-                            <input type="password" name="current_password" placeholder="••••••••"
+                            <input type="password" name="current_password" placeholder="••••••••" autocomplete="new-password"
                                    class="w-full rounded-xl border border-slate-200 bg-slate-50/60 px-4 py-3 pl-11 text-sm outline-none focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/15 transition-all text-slate-800 font-medium">
                         </div>
                     </div>

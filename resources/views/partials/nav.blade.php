@@ -23,8 +23,8 @@
        class="fixed inset-y-0 left-0 z-50 flex h-[100dvh] w-[min(100vw-3rem,18rem)] max-w-[288px] -translate-x-full flex-col overflow-hidden border-r border-slate-900/50 bg-[#152238] text-slate-200 shadow-2xl print:hidden motion-safe:transition-transform motion-safe:duration-200 motion-safe:ease-out sm:w-72 lg:translate-x-0">
     <div class="shrink-0 border-b border-white/10 px-4 py-5 md:px-5">
         <div class="flex items-center gap-3">
-            <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/10 ring-1 ring-white/15 text-white">
-                <i class="bi bi-printer text-2xl"></i>
+            <div class="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white/10 ring-1 ring-white/15">
+                <img src="{{ asset('images/logo.png') }}" alt="" class="h-10 w-10 object-contain" width="40" height="40" decoding="async">
             </div>
             <div class="min-w-0">
                 <p class="text-xs font-black uppercase tracking-wider text-white">SISTEM PAKAR</p>

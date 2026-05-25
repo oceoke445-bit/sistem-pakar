@@ -10,6 +10,7 @@
 </style>
 @php
     $printerUrl = asset('images/printer.png');
+    $logoUrl = asset('images/logo.png');
     $brand = config('app.name', 'Sistem Pakar');
     $tagline = config('app.tagline', 'Diagnosa Kerusakan Printer pada Fotocopy Berkah Andirra');
 @endphp
@@ -74,13 +75,16 @@
     </div>
 
     {{-- Right Panel: Soft off-white background with a beautifully styled white card in the center --}}
-    <div class="relative flex min-h-0 flex-col bg-[#f8fafc] lg:min-h-screen justify-between py-12 px-6 sm:px-12 lg:px-16">
-        <div class="my-auto flex flex-col items-center justify-center w-full">
+    <div class="relative flex min-h-0 flex-col items-center justify-center bg-[#f8fafc] px-6 py-14 sm:px-12 sm:py-16 lg:min-h-screen lg:px-16">
+        <div class="flex w-full flex-col items-center justify-center">
             
-            {{-- Header text: deep royal/navy blue matching reference image --}}
-            <div class="w-full max-w-[420px] text-center mb-6">
-                <h2 class="text-2xl sm:text-3xl font-extrabold text-[#133075] tracking-tight">Selamat Datang</h2>
-                <p class="mt-2 text-sm sm:text-base text-slate-500 font-normal">Silakan login untuk masuk ke sistem</p>
+            {{-- Header: logo di atas Selamat Datang --}}
+            <div class="mb-8 w-full max-w-[420px] text-center">
+                <img src="{{ $logoUrl }}" alt="Logo Fotocopy Berkah Andirra"
+                     class="mx-auto mb-5 h-24 w-24 object-contain sm:h-28 sm:w-28"
+                     width="112" height="112" decoding="async">
+                <h2 class="text-2xl font-extrabold tracking-tight text-[#133075] sm:text-3xl">Selamat Datang</h2>
+                <p class="mt-2 text-sm font-normal text-slate-500 sm:text-base">Silakan login untuk masuk ke sistem</p>
             </div>
 
             {{-- Central white card container with soft slate-100 border --}}
@@ -125,9 +129,6 @@
                 </p>
             </div>
         </div>
-
-        {{-- Footer --}}
-        <p class="mt-12 text-center text-xs sm:text-sm text-[#64748b]/80 font-medium">&copy; 2026 Fotocopy Berkah Andirra</p>
     </div>
 </div>
 
