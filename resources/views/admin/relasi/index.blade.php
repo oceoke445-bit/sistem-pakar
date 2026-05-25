@@ -44,7 +44,7 @@
                 <select name="kode_penyakit" required class="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-800 focus:border-brand-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-brand-500 transition-all">
                     <option value="">— Pilih Kerusakan —</option>
                     @foreach ($penyakit as $p)
-                        <option value="{{ $p->kode_penyakit }}">{{ $p->kode_penyakit }} — {{ $p->nama_penyakit }}</option>
+                        <option value="{{ $p->kode_penyakit }}" @selected(($tambahPenyakit ?? '') === $p->kode_penyakit)>{{ $p->kode_penyakit }} — {{ $p->nama_penyakit }}</option>
                     @endforeach
                 </select>
             </div>
@@ -105,8 +105,15 @@
                         <td class="px-6 py-4">
                             <div class="flex flex-wrap items-center gap-1.5">
                                 @foreach ($items as $item)
-                                    <span class="inline-flex items-center rounded-lg bg-blue-50 px-2.5 py-1 font-mono text-xs font-semibold text-blue-700 border border-blue-100/50" title="{{ $gn[$item->kode_gejala] ?? '' }}">
+                                    <span class="inline-flex items-center gap-1 rounded-lg bg-blue-50 pl-2.5 pr-1 py-1 font-mono text-xs font-semibold text-blue-700 border border-blue-100/50" title="{{ $gn[$item->kode_gejala] ?? '' }}">
                                         {{ $item->kode_gejala }}
+                                        <form method="post" action="/admin/relasi/hapus" class="inline" onsubmit="event.preventDefault(); confirmDelete(this, 'Hapus Gejala dari Rule?', 'Hapus gejala {{ $item->kode_gejala }} dari rule ini?');">
+                                            @csrf
+                                            <input type="hidden" name="id" value="{{ $item->id }}">
+                                            <button type="submit" class="inline-flex h-5 w-5 items-center justify-center rounded-md text-blue-500 hover:bg-blue-100 hover:text-red-600 transition-colors" title="Hapus gejala dari rule">
+                                                <i class="bi bi-x-lg text-[10px]"></i>
+                                            </button>
+                                        </form>
                                     </span>
                                     @if (!$loop->last)
                                         <span class="text-[11px] font-bold text-slate-400 px-1">{{ $connector }}</span>
@@ -123,8 +130,7 @@
                             </div>
                         </td>
                         <td class="px-6 py-4 text-center whitespace-nowrap">
-                            {{-- Edit Rule Notice trigger --}}
-                            <button type="button" onclick="alert('Untuk mengubah kombinasi gejala pada rule ini, silakan hapus rule ini kemudian tambahkan rule baru dengan kombinasi yang Anda inginkan.')" class="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-white text-brand-600 hover:bg-brand-50 hover:border-brand-200 shadow-sm transition-all active:scale-95 mr-1" title="Ubah Aturan">
+                            <button type="button" onclick="editRule('{{ $kodePenyakit }}')" class="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-white text-brand-600 hover:bg-brand-50 hover:border-brand-200 shadow-sm transition-all active:scale-95 mr-1" title="Tambah gejala ke rule">
                                 <i class="bi bi-pencil text-sm"></i>
                             </button>
                             {{-- Delete Rule Form --}}
@@ -150,12 +156,35 @@
 </div>
 
 <script>
-    function toggleForm() {
+    function toggleForm(forceOpen) {
         const form = document.getElementById('tambah-form');
-        form.classList.toggle('hidden');
+        if (!form) return;
+        if (forceOpen) {
+            form.classList.remove('hidden');
+        } else {
+            form.classList.toggle('hidden');
+        }
         if (!form.classList.contains('hidden')) {
             form.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
     }
+
+    function editRule(kodePenyakit) {
+        toggleForm(true);
+        const select = document.querySelector('#tambah-form select[name="kode_penyakit"]');
+        if (select) {
+            select.value = kodePenyakit;
+        }
+        const gejalaSelect = document.querySelector('#tambah-form select[name="kode_gejala"]');
+        if (gejalaSelect) {
+            gejalaSelect.focus();
+        }
+    }
+
+    @if (! empty($tambahPenyakit))
+        document.addEventListener('DOMContentLoaded', function () {
+            editRule(@json($tambahPenyakit));
+        });
+    @endif
 </script>
 @endsection

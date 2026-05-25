@@ -29,9 +29,10 @@ class HasilDiagnosaController extends Controller
         $data = $this->loadDiagnosa($request, $id);
         $filename = 'hasil-diagnosa-'.$id.'.doc';
         $content = view('exports.hasil-diagnosa-word', $data)->render();
+        $content = "\xEF\xBB\xBF".$content;
 
         return response($content, 200, [
-            'Content-Type' => 'application/msword',
+            'Content-Type' => 'application/msword; charset=UTF-8',
             'Content-Disposition' => 'attachment; filename="'.$filename.'"',
         ]);
     }

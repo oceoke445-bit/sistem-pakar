@@ -87,6 +87,7 @@ class RiwayatController extends Controller
             'namaGejala' => $namaGejala,
             'namaUser' => $namaUser,
             'notice' => $request->query('notice'),
+            'error' => $request->query('error'),
             'q' => $q,
             'tingkat' => $tingkat,
         ]);
@@ -95,9 +96,22 @@ class RiwayatController extends Controller
     public function destroy(Request $request)
     {
         $id = (int) $request->input('id');
+        if ($id <= 0) {
+            return redirect('/admin/riwayat?error='.urlencode('ID diagnosa tidak valid.'));
+        }
+
         $t = DB::table('diagnosa')->where('id', $id)->value('tanggal_diagnosa');
-        DB::table('diagnosa')->where('id', $id)->delete();
-        $when = $t ? format_date_id((string) $t) : "#{$id}";
+        if (! $t) {
+            return redirect('/admin/riwayat?error='.urlencode('Riwayat diagnosa tidak ditemukan.'));
+        }
+
+        try {
+            DB::table('diagnosa')->where('id', $id)->delete();
+        } catch (\Throwable $e) {
+            return redirect('/admin/riwayat?error='.urlencode('Gagal menghapus riwayat diagnosa.'));
+        }
+
+        $when = format_date_id((string) $t);
 
         return redirect('/admin/riwayat?notice='.urlencode("Diagnosa #{$id} ({$when}) berhasil dihapus dari riwayat."));
     }

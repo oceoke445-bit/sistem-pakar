@@ -38,14 +38,7 @@
         <!-- Red/Amber Header Box inside the main card -->
         <div class="rounded-2xl border border-red-100 bg-red-50/40 p-5 sm:p-6 print:bg-white print:border-0">
             <div class="flex flex-col gap-5 sm:flex-row sm:items-center">
-                <!-- Printer Illustration icon -->
-                <div class="shrink-0 flex justify-center">
-                    <svg class="h-20 w-auto text-slate-800" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
-                        <rect x="6 14" width="12" height="8" rx="1" />
-                        <path d="M6 9V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v5" />
-                    </svg>
-                </div>
+                @include('partials.printer-diagnosa-icon')
                 <!-- Damage details -->
                 <div class="text-center sm:text-left space-y-2">
                     <p class="text-[13px] font-bold uppercase tracking-wider text-slate-500">Diagnosa Kerusakan</p>

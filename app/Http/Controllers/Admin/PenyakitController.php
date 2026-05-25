@@ -75,8 +75,13 @@ class PenyakitController extends Controller
             'pencegahan' => 'nullable|string',
         ]);
 
+        $kode = trim($request->input('kode_penyakit'));
+        if (! DB::table('penyakit')->where('kode_penyakit', $kode)->exists()) {
+            return redirect('/admin/penyakit?error='.urlencode('Data kerusakan tidak ditemukan.'));
+        }
+
         DB::table('penyakit')
-            ->where('kode_penyakit', trim($request->input('kode_penyakit')))
+            ->where('kode_penyakit', $kode)
             ->update([
                 'nama_penyakit' => trim($request->input('nama_penyakit')),
                 'tingkat' => $request->input('tingkat'),
@@ -91,7 +96,19 @@ class PenyakitController extends Controller
     public function destroy(Request $request)
     {
         $kode = trim((string) $request->input('kode_penyakit'));
-        DB::table('penyakit')->where('kode_penyakit', $kode)->delete();
+        if ($kode === '') {
+            return redirect('/admin/penyakit?error='.urlencode('Kode kerusakan tidak valid.'));
+        }
+
+        if (! DB::table('penyakit')->where('kode_penyakit', $kode)->exists()) {
+            return redirect('/admin/penyakit?error='.urlencode('Data kerusakan tidak ditemukan.'));
+        }
+
+        try {
+            DB::table('penyakit')->where('kode_penyakit', $kode)->delete();
+        } catch (\Throwable $e) {
+            return redirect('/admin/penyakit?error='.urlencode('Gagal menghapus data kerusakan. Pastikan tidak ada ketergantungan data.'));
+        }
 
         return redirect('/admin/penyakit?notice='.urlencode("Data kerusakan {$kode} berhasil dihapus."));
     }

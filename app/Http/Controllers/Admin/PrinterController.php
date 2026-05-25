@@ -74,8 +74,13 @@ class PrinterController extends Controller
             'status' => 'required|in:aktif,perlu_perawatan',
         ]);
 
+        $id = (int) $request->input('id');
+        if (! DB::table('printers')->where('id', $id)->exists()) {
+            return redirect('/admin/printer?error='.urlencode('Data printer tidak ditemukan.'));
+        }
+
         try {
-            DB::table('printers')->where('id', $request->input('id'))->update([
+            DB::table('printers')->where('id', $id)->update([
                 'nama_printer' => trim($request->input('nama_printer')),
                 'model' => trim($request->input('model')),
                 'lokasi' => trim($request->input('lokasi')),
@@ -91,12 +96,18 @@ class PrinterController extends Controller
 
     public function destroy(Request $request)
     {
-        $id = $request->input('id');
+        $id = (int) $request->input('id');
+        if ($id <= 0) {
+            return redirect('/admin/printer?error='.urlencode('ID printer tidak valid.'));
+        }
 
         try {
             $row = DB::table('printers')->where('id', $id)->first();
-            $label = $row ? $row->nama_printer : $id;
-            
+            if (! $row) {
+                return redirect('/admin/printer?error='.urlencode('Data printer tidak ditemukan.'));
+            }
+
+            $label = $row->nama_printer;
             DB::table('printers')->where('id', $id)->delete();
         } catch (\Throwable $e) {
             return redirect('/admin/printer?error=' . urlencode($e->getMessage()));

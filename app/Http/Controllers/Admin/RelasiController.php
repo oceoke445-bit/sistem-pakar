@@ -77,6 +77,7 @@ class RelasiController extends Controller
             'pn' => $pn,
             'gn' => $gn,
             'q' => $q,
+            'tambahPenyakit' => $request->query('tambah'),
             'success' => $request->query('success'),
             'notice' => $request->query('notice'),
             'error' => $request->query('error'),
@@ -90,10 +91,20 @@ class RelasiController extends Controller
             'kode_gejala' => 'required|string',
         ]);
 
+        $kodePenyakit = trim((string) $request->input('kode_penyakit'));
+        $kodeGejala = trim((string) $request->input('kode_gejala'));
+
+        if (! DB::table('penyakit')->where('kode_penyakit', $kodePenyakit)->exists()) {
+            return redirect('/admin/relasi?error='.urlencode('Kode kerusakan tidak ditemukan.'));
+        }
+        if (! DB::table('gejala')->where('kode_gejala', $kodeGejala)->exists()) {
+            return redirect('/admin/relasi?error='.urlencode('Kode gejala tidak ditemukan.'));
+        }
+
         try {
             DB::table('relasi')->insert([
-                'kode_penyakit' => trim($request->input('kode_penyakit')),
-                'kode_gejala' => trim($request->input('kode_gejala')),
+                'kode_penyakit' => $kodePenyakit,
+                'kode_gejala' => $kodeGejala,
             ]);
         } catch (\Throwable $e) {
             $msg = str_contains($e->getMessage(), 'UNIQUE') || str_contains($e->getMessage(), 'duplicate')
@@ -108,30 +119,42 @@ class RelasiController extends Controller
 
     public function destroy(Request $request)
     {
-        $kodePenyakit = $request->input('kode_penyakit');
+        $kodePenyakit = trim((string) $request->input('kode_penyakit', ''));
 
-        if ($kodePenyakit) {
+        if ($kodePenyakit !== '') {
+            if (! DB::table('penyakit')->where('kode_penyakit', $kodePenyakit)->exists()) {
+                return redirect('/admin/relasi?error='.urlencode('Rule kerusakan tidak ditemukan.'));
+            }
+
             $namaPenyakit = DB::table('penyakit')->where('kode_penyakit', $kodePenyakit)->value('nama_penyakit');
             DB::table('relasi')->where('kode_penyakit', $kodePenyakit)->delete();
             $detail = "Seluruh aturan untuk kerusakan {$kodePenyakit}".($namaPenyakit ? " ({$namaPenyakit})" : '').' berhasil dihapus.';
-        } else {
-            $id = (int) $request->input('id');
-            $r = DB::table('relasi')->where('id', $id)->first();
-            $namaPenyakit = $r ? DB::table('penyakit')->where('kode_penyakit', $r->kode_penyakit)->value('nama_penyakit') : null;
-            $namaGejala = $r ? DB::table('gejala')->where('kode_gejala', $r->kode_gejala)->value('nama_gejala') : null;
 
-            DB::table('relasi')->where('id', $id)->delete();
-
-            $detail = $r
-                ? sprintf(
-                    'Relasi %s%s dengan gejala %s%s berhasil dihapus.',
-                    $r->kode_penyakit,
-                    $namaPenyakit ? " ({$namaPenyakit})" : '',
-                    $r->kode_gejala,
-                    $namaGejala ? " ({$namaGejala})" : ''
-                )
-                : 'Relasi berhasil dihapus.';
+            return redirect('/admin/relasi?notice='.urlencode($detail));
         }
+
+        $id = (int) $request->input('id');
+        if ($id <= 0) {
+            return redirect('/admin/relasi?error='.urlencode('Relasi tidak valid.'));
+        }
+
+        $r = DB::table('relasi')->where('id', $id)->first();
+        if (! $r) {
+            return redirect('/admin/relasi?error='.urlencode('Relasi tidak ditemukan.'));
+        }
+
+        $namaPenyakit = DB::table('penyakit')->where('kode_penyakit', $r->kode_penyakit)->value('nama_penyakit');
+        $namaGejala = DB::table('gejala')->where('kode_gejala', $r->kode_gejala)->value('nama_gejala');
+
+        DB::table('relasi')->where('id', $id)->delete();
+
+        $detail = sprintf(
+            'Relasi %s%s dengan gejala %s%s berhasil dihapus.',
+            $r->kode_penyakit,
+            $namaPenyakit ? " ({$namaPenyakit})" : '',
+            $r->kode_gejala,
+            $namaGejala ? " ({$namaGejala})" : ''
+        );
 
         return redirect('/admin/relasi?notice='.urlencode($detail));
     }

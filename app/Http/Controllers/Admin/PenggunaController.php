@@ -68,6 +68,15 @@ class PenggunaController extends Controller
             return redirect('/admin/pengguna?error='.urlencode('Tidak bisa menghapus role admin pada diri sendiri'));
         }
 
+        if (! DB::table('users')->where('id', $id)->exists()) {
+            return redirect('/admin/pengguna?error='.urlencode('Pengguna tidak ditemukan.'));
+        }
+
+        $email = strtolower(trim($request->input('email')));
+        if (DB::table('users')->where('email', $email)->where('id', '!=', $id)->exists()) {
+            return redirect('/admin/pengguna?error='.urlencode('Email sudah digunakan pengguna lain.'));
+        }
+
         if ($request->filled('password')) {
             DB::table('users')->where('id', $id)->update([
                 'nama_lengkap' => trim($request->input('nama_lengkap')),
@@ -91,14 +100,26 @@ class PenggunaController extends Controller
         $auth = $request->session()->get('auth');
         $id = (string) $request->input('id');
 
+        if ($id === '') {
+            return redirect('/admin/pengguna?error='.urlencode('ID pengguna tidak valid.'));
+        }
+
         if ($id === $auth['id']) {
             return redirect('/admin/pengguna?error='.urlencode('Tidak bisa menghapus akun sendiri'));
         }
 
         $row = DB::table('users')->where('id', $id)->select('nama_lengkap', 'email')->first();
-        $label = $row ? "{$row->nama_lengkap} ({$row->email})" : $id;
+        if (! $row) {
+            return redirect('/admin/pengguna?error='.urlencode('Pengguna tidak ditemukan.'));
+        }
 
-        DB::table('users')->where('id', $id)->delete();
+        $label = "{$row->nama_lengkap} ({$row->email})";
+
+        try {
+            DB::table('users')->where('id', $id)->delete();
+        } catch (\Throwable $e) {
+            return redirect('/admin/pengguna?error='.urlencode('Gagal menghapus pengguna. Coba lagi.'));
+        }
 
         return redirect('/admin/pengguna?notice='.urlencode("Pengguna {$label} berhasil dihapus dari sistem."));
     }

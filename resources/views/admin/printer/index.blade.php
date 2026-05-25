@@ -158,7 +158,7 @@
                         </td>
                         <td class="px-5 py-4 text-center">
                             <div class="flex items-center justify-center gap-1.5">
-                                <a href="?edit={{ $row->id }}" class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-blue-100 text-blue-600 hover:bg-blue-50 transition-colors" title="Edit">
+                                <a href="/admin/printer?edit={{ $row->id }}{{ $q !== '' ? '&q='.urlencode($q) : '' }}" class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-blue-100 text-blue-600 hover:bg-blue-50 transition-colors" title="Edit">
                                     <i class="bi bi-pencil"></i>
                                 </a>
                                 <form method="post" action="/admin/printer/hapus" class="inline" onsubmit="event.preventDefault(); confirmDelete(this, 'Hapus Printer?', 'Apakah Anda yakin ingin menghapus unit printer ini? Tindakan ini tidak dapat dibatalkan.');">

@@ -63,8 +63,13 @@ class GejalaController extends Controller
             'nama_gejala' => 'required|string|max:255',
         ]);
 
+        $kode = trim($request->input('kode_gejala'));
+        if (! DB::table('gejala')->where('kode_gejala', $kode)->exists()) {
+            return redirect('/admin/gejala?error='.urlencode('Data gejala tidak ditemukan.'));
+        }
+
         DB::table('gejala')
-            ->where('kode_gejala', trim($request->input('kode_gejala')))
+            ->where('kode_gejala', $kode)
             ->update(['nama_gejala' => trim($request->input('nama_gejala'))]);
 
         return redirect('/admin/gejala?success=1');
@@ -73,7 +78,22 @@ class GejalaController extends Controller
     public function destroy(Request $request)
     {
         $kode = trim((string) $request->input('kode_gejala'));
-        DB::table('gejala')->where('kode_gejala', $kode)->delete();
+        if ($kode === '') {
+            return redirect('/admin/gejala?error='.urlencode('Kode gejala tidak valid.'));
+        }
+
+        if (! DB::table('gejala')->where('kode_gejala', $kode)->exists()) {
+            return redirect('/admin/gejala?error='.urlencode('Data gejala tidak ditemukan.'));
+        }
+
+        try {
+            DB::transaction(function () use ($kode) {
+                DB::table('diagnosa_detail')->where('kode_gejala', $kode)->delete();
+                DB::table('gejala')->where('kode_gejala', $kode)->delete();
+            });
+        } catch (\Throwable $e) {
+            return redirect('/admin/gejala?error='.urlencode('Gagal menghapus gejala. Coba lagi.'));
+        }
 
         return redirect('/admin/gejala?notice='.urlencode("Gejala {$kode} berhasil dihapus dari daftar."));
     }

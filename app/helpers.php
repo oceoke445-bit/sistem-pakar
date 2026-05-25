@@ -97,3 +97,62 @@ if (! function_exists('diagnosa_tindakan_badge')) {
         };
     }
 }
+
+if (! function_exists('export_printer_icon_data_uri')) {
+    /** PNG data URI for PDF/Word export (DomPDF & Word do not render inline SVG reliably). */
+    function export_printer_icon_data_uri(): string
+    {
+        static $cached = null;
+        if ($cached !== null) {
+            return $cached;
+        }
+
+        $dir = public_path('images');
+        $path = $dir.DIRECTORY_SEPARATOR.'printer-diagnosa-export.png';
+
+        if (! is_file($path)) {
+            if (! is_dir($dir)) {
+                mkdir($dir, 0755, true);
+            }
+
+            $w = 96;
+            $h = 96;
+            $im = imagecreatetruecolor($w, $h);
+            imagesavealpha($im, true);
+            imagealphablending($im, false);
+            $transparent = imagecolorallocatealpha($im, 0, 0, 0, 127);
+            imagefill($im, 0, 0, $transparent);
+            imagealphablending($im, true);
+
+            $dark = imagecolorallocate($im, 30, 41, 59);
+            $white = imagecolorallocate($im, 255, 255, 255);
+            $gray = imagecolorallocate($im, 148, 163, 184);
+            $red = imagecolorallocate($im, 239, 68, 68);
+            $slate = imagecolorallocate($im, 71, 85, 105);
+            $yellow = imagecolorallocate($im, 234, 179, 8);
+            $green = imagecolorallocate($im, 34, 197, 94);
+
+            imagefilledrectangle($im, 32, 10, 64, 24, $white);
+            imagerectangle($im, 32, 10, 64, 24, $gray);
+            imagefilledrectangle($im, 28, 20, 72, 35, $slate);
+            imagefilledrectangle($im, 12, 32, 84, 74, $dark);
+            imagefilledrectangle($im, 22, 52, 78, 58, $dark);
+            imagefilledrectangle($im, 24, 56, 76, 84, $white);
+            imagerectangle($im, 24, 56, 76, 84, $gray);
+
+            foreach ([62, 67, 72, 77] as $y) {
+                imageline($im, 30, $y, 70, $y, $red);
+            }
+
+            imagefilledellipse($im, 20, 42, 5, 5, $yellow);
+            imagefilledellipse($im, 27, 42, 5, 5, $green);
+
+            imagepng($im, $path);
+            imagedestroy($im);
+        }
+
+        $cached = 'data:image/png;base64,'.base64_encode((string) file_get_contents($path));
+
+        return $cached;
+    }
+}

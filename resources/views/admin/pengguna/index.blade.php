@@ -12,7 +12,7 @@
 
     <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
         <h2 class="text-lg font-semibold text-slate-900">+ Tambah pengguna</h2>
-        <form method="post" action="/admin/pengguna" class="mt-4 grid gap-4 md:grid-cols-2">
+        <form method="post" action="/admin/pengguna" class="mt-4 grid gap-4 md:grid-cols-2" onsubmit="event.preventDefault(); confirmSave(this, 'Tambah Pengguna?', 'Apakah Anda yakin ingin menambahkan pengguna baru ini?');">
             @csrf
             <div>
                 <label class="mb-1 block text-xs font-semibold uppercase text-slate-500">Nama</label>
@@ -52,7 +52,7 @@
                             <span class="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-semibold capitalize text-slate-700">{{ $u->role }}</span>
                         </td>
                         <td class="px-4 py-3">
-                            <form method="post" action="/admin/pengguna/update" class="mb-2 flex flex-wrap gap-2">
+                            <form method="post" action="/admin/pengguna/update" class="mb-2 flex flex-wrap gap-2" onsubmit="event.preventDefault(); confirmUpdate(this, 'Perbarui Pengguna?', 'Apakah Anda yakin ingin menyimpan perubahan data pengguna ini?');">
                                 @csrf
                                 <input type="hidden" name="id" value="{{ $u->id }}">
                                 <input name="nama_lengkap" value="{{ $u->nama_lengkap }}" class="w-32 rounded-lg border border-slate-200 px-2 py-1 text-xs">

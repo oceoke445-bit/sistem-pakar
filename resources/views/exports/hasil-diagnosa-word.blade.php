@@ -1,52 +1,53 @@
-<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word">
+<html xmlns:o="urn:schemas-microsoft-com:office:office"
+      xmlns:w="urn:schemas-microsoft-com:office:word"
+      xmlns:v="urn:schemas-microsoft-com:vml"
+      xmlns="http://www.w3.org/TR/REC-html40">
 <head>
     <meta charset="utf-8">
+    <meta name="ProgId" content="Word.Document">
+    <meta name="Generator" content="Microsoft Word 15">
     <title>Hasil Diagnosa #{{ $d->id }}</title>
-    <!--[if gte mso 9]><xml><w:WordDocument><w:View>Print</w:View></w:WordDocument></xml><![endif]-->
+    <!--[if gte mso 9]>
+    <xml>
+        <w:WordDocument>
+            <w:View>Print</w:View>
+            <w:Zoom>100</w:Zoom>
+            <w:DoNotOptimizeForBrowser/>
+            <w:ValidateAgainstSchemas/>
+            <w:SaveIfXMLInvalid>false</w:SaveIfXMLInvalid>
+            <w:IgnoreMixedContent>false</w:IgnoreMixedContent>
+            <w:AlwaysShowPlaceholderText>false</w:AlwaysShowPlaceholderText>
+            <w:Compatibility>
+                <w:BreakWrappedTables/>
+                <w:SnapToGridInCell/>
+                <w:WrapTextWithPunct/>
+                <w:UseAsianBreakRules/>
+            </w:Compatibility>
+        </w:WordDocument>
+    </xml>
+    <![endif]-->
     <style>
-        body { font-family: Calibri, Arial, sans-serif; font-size: 11pt; color: #1e293b; line-height: 1.5; }
-        h1 { font-size: 16pt; color: #152238; }
-        h2 { font-size: 12pt; color: #152238; margin-top: 16pt; }
-        .meta { color: #64748b; font-size: 10pt; }
+        @page Section1 {
+            size: 595.3pt 841.9pt;
+            margin: 42.5pt 49.6pt 42.5pt 49.6pt;
+        }
+        div.Section1 { page: Section1; }
+        body {
+            margin: 0;
+            padding: 0;
+            background: #ffffff;
+            font-family: Calibri, Arial, sans-serif;
+            font-size: 11pt;
+            color: #334155;
+        }
+        table { border-collapse: collapse; }
+        p { margin: 0; }
+        img { border: 0; }
     </style>
 </head>
 <body>
-    <h1>Hasil Diagnosa Kerusakan Printer</h1>
-    <p class="meta">Diagnosa #{{ $d->id }} · {{ format_date_id($d->tanggal_diagnosa) }}</p>
-
-    @if ($penyakit)
-        <p><strong>Kerusakan:</strong> {{ $penyakit->nama_penyakit }}</p>
-        <p><strong>Tingkat Kerusakan:</strong> {{ $tingkat }}</p>
-
-        <h2>Penyebab</h2>
-        <p>{{ $penyakit->deskripsi }}</p>
-
-        <h2>Solusi</h2>
-        @if (count($solusiLines))
-            <ol>
-                @foreach ($solusiLines as $line)
-                    <li>{{ $line }}</li>
-                @endforeach
-            </ol>
-        @else
-            <p>{{ $penyakit->solusi }}</p>
-        @endif
-    @else
-        <p>Tidak ada kerusakan yang terdeteksi dari gejala yang dipilih.</p>
-    @endif
-
-    <h2>Gejala yang Dipilih</h2>
-    <ul>
-        @forelse ($kodes as $k)
-            <li>{{ $namaGejala[$k] ?? $k }}</li>
-        @empty
-            <li>—</li>
-        @endforelse
-    </ul>
-
-    @if ($tindakanLabel)
-        <h2>Tindakan</h2>
-        <p>{{ $tindakanLabel }}</p>
-    @endif
+    <div class="Section1">
+        @include('exports.partials.hasil-diagnosa-word-body')
+    </div>
 </body>
 </html>

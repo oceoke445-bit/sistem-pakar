@@ -136,10 +136,13 @@
 
             <!-- Member Sejak Block at the bottom -->
             <div class="w-full mt-8">
+                @php
+                    $memberSince = $user->created_at ? wib_from_db((string) $user->created_at) : null;
+                @endphp
                 <div class="rounded-2xl bg-white/10 p-5 backdrop-blur-sm border border-white/5">
                     <p class="text-[11px] font-bold uppercase tracking-widest text-white/70">Member Sejak</p>
-                    <p class="mt-1 text-base font-bold text-white">
-                        {{ $user->created_at ? \Carbon\Carbon::parse($user->created_at)->translatedFormat('d F Y') : '05 Mei 2026' }}
+                    <p class="mt-2 text-base font-bold text-white">
+                        {{ $memberSince ? $memberSince->translatedFormat('d F Y') : '—' }}
                     </p>
                 </div>
             </div>

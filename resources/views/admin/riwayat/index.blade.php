@@ -10,6 +10,9 @@
     @if (request('notice'))
         <div class="rounded-xl border border-sky-200 bg-sky-50 p-4 text-sm text-sky-900">{{ request('notice') }}</div>
     @endif
+    @if (request('error'))
+        <div class="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-900">{{ request('error') }}</div>
+    @endif
 
     <form method="get" action="/admin/riwayat" class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end bg-transparent p-0 border-0 shadow-none">
         <div class="relative min-w-0 flex-1">
