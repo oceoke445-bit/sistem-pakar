@@ -331,19 +331,14 @@
             return null;
         }
 
-        function submitCapturedForm(form, formData) {
-            if (!form || !formData) return;
-
-            fetch(form.action, {
-                method: 'POST',
-                body: formData,
-                credentials: 'same-origin',
-                redirect: 'follow',
-            }).then(function(response) {
-                window.location.assign(response.url);
-            }).catch(function() {
+        function submitFormAfterConfirm(form) {
+            if (!form) return;
+            form.removeAttribute('onsubmit');
+            if (typeof form.requestSubmit === 'function') {
+                form.requestSubmit();
+            } else {
                 form.submit();
-            });
+            }
         }
 
         // Modal helpers
@@ -365,10 +360,8 @@
         }
 
         var deleteFormToSubmit = null;
-        var deleteFormData = null;
         window.confirmDelete = function(formIdOrElement, customTitle, customDesc) {
             deleteFormToSubmit = resolveForm(formIdOrElement);
-            deleteFormData = deleteFormToSubmit ? new FormData(deleteFormToSubmit) : null;
             var titleEl = document.getElementById('deleteModalTitle');
             var descEl = document.getElementById('deleteModalDescription');
             if (titleEl) titleEl.textContent = customTitle || 'Hapus Data?';
@@ -381,24 +374,20 @@
             var modal = document.getElementById('deleteModal');
             if (modal) modal.classList.add('hidden');
             deleteFormToSubmit = null;
-            deleteFormData = null;
         }
 
         var confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
         if (confirmDeleteBtn) {
             confirmDeleteBtn.addEventListener('click', function() {
-                if (deleteFormToSubmit && deleteFormData) {
-                    submitCapturedForm(deleteFormToSubmit, deleteFormData);
-                }
+                var form = deleteFormToSubmit;
                 closeDeleteModal();
+                submitFormAfterConfirm(form);
             });
         }
 
         var saveFormToSubmit = null;
-        var saveFormData = null;
         window.confirmSave = function(formIdOrElement, customTitle, customDesc) {
             saveFormToSubmit = resolveForm(formIdOrElement);
-            saveFormData = saveFormToSubmit ? new FormData(saveFormToSubmit) : null;
             var titleEl = document.getElementById('saveModalTitle');
             var descEl = document.getElementById('saveModalDescription');
             if (titleEl) titleEl.textContent = customTitle || 'Tambah Data?';
@@ -411,29 +400,25 @@
             var modal = document.getElementById('saveModal');
             if (modal) modal.classList.add('hidden');
             saveFormToSubmit = null;
-            saveFormData = null;
         }
 
         var confirmSaveBtn = document.getElementById('confirmSaveBtn');
         if (confirmSaveBtn) {
             confirmSaveBtn.addEventListener('click', function() {
-                if (saveFormToSubmit && saveFormData) {
-                    submitCapturedForm(saveFormToSubmit, saveFormData);
-                }
+                var form = saveFormToSubmit;
                 closeSaveModal();
+                submitFormAfterConfirm(form);
             });
         }
 
         var updateFormToSubmit = null;
-        var updateFormData = null;
         window.confirmUpdate = function(formIdOrElement, customTitle, customDesc) {
             updateFormToSubmit = resolveForm(formIdOrElement);
-            updateFormData = updateFormToSubmit ? new FormData(updateFormToSubmit) : null;
             var titleEl = document.getElementById('updateModalTitle');
             var descEl = document.getElementById('updateModalDescription');
             if (titleEl) titleEl.textContent = customTitle || 'Simpan Perubahan?';
             if (descEl) descEl.textContent = customDesc || 'Apakah Anda yakin ingin memperbarui data ini?';
-            
+
             var modal = document.getElementById('updateModal');
             if (modal) modal.classList.remove('hidden');
         }
@@ -441,16 +426,14 @@
             var modal = document.getElementById('updateModal');
             if (modal) modal.classList.add('hidden');
             updateFormToSubmit = null;
-            updateFormData = null;
         }
 
         var confirmUpdateBtn = document.getElementById('confirmUpdateBtn');
         if (confirmUpdateBtn) {
             confirmUpdateBtn.addEventListener('click', function() {
-                if (updateFormToSubmit && updateFormData) {
-                    submitCapturedForm(updateFormToSubmit, updateFormData);
-                }
+                var form = updateFormToSubmit;
                 closeUpdateModal();
+                submitFormAfterConfirm(form);
             });
         }
 

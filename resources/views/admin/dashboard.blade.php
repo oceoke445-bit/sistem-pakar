@@ -53,7 +53,7 @@
             <div class="mt-2.5 flex-1 flex flex-col md:flex-row items-center gap-5">
                 <div class="w-full md:w-1/2">
                     <p class="text-[14px] leading-relaxed text-slate-600 sm:text-[15px]">
-                        Sistem pakar ini digunakan untuk membantu teknisi dalam mendiagnosa kerusakan pada printer yang ada di Fotocopy Berkah Andirra menggunakan metode Forward Chaining.
+                        Sistem pakar ini digunakan untuk membantu pemilik dan karyawan fotocopy dalam mendiagnosa kerusakan pada printer yang ada di Fotocopy Berkah Andirra menggunakan metode Forward Chaining.
                     </p>
                 </div>
                 <div class="w-full md:w-1/2 flex justify-center">
