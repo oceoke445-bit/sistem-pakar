@@ -3,38 +3,45 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\User\Concerns\LoadsUserDiagnosa;
+use App\Support\WordMhtmlExporter;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class HasilDiagnosaController extends Controller
 {
+    use LoadsUserDiagnosa;
+
     public function show(Request $request, int $id)
     {
-        return view('user.hasil-diagnosa', $this->loadDiagnosa($request, $id));
+        return view('user.hasil-diagnosa', $this->loadUserDiagnosa($request, $id));
     }
 
     public function exportPdf(Request $request, int $id)
     {
-        $data = $this->loadDiagnosa($request, $id);
+        $data = $this->loadUserDiagnosa($request, $id);
         $filename = 'hasil-diagnosa-'.$id.'.pdf';
 
-        return Pdf::loadView('exports.hasil-diagnosa-pdf', $data)
+        return Pdf::loadView('exports.hasil-diagnosa-konsultasi-pdf', $data)
             ->setPaper('a4', 'portrait')
             ->download($filename);
     }
 
     public function exportWord(Request $request, int $id)
     {
-        $data = $this->loadDiagnosa($request, $id);
+        $data = $this->loadUserDiagnosa($request, $id);
         $filename = 'hasil-diagnosa-'.$id.'.doc';
-        $content = view('exports.hasil-diagnosa-word', $data)->render();
-        $content = "\xEF\xBB\xBF".$content;
+        $embeds = export_word_embed_paths();
 
-        return response($content, 200, [
-            'Content-Type' => 'application/msword; charset=UTF-8',
-            'Content-Disposition' => 'attachment; filename="'.$filename.'"',
-        ]);
+        return WordMhtmlExporter::download(
+            view('exports.hasil-diagnosa-konsultasi-word', $data)->render(),
+            $filename,
+            [
+                'checkicon' => $embeds['checkicon'],
+                'warningicon' => $embeds['warningicon'],
+            ]
+        );
     }
 
     public function setTindakan(Request $request, int $id)
@@ -61,37 +68,30 @@ class HasilDiagnosaController extends Controller
             ]);
         }
 
-        return redirect('/user/riwayat');
+        return redirect('/user/riwayat?notice='.urlencode('Diagnosa telah disimpan ke riwayat.'));
     }
 
-    /** @return array<string, mixed> */
-    private function loadDiagnosa(Request $request, int $id): array
+    public function simpanRiwayat(Request $request, int $id)
     {
         $auth = $request->session()->get('auth');
-        $d = DB::table('diagnosa')->where('id', $id)->where('id_user', $auth['id'])->first();
-        if (! $d) {
+        $row = DB::table('diagnosa')->where('id', $id)->where('id_user', $auth['id'])->first();
+        if (! $row) {
             abort(404);
         }
 
-        $penyakit = $d->hasil_penyakit
-            ? DB::table('penyakit')->where('kode_penyakit', $d->hasil_penyakit)->first()
-            : null;
+        if (! $row->tindakan) {
+            $penyakit = $row->hasil_penyakit
+                ? DB::table('penyakit')->where('kode_penyakit', $row->hasil_penyakit)->first()
+                : null;
+            $tingkat = strtolower((string) ($penyakit->tingkat ?? 'sedang'));
+            $tindakan = $tingkat === 'berat' ? 'teknisi' : 'sendiri';
 
-        $kodes = DB::table('diagnosa_detail')->where('id_diagnosa', $id)->pluck('kode_gejala')->all();
-        $namaGejala = [];
-        if ($kodes !== []) {
-            $namaGejala = DB::table('gejala')->whereIn('kode_gejala', $kodes)->pluck('nama_gejala', 'kode_gejala')->all();
+            DB::table('diagnosa')
+                ->where('id', $id)
+                ->where('id_user', $auth['id'])
+                ->update(['tindakan' => $tindakan]);
         }
 
-        $pct = $d->confidence !== null ? (float) $d->confidence * 100 : null;
-        $tingkat = $penyakit && $penyakit->tingkat ? $penyakit->tingkat : 'Sedang';
-        $solusiLines = $penyakit && $penyakit->solusi
-            ? array_filter(preg_split('/\r\n|\r|\n/', trim($penyakit->solusi)))
-            : [];
-        $tindakanLabel = ($d->tindakan ?? null)
-            ? diagnosa_tindakan_badge($d->tindakan)['label']
-            : null;
-
-        return compact('d', 'penyakit', 'kodes', 'namaGejala', 'pct', 'tingkat', 'solusiLines', 'tindakanLabel');
+        return redirect('/user/riwayat?notice='.urlencode('Diagnosa telah disimpan ke riwayat.'));
     }
 }

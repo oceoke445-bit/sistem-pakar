@@ -21,17 +21,24 @@ Route::post('/auth/signout', [\App\Http\Controllers\AuthController::class, 'logo
 Route::middleware('auth.mjm')->group(function () {
     Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'show'])->name('profile');
     Route::post('/profile', [\App\Http\Controllers\ProfileController::class, 'update']);
+    Route::post('/profile/foto', [\App\Http\Controllers\ProfileController::class, 'uploadPhoto'])->name('profile.foto');
 
     Route::prefix('user')->name('user.')->group(function () {
         Route::get('/dashboard', [\App\Http\Controllers\User\DashboardController::class, 'index'])->name('dashboard');
         Route::get('/diagnosa', [\App\Http\Controllers\User\DiagnosaController::class, 'index'])->name('diagnosa');
         Route::post('/diagnosa', [\App\Http\Controllers\User\DiagnosaController::class, 'store']);
+        Route::get('/diagnosa/proses/{id}', [\App\Http\Controllers\User\DiagnosaController::class, 'proses'])
+            ->whereNumber('id')
+            ->name('diagnosa.proses');
         Route::get('/hasil-diagnosa/{id}', [\App\Http\Controllers\User\HasilDiagnosaController::class, 'show'])
             ->whereNumber('id')
             ->name('hasil-diagnosa');
         Route::post('/hasil-diagnosa/{id}/tindakan', [\App\Http\Controllers\User\HasilDiagnosaController::class, 'setTindakan'])
             ->whereNumber('id')
             ->name('hasil-diagnosa.tindakan');
+        Route::get('/hasil-diagnosa/{id}/simpan-riwayat', [\App\Http\Controllers\User\HasilDiagnosaController::class, 'simpanRiwayat'])
+            ->whereNumber('id')
+            ->name('hasil-diagnosa.simpan-riwayat');
         Route::get('/hasil-diagnosa/{id}/export/pdf', [\App\Http\Controllers\User\HasilDiagnosaController::class, 'exportPdf'])
             ->whereNumber('id')
             ->name('hasil-diagnosa.export.pdf');
@@ -42,6 +49,12 @@ Route::middleware('auth.mjm')->group(function () {
         Route::get('/riwayat/{id}', [\App\Http\Controllers\User\RiwayatController::class, 'show'])
             ->whereNumber('id')
             ->name('riwayat.show');
+        Route::get('/riwayat/{id}/export/pdf', [\App\Http\Controllers\User\RiwayatController::class, 'exportPdf'])
+            ->whereNumber('id')
+            ->name('riwayat.export.pdf');
+        Route::get('/riwayat/{id}/export/word', [\App\Http\Controllers\User\RiwayatController::class, 'exportWord'])
+            ->whereNumber('id')
+            ->name('riwayat.export.word');
         Route::post('/riwayat/hapus', [\App\Http\Controllers\User\RiwayatController::class, 'destroy'])->name('riwayat.hapus');
     });
 

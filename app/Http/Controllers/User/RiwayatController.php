@@ -3,11 +3,15 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\User\Concerns\LoadsUserDiagnosa;
+use App\Support\WordMhtmlExporter;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class RiwayatController extends Controller
 {
+    use LoadsUserDiagnosa;
     public function index(Request $request)
     {
         $auth = $request->session()->get('auth');
@@ -48,31 +52,16 @@ class RiwayatController extends Controller
         }
 
         $rows = $query->orderByDesc('tanggal_diagnosa')->paginate(10)->withQueryString();
-
-        $diagnosaIds = collect($rows->items())->pluck('id')->all();
-        $gejalaByDiagnosa = [];
-        if ($diagnosaIds !== []) {
-            $details = DB::table('diagnosa_detail')
-                ->whereIn('id_diagnosa', $diagnosaIds)
-                ->orderBy('kode_gejala')
-                ->get(['id_diagnosa', 'kode_gejala']);
-            foreach ($details as $detail) {
-                $gejalaByDiagnosa[$detail->id_diagnosa][] = $detail->kode_gejala;
-            }
-        }
-
-        $allGejalaKodes = collect($gejalaByDiagnosa)->flatten()->unique()->values()->all();
-        $namaGejala = $allGejalaKodes !== []
-            ? DB::table('gejala')->whereIn('kode_gejala', $allGejalaKodes)->pluck('nama_gejala', 'kode_gejala')->all()
-            : [];
+        $penyakitMap = DB::table('penyakit')->get()->keyBy('kode_penyakit');
+        $firstName = trim(explode(' ', trim($auth['nama_lengkap'] ?? 'Pengguna'))[0] ?: 'Pengguna');
 
         return view('user.riwayat.index', [
             'rows' => $rows,
-            'gejalaByDiagnosa' => $gejalaByDiagnosa,
-            'namaGejala' => $namaGejala,
+            'penyakitMap' => $penyakitMap,
             'notice' => $request->query('notice'),
             'q' => $q,
             'tingkat' => $tingkat,
+            'firstName' => $firstName,
         ]);
     }
 
@@ -97,6 +86,29 @@ class RiwayatController extends Controller
         $pct = $d->confidence !== null ? (float) $d->confidence * 100 : null;
 
         return view('user.riwayat.show', compact('d', 'penyakit', 'kodes', 'namaGejala', 'pct'));
+    }
+
+    public function exportPdf(Request $request, int $id)
+    {
+        $data = $this->loadUserDiagnosa($request, $id);
+        $filename = 'detail-riwayat-diagnosa-'.$id.'.pdf';
+
+        return Pdf::loadView('exports.hasil-diagnosa-pdf', $data)
+            ->setPaper('a4', 'portrait')
+            ->download($filename);
+    }
+
+    public function exportWord(Request $request, int $id)
+    {
+        $data = $this->loadUserDiagnosa($request, $id);
+        $filename = 'detail-riwayat-diagnosa-'.$id.'.doc';
+        $embeds = export_word_embed_paths();
+
+        return WordMhtmlExporter::download(
+            view('exports.hasil-diagnosa-word', $data)->render(),
+            $filename,
+            ['printericon' => $embeds['printericon']]
+        );
     }
 
     public function destroy(Request $request)

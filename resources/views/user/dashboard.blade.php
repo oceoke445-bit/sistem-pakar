@@ -1,7 +1,7 @@
 @extends('layouts.dashboard')
 @section('title', 'Dashboard')
 @section('content')
-<div class="mx-auto max-w-7xl space-y-6">
+<div class="mx-auto max-w-6xl space-y-8">
 
     @if (session('success'))
         <div class="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-900">
@@ -15,135 +15,76 @@
         </div>
     @endif
 
-    {{-- Banner selamat datang --}}
-    <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#1d4ed8] to-[#2563eb] px-6 py-8 shadow-lg shadow-blue-600/20 sm:px-8 sm:py-10">
-        <div class="pointer-events-none absolute -right-8 -top-8 h-40 w-40 rounded-full bg-white/10"></div>
-        <div class="pointer-events-none absolute -bottom-12 right-24 h-32 w-32 rounded-full bg-white/5"></div>
-        <div class="relative flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-            <div class="max-w-2xl">
-                <h1 class="text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
-                    Halo, {{ $firstName }}! 👋
-                </h1>
-                <p class="mt-2 text-sm leading-relaxed text-blue-100 sm:text-base">
-                    Selamat datang di Sistem Pakar Printer. Kami siap membantu mendeteksi masalah printer Anda.
-                </p>
-            </div>
-            <div class="flex shrink-0 flex-col items-stretch gap-3 sm:items-end">
-                <span class="inline-flex items-center justify-center gap-2 self-start rounded-full border border-white/20 bg-white/95 px-4 py-2 text-xs font-medium text-slate-600 shadow-sm backdrop-blur-sm sm:self-end sm:text-sm">
-                    <i class="bi bi-calendar3 text-slate-400"></i>
-                    <span id="toolbar-datetime-text"></span>
-                </span>
-                <a href="/user/diagnosa"
-                   class="inline-flex items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-bold text-[#1d4ed8] shadow-md transition hover:bg-blue-50 active:scale-[0.98]">
-                    <i class="fa-solid fa-stethoscope text-base"></i>
-                    Mulai Diagnosa Baru
-                </a>
-            </div>
+    {{-- Header --}}
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+            <h1 class="text-3xl font-bold tracking-tight text-[#152238] sm:text-4xl">Dashboard</h1>
+            <p class="mt-2 max-w-2xl text-[15px] leading-relaxed text-slate-600">
+                Selamat datang di Sistem Pakar Identifikasi Kerusakan Printer Canon IR 2425/3045
+            </p>
+        </div>
+        <div class="flex shrink-0 items-center gap-3 self-start sm:self-auto">
+            <span class="text-sm font-semibold text-slate-700">Halo, {{ $firstName }}</span>
+            <span class="flex h-11 w-11 items-center justify-center rounded-full bg-slate-200 text-slate-500">
+                <i class="bi bi-person-fill text-xl"></i>
+            </span>
         </div>
     </div>
 
-    {{-- Stat cards --}}
-    <div class="grid gap-4 sm:grid-cols-2">
-        <div class="flex items-center gap-4 rounded-2xl border border-slate-200/90 bg-white p-5 shadow-[0_4px_24px_rgba(15,23,42,0.06)] sm:p-6">
-            <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-blue-50 text-[#1d4ed8]">
-                <i class="bi bi-clipboard2-check text-2xl"></i>
+    {{-- Menu cards --}}
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {{-- Konsultasi Diagnosa --}}
+        <div class="flex min-h-[320px] flex-col items-center rounded-2xl border border-slate-200/90 bg-white p-8 text-center shadow-[0_4px_24px_rgba(15,23,42,0.06)] sm:min-h-[340px] sm:p-10">
+            <div class="flex h-20 w-20 items-center justify-center rounded-2xl bg-blue-50 text-blue-600 sm:h-24 sm:w-24">
+                <i class="bi bi-clipboard2-plus text-4xl sm:text-5xl"></i>
             </div>
-            <div class="min-w-0">
-                <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Total Diagnosa Anda</p>
-                <p class="mt-1 text-2xl font-extrabold tabular-nums text-slate-900 sm:text-3xl">
-                    {{ $count }} <span class="text-lg font-bold text-slate-600">Kali</span>
-                </p>
-            </div>
+            <h2 class="mt-6 text-xl font-bold text-slate-900 sm:text-2xl">Konsultasi Diagnosa</h2>
+            <p class="mt-3 flex-1 text-sm leading-relaxed text-slate-600 sm:text-base">
+                Mulai konsultasi untuk mengetahui kerusakan printer yang Anda alami.
+            </p>
+            <a href="/user/diagnosa"
+               class="mt-8 inline-flex w-full items-center justify-center rounded-xl bg-blue-600 px-5 py-3.5 text-sm font-bold text-white shadow-sm transition hover:bg-blue-700 active:scale-[0.98] sm:py-4 sm:text-base">
+                Mulai Diagnosa
+            </a>
         </div>
-        <div class="flex items-center gap-4 rounded-2xl border border-slate-200/90 bg-white p-5 shadow-[0_4px_24px_rgba(15,23,42,0.06)] sm:p-6">
-            <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-amber-50 text-amber-500">
-                <i class="bi bi-clock-history text-2xl"></i>
+
+        {{-- Riwayat Diagnosa --}}
+        <div class="flex min-h-[320px] flex-col items-center rounded-2xl border border-slate-200/90 bg-white p-8 text-center shadow-[0_4px_24px_rgba(15,23,42,0.06)] sm:min-h-[340px] sm:p-10">
+            <div class="flex h-20 w-20 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600 sm:h-24 sm:w-24">
+                <i class="bi bi-clock-history text-4xl sm:text-5xl"></i>
             </div>
-            <div class="min-w-0">
-                <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Diagnosa Terakhir</p>
-                <p class="mt-1 text-xl font-extrabold text-slate-900 sm:text-2xl">{{ $lastDiagnosaHuman }}</p>
+            <h2 class="mt-6 text-xl font-bold text-slate-900 sm:text-2xl">Riwayat Diagnosa</h2>
+            <p class="mt-3 flex-1 text-sm leading-relaxed text-slate-600 sm:text-base">
+                Lihat hasil diagnosa yang pernah Anda lakukan sebelumnya.
+            </p>
+            <a href="/user/riwayat"
+               class="mt-8 inline-flex w-full items-center justify-center rounded-xl bg-emerald-600 px-5 py-3.5 text-sm font-bold text-white shadow-sm transition hover:bg-emerald-700 active:scale-[0.98] sm:py-4 sm:text-base">
+                Lihat Riwayat
+            </a>
+        </div>
+
+        {{-- Profil Saya --}}
+        <div class="flex min-h-[320px] flex-col items-center rounded-2xl border border-slate-200/90 bg-white p-8 text-center shadow-[0_4px_24px_rgba(15,23,42,0.06)] sm:col-span-2 sm:min-h-[340px] sm:p-10 lg:col-span-1">
+            <div class="flex h-20 w-20 items-center justify-center rounded-2xl bg-violet-50 text-violet-600 sm:h-24 sm:w-24">
+                <i class="bi bi-person-fill text-4xl sm:text-5xl"></i>
             </div>
+            <h2 class="mt-6 text-xl font-bold text-slate-900 sm:text-2xl">Profil Saya</h2>
+            <p class="mt-3 flex-1 text-sm leading-relaxed text-slate-600 sm:text-base">
+                Kelola profil dan informasi akun Anda.
+            </p>
+            <a href="/profile"
+               class="mt-8 inline-flex w-full items-center justify-center rounded-xl bg-violet-600 px-5 py-3.5 text-sm font-bold text-white shadow-sm transition hover:bg-violet-700 active:scale-[0.98] sm:py-4 sm:text-base">
+                Lihat Profil
+            </a>
         </div>
     </div>
 
-    {{-- Aktivitas + Tips --}}
-    <div class="grid gap-5 lg:grid-cols-[1fr_320px] xl:grid-cols-[1fr_360px]">
-        <div class="rounded-2xl border border-slate-200/90 bg-white p-5 shadow-[0_4px_24px_rgba(15,23,42,0.06)] sm:p-6">
-            <div class="mb-5 flex items-center justify-between gap-3">
-                <h2 class="flex items-center gap-2 text-lg font-bold text-[#152238]">
-                    <i class="bi bi-clock-history text-[#1d4ed8]"></i>
-                    Aktivitas Terbaru
-                </h2>
-                <a href="/user/riwayat" class="text-sm font-semibold text-[#1d4ed8] transition hover:underline">Lihat Semua</a>
-            </div>
-
-            <div class="overflow-x-auto rounded-xl border border-slate-100">
-                <table class="w-full min-w-[520px] text-sm">
-                    <thead class="border-b border-slate-100 bg-slate-50/80 text-left text-[11px] font-bold uppercase tracking-wider text-slate-400">
-                        <tr>
-                            <th class="px-4 py-3.5">Tanggal</th>
-                            <th class="px-4 py-3.5">Hasil Kerusakan</th>
-                            <th class="px-4 py-3.5 text-right">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse ($rows as $r)
-                            @php
-                                $dt = wib_from_db($r->tanggal_diagnosa);
-                                $hasil = $r->hasil_penyakit
-                                    ? ($namaByKode[$r->hasil_penyakit] ?? $r->hasil_penyakit)
-                                    : null;
-                            @endphp
-                            <tr class="border-t border-slate-100 odd:bg-white even:bg-slate-50/50">
-                                <td class="px-4 py-4">
-                                    @if ($dt)
-                                        <p class="font-bold text-slate-800">{{ $dt->translatedFormat('d F Y') }}</p>
-                                        <p class="mt-0.5 text-xs text-slate-400">{{ $dt->format('H:i') }} WIB</p>
-                                    @else
-                                        <span class="text-slate-400">—</span>
-                                    @endif
-                                </td>
-                                <td class="px-4 py-4 align-top">
-                                    @include('partials.hasil-kerusakan-badge', ['label' => $hasil])
-                                </td>
-                                <td class="px-4 py-4">
-                                    <div class="flex items-center justify-end gap-2">
-                                    <a href="/user/riwayat/{{ $r->id }}"
-                                       class="inline-flex shrink-0 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 transition hover:border-slate-300 hover:bg-slate-50">
-                                        Detail
-                                    </a>
-                                    </div>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="3" class="px-4 py-10 text-center text-slate-500">
-                                    Belum ada aktivitas diagnosa. Mulai diagnosa pertama Anda!
-                                </td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <div class="rounded-2xl border border-slate-200/90 bg-white p-5 shadow-[0_4px_24px_rgba(15,23,42,0.06)] sm:p-6">
-            <h2 class="flex items-center gap-2 text-lg font-bold text-[#152238]">
-                <i class="bi bi-lightbulb-fill text-amber-400"></i>
-                Tips Printer
-            </h2>
-            <div class="mt-5 space-y-3">
-                <div class="rounded-xl bg-slate-50 px-4 py-3.5 text-sm leading-relaxed text-slate-600 ring-1 ring-slate-100">
-                    Selalu gunakan tinta original untuk menjaga keawetan print head printer Anda.
-                </div>
-                <div class="rounded-xl bg-slate-50 px-4 py-3.5 text-sm leading-relaxed text-slate-600 ring-1 ring-slate-100">
-                    Lakukan <span class="font-medium text-slate-700">cleaning</span> secara berkala jika hasil cetakan mulai bergaris.
-                </div>
-                <div class="rounded-xl bg-slate-50 px-4 py-3.5 text-sm leading-relaxed text-slate-600 ring-1 ring-slate-100">
-                    Matikan printer dengan benar setelah digunakan agar komponen internal tidak cepat aus.
-                </div>
-            </div>
-        </div>
+    {{-- Informasi --}}
+    <div class="rounded-2xl border border-blue-100 bg-blue-50/80 px-6 py-5">
+        <h3 class="text-base font-bold text-slate-900">Informasi</h3>
+        <p class="mt-2 text-sm leading-relaxed text-slate-700">
+            Sistem ini membantu Anda mengidentifikasi kerusakan printer Canon IR 2425/3045 berdasarkan gejala yang Anda pilih.
+        </p>
     </div>
 </div>
 @endsection

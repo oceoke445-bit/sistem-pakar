@@ -60,6 +60,9 @@
                 <p class="text-xl sm:text-2xl md:text-3xl font-semibold text-white/95 max-w-2xl mx-auto leading-relaxed">
                     Diagnosa Kerusakan Printer<br class="hidden sm:inline"> pada Fotocopy Berkah Andirra
                 </p>
+                <p class="text-lg sm:text-xl md:text-2xl font-bold tracking-wide text-white">
+                    Canon IR 2425/3045
+                </p>
             </header>
 
             <div class="flex w-full justify-center px-4">

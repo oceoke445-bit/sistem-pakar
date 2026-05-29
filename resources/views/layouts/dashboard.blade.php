@@ -60,7 +60,8 @@
                     !Request::is('admin/printer') &&
                     !Request::is('admin/relasi') &&
                     !Request::is('user/dashboard') &&
-                    !Request::is('user/diagnosa*') &&
+                    !Request::is('user/diagnosa') &&
+                    !Request::is('user/diagnosa/*') &&
                     !Request::is('user/hasil-diagnosa*') &&
                     !Request::is('user/riwayat*') &&
                     !Request::is('profile*')

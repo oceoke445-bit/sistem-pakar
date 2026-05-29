@@ -6,21 +6,17 @@
     <style>
         @page { margin: 28px 32px; }
         body { margin: 0; padding: 0; background: #ffffff; }
-        table, td, th, tr { border: none !important; border-collapse: collapse; }
-        img { border: none !important; }
+        table { border: none !important; }
+        td { border: none !important; }
     </style>
 </head>
 <body>
-    @include('exports.partials.hasil-diagnosa-document', [
+    @include('exports.partials.konsultasi-hasil-document', [
         'fontFamily' => 'DejaVu Sans, sans-serif',
         'baseFontSize' => '11px',
         'metaFontSize' => '10px',
-        'labelFontSize' => '10px',
-        'titleFontSize' => '20px',
-        'badgeFontSize' => '10px',
         'headingFontSize' => '13px',
         'bodyFontSize' => '11px',
-        'tagFontSize' => '10px',
     ])
 </body>
 </html>

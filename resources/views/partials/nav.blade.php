@@ -13,9 +13,9 @@
     ];
     $userNav = [
         ['/user/dashboard', 'Dashboard', 'bi-house-door-fill'],
-        ['/user/diagnosa', 'Diagnosa Kerusakan', 'bi-clipboard2-check'],
+        ['/user/diagnosa', 'Konsultasi Diagnosa', 'bi-clipboard2-plus'],
         ['/user/riwayat', 'Riwayat Diagnosa', 'bi-clock-history'],
-        ['/profile', 'Pengaturan', 'bi-gear'],
+        ['/profile', 'Profil Saya', 'bi-person-circle'],
     ];
     $items = $role === 'admin' ? $adminNav : $userNav;
 @endphp

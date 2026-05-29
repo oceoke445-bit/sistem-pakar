@@ -11,11 +11,14 @@ class DiagnosaController extends Controller
 {
     public function index(Request $request)
     {
+        $auth = $request->session()->get('auth');
+        $firstName = trim(explode(' ', trim($auth['nama_lengkap'] ?? 'Pengguna'))[0] ?: 'Pengguna');
         $gejala = DB::table('gejala')->orderBy('kode_gejala')->get();
 
         return view('user.diagnosa', [
             'gejala' => $gejala,
             'error' => $request->query('error'),
+            'firstName' => $firstName,
         ]);
     }
 
@@ -54,6 +57,26 @@ class DiagnosaController extends Controller
             return $id;
         });
 
-        return redirect('/user/hasil-diagnosa/'.(int) $id);
+        return redirect()->route('user.diagnosa.proses', ['id' => (int) $id]);
+    }
+
+    public function proses(Request $request, int $id)
+    {
+        $auth = $request->session()->get('auth');
+        $exists = DB::table('diagnosa')
+            ->where('id', $id)
+            ->where('id_user', $auth['id'])
+            ->exists();
+
+        if (! $exists) {
+            abort(404);
+        }
+
+        $firstName = trim(explode(' ', trim($auth['nama_lengkap'] ?? 'Pengguna'))[0] ?: 'Pengguna');
+
+        return view('user.diagnosa-proses', [
+            'diagnosaId' => $id,
+            'firstName' => $firstName,
+        ]);
     }
 }
