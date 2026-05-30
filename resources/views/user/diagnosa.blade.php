@@ -26,7 +26,10 @@
                     <label class="flex cursor-pointer items-start gap-3 px-4 py-4 transition hover:bg-slate-50/80 has-[:checked]:bg-blue-50/40 sm:px-5">
                         <input type="checkbox" name="gejala[]" value="{{ $g->kode_gejala }}"
                                class="mt-0.5 h-4 w-4 shrink-0 rounded border-slate-300 text-blue-600 focus:ring-blue-500">
-                        <span class="text-sm font-medium leading-relaxed text-slate-800">{{ $g->nama_gejala }}</span>
+                        <span class="text-sm font-medium leading-relaxed text-slate-800">
+                            <span class="mr-1.5 font-mono text-xs font-semibold text-slate-500">{{ $g->kode_gejala }}</span>
+                            {{ $g->nama_gejala }}
+                        </span>
                     </label>
                 @empty
                     <p class="px-4 py-8 text-center text-sm text-slate-500">Belum ada data gejala.</p>
