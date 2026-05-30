@@ -82,6 +82,11 @@ Route::middleware('auth.mjm')->group(function () {
         Route::get('/riwayat', [\App\Http\Controllers\Admin\RiwayatController::class, 'index'])->name('riwayat');
         Route::post('/riwayat/hapus', [\App\Http\Controllers\Admin\RiwayatController::class, 'destroy'])->name('riwayat.hapus');
         Route::get('/laporan', [\App\Http\Controllers\Admin\LaporanController::class, 'index'])->name('laporan');
+        Route::get('/diagnosa', [\App\Http\Controllers\Admin\DiagnosaRunController::class, 'index'])->name('diagnosa.index');
+        Route::post('/diagnosa', [\App\Http\Controllers\Admin\DiagnosaRunController::class, 'store'])->name('diagnosa.store');
+        Route::get('/diagnosa/hasil/{id}', [\App\Http\Controllers\Admin\DiagnosaRunController::class, 'hasil'])
+            ->whereNumber('id')
+            ->name('diagnosa.hasil');
         Route::get('/diagnosa/{id}', [\App\Http\Controllers\Admin\DiagnosaDetailController::class, 'show'])
             ->whereNumber('id')
             ->name('diagnosa.show');

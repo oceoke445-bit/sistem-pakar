@@ -4,9 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class ExportController extends Controller
@@ -58,31 +61,76 @@ class ExportController extends Controller
             ];
         }
 
-        if ($isExcel) {
-            $sheetData = array_merge(
-                [['No', 'Tanggal', 'Nama User', 'Hasil Diagnosa', 'Kecocokan']],
-                $tableBody
-            );
-            $spreadsheet = new Spreadsheet;
-            $spreadsheet->getActiveSheet()->fromArray($sheetData);
-            $writer = new Xlsx($spreadsheet);
-            $tmp = tempnam(sys_get_temp_dir(), 'xlsx');
-            $writer->save($tmp);
-            $content = file_get_contents($tmp);
-            @unlink($tmp);
+        $reportMeta = $this->laporanReportMeta($start_date, $end_date);
 
-            return response($content, 200, [
-                'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                'Content-Disposition' => 'attachment; filename="laporan-diagnosa.xlsx"',
-            ]);
+        if ($isExcel) {
+            return $this->laporanExcelResponse($tableBody, $reportMeta);
         }
 
-        $pdf = Pdf::loadView('exports.laporan-pdf', [
-            'start_date' => $start_date,
-            'end_date' => $end_date,
+        $pdf = Pdf::loadView('exports.laporan-pdf', array_merge($reportMeta, [
             'rows' => $tableBody,
-        ])->setPaper('a4', 'landscape');
+        ]))->setPaper('a4', 'landscape');
 
-        return $pdf->download('laporan-diagnosa.pdf');
+        return $pdf->download('laporan-diagnosa-printer.pdf');
+    }
+
+    /** @return array{reportTitle: string, appName: string, unitName: string, periodLabel: string, printedAt: string} */
+    private function laporanReportMeta(string $start_date, string $end_date): array
+    {
+        return [
+            'reportTitle' => 'Laporan Diagnosa Kerusakan Printer',
+            'appName' => (string) config('app.name', 'Sistem Pakar'),
+            'unitName' => 'Fotocopy Berkah Andirra',
+            'periodLabel' => format_report_period_range($start_date ?: null, $end_date ?: null),
+            'printedAt' => Carbon::now('Asia/Jakarta')->format('d/m/Y, H:i').' WIB',
+        ];
+    }
+
+    /**
+     * @param  array<int, array<int, string>>  $tableBody
+     * @param  array{reportTitle: string, appName: string, unitName: string, periodLabel: string, printedAt: string}  $meta
+     */
+    private function laporanExcelResponse(array $tableBody, array $meta)
+    {
+        $sheetData = [
+            [$meta['reportTitle']],
+            [$meta['appName']],
+            [$meta['unitName']],
+            ['Periode: '.$meta['periodLabel']],
+            ['Dicetak: '.$meta['printedAt']],
+            [],
+            ['No', 'Tanggal', 'Nama Pengguna', 'Hasil Kerusakan', 'Kecocokan'],
+            ...$tableBody,
+        ];
+
+        $spreadsheet = new Spreadsheet;
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Laporan Diagnosa');
+        $sheet->fromArray($sheetData);
+
+        $sheet->mergeCells('A1:E1');
+        $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(14);
+        $sheet->getStyle('A1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_LEFT);
+
+        $sheet->getStyle('A7:E7')->getFont()->setBold(true)->setColor(new \PhpOffice\PhpSpreadsheet\Style\Color('FFFFFFFF'));
+        $sheet->getStyle('A7:E7')->getFill()
+            ->setFillType(Fill::FILL_SOLID)
+            ->getStartColor()->setRGB('1E40AF');
+        $sheet->getStyle('A7:E7')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+
+        foreach (range('A', 'E') as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
+
+        $writer = new Xlsx($spreadsheet);
+        $tmp = tempnam(sys_get_temp_dir(), 'xlsx');
+        $writer->save($tmp);
+        $content = file_get_contents($tmp);
+        @unlink($tmp);
+
+        return response($content, 200, [
+            'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'Content-Disposition' => 'attachment; filename="laporan-diagnosa-printer.xlsx"',
+        ]);
     }
 }

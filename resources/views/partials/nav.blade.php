@@ -1,7 +1,7 @@
 @php
     $adminNav = [
         ['/admin/dashboard', 'Dashboard', 'bi-house-door-fill'],
-        ['/user/diagnosa', 'Diagnosa Kerusakan', 'bi-clipboard2-check'],
+        ['/admin/diagnosa', 'Diagnosa Kerusakan', 'bi-clipboard2-check'],
         ['/admin/riwayat', 'Riwayat Diagnosa', 'bi-clock-history'],
         ['/admin/penyakit', 'Data Kerusakan', 'bi-shield-exclamation'],
         ['/admin/gejala', 'Data Gejala', 'bi-clipboard2-pulse'],

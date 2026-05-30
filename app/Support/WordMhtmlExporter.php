@@ -31,7 +31,7 @@ class WordMhtmlExporter
             $parts .= '--'.$boundary."\r\n";
             $parts .= "Content-Type: image/png\r\n";
             $parts .= "Content-Transfer-Encoding: base64\r\n";
-            $parts .= 'Content-ID: <'.$cid.">'."\r\n";
+            $parts .= 'Content-ID: <'.$cid.">\r\n";
             $parts .= 'Content-Location: '.$cid."\r\n\r\n";
             $parts .= chunk_split(base64_encode($binary))."\r\n";
         }

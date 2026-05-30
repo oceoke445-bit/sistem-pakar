@@ -77,6 +77,17 @@ if (! function_exists('format_date_id_day')) {
     }
 }
 
+if (! function_exists('format_report_period_range')) {
+    function format_report_period_range(?string $startYmd, ?string $endYmd): string
+    {
+        if ($startYmd && $endYmd) {
+            return format_date_id_day($startYmd.'T00:00:00Z').' s/d '.format_date_id_day($endYmd.'T00:00:00Z');
+        }
+
+        return 'Semua periode';
+    }
+}
+
 if (! function_exists('diagnosa_rekomendasi_label')) {
     function diagnosa_rekomendasi_label(?string $tindakan, ?string $penyakitTingkat = null): string
     {
