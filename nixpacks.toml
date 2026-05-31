@@ -1,5 +1,20 @@
 [phases.setup]
-nixPkgs = ["php82", "php82Packages.composer"]
+nixPkgs = [
+    "php82",
+    "php82Packages.composer",
+    "php82Extensions.pdo_pgsql",
+    "php82Extensions.pgsql",
+    "php82Extensions.mbstring",
+    "php82Extensions.openssl",
+    "php82Extensions.tokenizer",
+    "php82Extensions.xml",
+    "php82Extensions.ctype",
+    "php82Extensions.json",
+    "php82Extensions.bcmath",
+    "php82Extensions.fileinfo",
+    "php82Extensions.dom",
+    "php82Extensions.gd"
+]
 
 [phases.install]
 cmds = [
@@ -10,14 +25,14 @@ cmds = [
 cmds = [
     "mkdir -p bootstrap/cache",
     "mkdir -p storage/framework/sessions",
-    "mkdir -p storage/framework/views", 
+    "mkdir -p storage/framework/views",
     "mkdir -p storage/framework/cache/data",
     "mkdir -p storage/logs",
-    "chmod -R 775 storage bootstrap/cache",
-    "php artisan config:clear || true",
-    "php artisan cache:clear || true",
-    "php artisan view:clear || true"
+    "chmod -R 777 storage bootstrap/cache",
+    "php artisan config:cache || true",
+    "php artisan route:cache || true",
+    "php artisan view:cache || true"
 ]
 
 [start]
-cmd = "php artisan serve --host=0.0.0.0 --port=${PORT:-8080}"
+cmd = "php artisan migrate --force --no-interaction && php artisan db:seed --force --no-interaction || true && php artisan serve --host=0.0.0.0 --port=${PORT:-8080}"
