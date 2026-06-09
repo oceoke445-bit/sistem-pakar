@@ -87,6 +87,9 @@ Route::middleware('auth.mjm')->group(function () {
         Route::get('/diagnosa/hasil/{id}', [\App\Http\Controllers\Admin\DiagnosaRunController::class, 'hasil'])
             ->whereNumber('id')
             ->name('diagnosa.hasil');
+        Route::post('/diagnosa/hasil/{id}/tindakan', [\App\Http\Controllers\Admin\DiagnosaRunController::class, 'setTindakan'])
+            ->whereNumber('id')
+            ->name('diagnosa.tindakan');
         Route::get('/diagnosa/{id}', [\App\Http\Controllers\Admin\DiagnosaDetailController::class, 'show'])
             ->whereNumber('id')
             ->name('diagnosa.show');

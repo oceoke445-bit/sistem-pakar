@@ -79,4 +79,24 @@ class DiagnosaRunController extends Controller
 
         return view('admin.diagnosa.hasil', compact('d', 'penyakit', 'kodes', 'namaGejala', 'pct'));
     }
+
+    public function setTindakan(Request $request, int $id)
+    {
+        $request->validate([
+            'tindakan' => 'required|in:sendiri,teknisi',
+        ]);
+
+        $auth = $request->session()->get('auth');
+        $row = DB::table('diagnosa')->where('id', $id)->where('id_user', $auth['id'])->first();
+        if (! $row) {
+            abort(404);
+        }
+
+        DB::table('diagnosa')
+            ->where('id', $id)
+            ->where('id_user', $auth['id'])
+            ->update(['tindakan' => $request->input('tindakan')]);
+
+        return redirect()->route('admin.riwayat', ['notice' => 'Diagnosa telah disimpan ke riwayat.']);
+    }
 }

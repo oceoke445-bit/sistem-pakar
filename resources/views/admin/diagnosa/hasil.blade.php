@@ -101,7 +101,11 @@
                     </div>
                     <p class="mt-4 font-bold text-emerald-950">Perbaikan sendiri</p>
                     <p class="mt-2 text-sm leading-relaxed text-emerald-900/85">Kerusakan ini dapat diperbaiki sendiri dengan langkah-langkah di atas jika kondisi aman.</p>
-                    <a href="{{ route('admin.riwayat') }}" class="mt-5 inline-flex w-full items-center justify-center rounded-xl bg-emerald-600 py-3 text-sm font-bold text-white shadow-md hover:bg-emerald-700 sm:w-auto sm:px-6">Lakukan sendiri</a>
+                    <form method="post" action="{{ route('admin.diagnosa.tindakan', ['id' => $d->id]) }}" class="mt-5">
+                        @csrf
+                        <input type="hidden" name="tindakan" value="sendiri">
+                        <button type="submit" class="inline-flex w-full items-center justify-center rounded-xl bg-emerald-600 py-3 text-sm font-bold text-white shadow-md hover:bg-emerald-700 sm:w-auto sm:px-6">Lakukan sendiri</button>
+                    </form>
                 </div>
                 <div class="rounded-2xl border border-orange-200/80 bg-orange-50/80 p-6 shadow-sm">
                     <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-orange-500 text-white">
@@ -110,14 +114,12 @@
                     <p class="mt-4 font-bold text-orange-950">Panggil teknisi</p>
                     <p class="mt-2 text-sm leading-relaxed text-orange-900/85">Jika kerusakan tidak dapat diatasi atau tingkat berat, hubungi teknisi resmi.</p>
                     @php $teknisiPhone = config('app.teknisi_phone'); @endphp
-                    @if ($teknisiPhone)
-                        <a href="https://wa.me/{{ $teknisiPhone }}" target="_blank" rel="noopener noreferrer"
-                           class="mt-5 inline-flex w-full items-center justify-center rounded-xl bg-orange-500 py-3 text-sm font-bold text-white shadow-md hover:bg-orange-600 sm:w-auto sm:px-6">
-                            Hubungi teknisi
-                        </a>
-                    @else
-                        <span class="mt-5 flex w-full cursor-default items-center justify-center rounded-xl bg-orange-500 py-3 text-sm font-bold text-white shadow-md sm:inline-flex sm:w-auto sm:px-6">Hubungi teknisi</span>
-                    @endif
+                    <form method="post" action="{{ route('admin.diagnosa.tindakan', ['id' => $d->id]) }}" class="mt-5"
+                          @if($teknisiPhone) onsubmit="window.open('https://wa.me/{{ $teknisiPhone }}','_blank')" @endif>
+                        @csrf
+                        <input type="hidden" name="tindakan" value="teknisi">
+                        <button type="submit" class="inline-flex w-full items-center justify-center rounded-xl bg-orange-500 py-3 text-sm font-bold text-white shadow-md hover:bg-orange-600 sm:w-auto sm:px-6">Hubungi teknisi</button>
+                    </form>
                 </div>
             </div>
 
