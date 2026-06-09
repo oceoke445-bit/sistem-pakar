@@ -26,7 +26,6 @@
                 <select name="tingkat" onchange="this.form.submit()" class="w-full appearance-none rounded-xl border border-slate-200 bg-white pl-4 pr-10 py-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 shadow-sm">
                     <option value="" @selected($tingkat === '')>Semua tingkat</option>
                     <option value="ringan" @selected($tingkat === 'ringan')>Ringan</option>
-                    <option value="sedang" @selected($tingkat === 'sedang')>Sedang</option>
                     <option value="berat" @selected($tingkat === 'berat')>Berat</option>
                 </select>
                 <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3.5 text-slate-400">

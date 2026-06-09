@@ -106,34 +106,20 @@ if (! function_exists('diagnosis_tingkat_label')) {
         if ($confidence === null) {
             return 'Ringan';
         }
-        $p = (float) $confidence;
-        if ($p >= 0.8) {
-            return 'Berat';
-        }
-        if ($p >= 0.5) {
-            return 'Sedang';
-        }
 
-        return 'Ringan';
+        return (float) $confidence >= 0.5 ? 'Berat' : 'Ringan';
     }
 }
 
 if (! function_exists('diagnosis_tingkat_bucket')) {
-    /** @return 'ringan'|'sedang'|'berat' */
+    /** @return 'ringan'|'berat' */
     function diagnosis_tingkat_bucket(?float $confidence): string
     {
         if ($confidence === null) {
             return 'ringan';
         }
-        $p = (float) $confidence;
-        if ($p >= 0.8) {
-            return 'berat';
-        }
-        if ($p >= 0.5) {
-            return 'sedang';
-        }
 
-        return 'ringan';
+        return (float) $confidence >= 0.5 ? 'berat' : 'ringan';
     }
 }
 

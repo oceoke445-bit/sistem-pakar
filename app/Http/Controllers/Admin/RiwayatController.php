@@ -42,12 +42,10 @@ class RiwayatController extends Controller
             });
         }
 
-        if (in_array($tingkat, ['ringan', 'sedang', 'berat'], true)) {
+        if (in_array($tingkat, ['ringan', 'berat'], true)) {
             $query->where(function ($w) use ($tingkat) {
                 if ($tingkat === 'berat') {
-                    $w->where('confidence', '>=', 0.8);
-                } elseif ($tingkat === 'sedang') {
-                    $w->where('confidence', '>=', 0.5)->where('confidence', '<', 0.8);
+                    $w->where('confidence', '>=', 0.5);
                 } else {
                     $w->where(function ($inner) {
                         $inner->whereNull('confidence')->orWhere('confidence', '<', 0.5);

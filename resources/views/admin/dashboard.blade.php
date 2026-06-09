@@ -125,13 +125,6 @@
                         </div>
                     </div>
                     <div class="flex items-start gap-3">
-                        <span class="mt-1 h-4 w-4 shrink-0 rounded-md bg-[#f59e0b]"></span>
-                        <div>
-                            <p class="text-sm font-bold text-slate-800 leading-tight">Sedang</p>
-                            <p class="text-[13px] text-slate-500 font-semibold mt-1" id="legendSedangVal">0 (0%)</p>
-                        </div>
-                    </div>
-                    <div class="flex items-start gap-3">
                         <span class="mt-1 h-4 w-4 shrink-0 rounded-md bg-[#22c55e]"></span>
                         <div>
                             <p class="text-sm font-bold text-slate-800 leading-tight">Ringan</p>
@@ -194,7 +187,7 @@
         }
     };
     const donut = @json($donut);
-    const totalD = donut.ringan + donut.sedang + donut.berat;
+    const totalD = donut.ringan + donut.berat;
     const chartLine = new Chart(document.getElementById('chartLineAdmin'), {
         type: 'line',
         data: {
@@ -263,10 +256,10 @@
     new Chart(document.getElementById('chartDonutAdmin'), {
         type: 'doughnut',
         data: {
-            labels: ['Ringan', 'Sedang', 'Berat'],
+            labels: ['Ringan', 'Berat'],
             datasets: [{
-                data: totalD ? [donut.ringan, donut.sedang, donut.berat] : [1],
-                backgroundColor: totalD ? ['#22c55e', '#f59e0b', '#ef4444'] : ['#e2e8f0'],
+                data: totalD ? [donut.ringan, donut.berat] : [1],
+                backgroundColor: totalD ? ['#22c55e', '#ef4444'] : ['#e2e8f0'],
                 borderWidth: 0,
             }],
         },
@@ -279,11 +272,9 @@
     });
 
     const pctBerat = totalD ? Math.round((donut.berat / totalD) * 100) : 0;
-    const pctSedang = totalD ? Math.round((donut.sedang / totalD) * 100) : 0;
     const pctRingan = totalD ? Math.round((donut.ringan / totalD) * 100) : 0;
     document.getElementById('donutTotalCount').innerText = totalD;
     document.getElementById('legendBeratVal').innerText = `${donut.berat} (${pctBerat}%)`;
-    document.getElementById('legendSedangVal').innerText = `${donut.sedang} (${pctSedang}%)`;
     document.getElementById('legendRinganVal').innerText = `${donut.ringan} (${pctRingan}%)`;
     }
 </script>

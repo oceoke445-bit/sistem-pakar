@@ -59,7 +59,6 @@
                     <label class="mb-1.5 block text-xs font-bold uppercase tracking-wide text-slate-500">Tingkat Kerusakan</label>
                     <select name="tingkat" required class="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/20">
                         <option value="ringan">Ringan</option>
-                        <option value="sedang">Sedang</option>
                         <option value="berat">Berat</option>
                     </select>
                 </div>
@@ -95,9 +94,8 @@
                 <div>
                     <label class="mb-1.5 block text-xs font-bold uppercase text-slate-500">Tingkat Kerusakan</label>
                     <select name="tingkat" required class="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm">
-                        <option value="ringan" @selected(($editing->tingkat ?? '') === 'ringan')>Ringan</option>
-                        <option value="sedang" @selected(($editing->tingkat ?? '') === 'sedang')>Sedang</option>
-                        <option value="berat" @selected(($editing->tingkat ?? '') === 'berat')>Berat</option>
+                        <option value="ringan" @selected(in_array(strtolower($editing->tingkat ?? ''), ['ringan', 'sedang']))>Ringan</option>
+                        <option value="berat" @selected(strtolower($editing->tingkat ?? '') === 'berat')>Berat</option>
                     </select>
                 </div>
                 <div class="md:col-span-2">
@@ -139,10 +137,8 @@
                         <td class="px-4 py-3.5 font-mono text-xs text-slate-600">{{ $row->kode_penyakit }}</td>
                         <td class="px-4 py-3.5 font-medium text-slate-900">{{ $row->nama_penyakit }}</td>
                         <td class="px-4 py-3.5">
-                            @if (($row->tingkat ?? '') === 'berat')
+                            @if (strtolower($row->tingkat ?? '') === 'berat')
                                 <span class="inline-flex rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-semibold text-red-800">Berat</span>
-                            @elseif (($row->tingkat ?? '') === 'sedang')
-                                <span class="inline-flex rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-semibold text-amber-800">Sedang</span>
                             @else
                                 <span class="inline-flex rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-semibold text-emerald-800">Ringan</span>
                             @endif

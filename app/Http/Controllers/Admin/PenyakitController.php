@@ -38,7 +38,7 @@ class PenyakitController extends Controller
         $request->validate([
             'kode_penyakit' => 'required|string|max:50',
             'nama_penyakit' => 'required|string|max:255',
-            'tingkat' => 'required|string|in:ringan,sedang,berat',
+            'tingkat' => 'required|string|in:ringan,berat',
             'deskripsi' => 'nullable|string',
             'solusi' => 'nullable|string',
             'pencegahan' => 'nullable|string',
@@ -69,7 +69,7 @@ class PenyakitController extends Controller
         $request->validate([
             'kode_penyakit' => 'required|string|max:50',
             'nama_penyakit' => 'required|string|max:255',
-            'tingkat' => 'required|string|in:ringan,sedang,berat',
+            'tingkat' => 'required|string|in:ringan,berat',
             'deskripsi' => 'nullable|string',
             'solusi' => 'nullable|string',
             'pencegahan' => 'nullable|string',

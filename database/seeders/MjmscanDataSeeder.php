@@ -50,7 +50,7 @@ class MjmscanDataSeeder extends Seeder
             [
                 'K002', 
                 'Lampu indikator berkedip (Blinking)', 
-                'Sedang', 
+                'Ringan', 
                 'Lampu indikator berkedip terus menerus, menandakan printer mengalami status error seperti sensor kotor, paper jam, atau waste ink absorber penuh.', 
                 "Matikan printer selama beberapa menit lalu nyalakan kembali.\nPeriksa bagian dalam printer apakah ada kertas kecil atau benda asing yang menyangkut.\nLakukan reset counter printer dengan software adjustment tool.\nBersihkan encoder strip transparan di belakang cartridge.", 
                 'Bersihkan debu bagian dalam printer secara berkala dan hindari memaksakan penarikan cartridge.'
@@ -66,7 +66,7 @@ class MjmscanDataSeeder extends Seeder
             [
                 'K004', 
                 'Kertas macet (Paper Jam)', 
-                'Sedang', 
+                'Ringan', 
                 'Kertas tersangkut di dalam printer, disebabkan karena karet roller penarik kertas (ASF Roller) yang sudah licin/kotor atau ada serpihan kertas di dalamnya.', 
                 "Tarik kertas yang tersangkut secara perlahan searah dengan jalurnya.\nBersihkan karet roller penarik kertas menggunakan kain bersih yang sedikit lembab.\nHindari menaruh kertas terlalu tebal atau lecek di tray.\nGanti karet roller ASF jika sudah aus/licin.", 
                 'Gunakan kertas dengan ketebalan standar dan hindari memasukkan kertas yang terlalu berdebu.'
@@ -74,7 +74,7 @@ class MjmscanDataSeeder extends Seeder
             [
                 'K005', 
                 'Tinta tidak keluar / Cartridge tidak terbaca', 
-                'Sedang', 
+                'Ringan', 
                 'Cartridge printer tidak terdeteksi atau tinta tidak keluar sama sekali, biasanya karena pin chip kuningan kotor, tinta habis, atau cartridge kering.', 
                 "Lepaskan cartridge lalu bersihkan chip kuningan menggunakan penghapus pensil lembut.\nLakukan proses Head Cleaning lewat komputer.\nIsi kembali tinta jika tingkat tinta di tabung/cartridge habis.\nGanti cartridge baru jika chip terbukti mati/rusak.", 
                 'Lakukan pencetakan minimal 1-2 kali seminggu agar tinta tidak mengering di nozzle cartridge.'

@@ -148,15 +148,13 @@ class DashboardController extends Controller
         // 3. Optimize confidence bucket counts directly in SQL (no massive data retrieval)
         $donutCounts = DB::table('diagnosa')
             ->selectRaw("
-                COUNT(CASE WHEN confidence >= 0.8 THEN 1 END) as berat,
-                COUNT(CASE WHEN confidence >= 0.5 AND confidence < 0.8 THEN 1 END) as sedang,
+                COUNT(CASE WHEN confidence >= 0.5 THEN 1 END) as berat,
                 COUNT(CASE WHEN confidence < 0.5 OR confidence IS NULL THEN 1 END) as ringan
             ")
             ->first();
 
         $donut = [
             'ringan' => (int) ($donutCounts->ringan ?? 0),
-            'sedang' => (int) ($donutCounts->sedang ?? 0),
             'berat' => (int) ($donutCounts->berat ?? 0),
         ];
 
