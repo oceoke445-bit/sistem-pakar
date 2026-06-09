@@ -110,7 +110,7 @@ class MjmscanDataSeeder extends Seeder
                 'id' => (string) Str::uuid(),
                 'email' => $adminEmail,
                 'password_hash' => Hash::make(env('ADMIN_PASSWORD', 'admin123')),
-                'nama_lengkap' => 'Administrator',
+                'nama_lengkap' => 'Gemma Galgani Ajum',
                 'role' => 'admin',
                 'created_at' => now(),
             ]);
